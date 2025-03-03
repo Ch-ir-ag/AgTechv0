@@ -7,18 +7,72 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #333333;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --secondary: #f8fafc;
+  --secondary-hover: #f1f5f9;
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f8fafc;
+    --foreground: #333333;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --secondary: #f1f5f9;
+    --secondary-hover: #e2e8f0;
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
   }
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f0f7ff;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+/* Custom selection color */
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Responsive height adjustments for the chart and chatbot */
+@media (min-width: 1024px) {
+  #analytics, #chatbot {
+    min-height: 550px;
+  }
 }

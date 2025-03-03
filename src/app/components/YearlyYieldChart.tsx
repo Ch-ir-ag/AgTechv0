@@ -30,7 +30,18 @@ const yearlyYieldData = [
   { month: 'Dec', actual: null, predicted: 165000 },
 ];
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+// Define proper types for the tooltip props
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    name: string;
+    dataKey: string;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length > 0) {
     const actualValue = payload[0]?.value !== undefined ? payload[0].value : 'N/A';
     const predictedValue = payload[1]?.value !== undefined ? payload[1].value : 'N/A';

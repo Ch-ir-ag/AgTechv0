@@ -46,7 +46,18 @@ const milkYieldDataByYear = {
   ],
 };
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+// Define proper types for the tooltip props
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    name: string;
+    dataKey: string;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-md shadow-sm">
@@ -62,12 +73,6 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   }
 
   return null;
-};
-
-// Format date in a consistent way for both server and client
-const formatDate = () => {
-  const date = new Date();
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 };
 
 export default function MilkYieldChart() {

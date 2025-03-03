@@ -16,7 +16,10 @@ export async function POST(request: Request) {
       data: body,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch (err) {
+    // Log the error for debugging purposes
+    console.error('Error parsing request body:', err);
+    
     return NextResponse.json(
       { error: 'Failed to parse request body' },
       { status: 400 }

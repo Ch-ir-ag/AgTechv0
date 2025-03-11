@@ -2,8 +2,29 @@
 
 import React, { useState, useEffect } from 'react';
 
+// Define types for region data
+interface RegionCoordinates {
+  top: string;
+  left: string;
+}
+
+interface RegionData {
+  farms: number;
+  avgYield: number;
+  totalVolume: number;
+  avgFat: number;
+  avgProtein: number;
+  avgLactose: number;
+  avgUrea: number;
+  coordinates: RegionCoordinates;
+}
+
+type RegionDataMap = {
+  [key: string]: RegionData;
+};
+
 // Sample data for different regions
-const regionData = {
+const regionData: RegionDataMap = {
   'Northern Ireland': {
     farms: 1250,
     avgYield: 28.5,
@@ -58,7 +79,6 @@ const regionData = {
 
 export default function SupplyChainMap() {
   const [selectedRegion, setSelectedRegion] = useState('Northern Ireland');
-  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   
   // Use useEffect to set isClient to true after component mounts
@@ -194,14 +214,12 @@ export default function SupplyChainMap() {
                     : 'scale-100'
                 } transition-all duration-200`}
                 style={{ 
-                  top: (data as any).coordinates.top, 
-                  left: (data as any).coordinates.left 
+                  top: data.coordinates.top, 
+                  left: data.coordinates.left 
                 }}
               >
                 <button
                   onClick={() => handleRegionClick(region)}
-                  onMouseEnter={() => setHoveredRegion(region)}
-                  onMouseLeave={() => setHoveredRegion(null)}
                   className={`px-2 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-200 ${
                     selectedRegion === region 
                       ? 'bg-blue-500 text-white ring-2 ring-white' 

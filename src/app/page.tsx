@@ -20,7 +20,7 @@ export default function Home() {
             </h1>
             <p className="text-gray-600 max-w-3xl mx-auto">
               Monitor your dairy production metrics and get accurate AI-powered predictions for future milk yield
-              to help optimize your operations and planning with Daisy AI's advanced analytics.
+              to help optimize your operations and planning with Daisy AI&apos;s advanced analytics.
             </p>
           </div>
           

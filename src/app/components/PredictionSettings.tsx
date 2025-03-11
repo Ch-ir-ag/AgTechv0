@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 
 // Define type for prediction period
@@ -53,8 +53,8 @@ export default function PredictionSettings() {
     optimizationScore: 89
   });
   
-  // Function to update predictions based on selected time period
-  const updatePredictionsForPeriod = (period: PredictionPeriod) => {
+  // Function to update predictions based on selected time period - wrapped in useCallback
+  const updatePredictionsForPeriod = useCallback((period: PredictionPeriod) => {
     if (!isClient) return; // Skip if not client-side
     
     setIsLoading(true);
@@ -93,14 +93,14 @@ export default function PredictionSettings() {
       
       setIsLoading(false);
     }, 800);
-  };
+  }, [isClient, setPredictedValues, setPredictionResults, setIsLoading]);
   
   // Update predictions when period changes - only on client side
   useEffect(() => {
     if (isClient && !isManualMode) {
       updatePredictionsForPeriod(predictionPeriod);
     }
-  }, [predictionPeriod, isManualMode, isClient]);
+  }, [predictionPeriod, isManualMode, isClient, updatePredictionsForPeriod]);
   
   // Update prediction results based on active values (either predicted or manual)
   useEffect(() => {

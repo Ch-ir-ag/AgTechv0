@@ -36,19 +36,20 @@ export default function Navbar() {
             <path d="M8 2h8a2 2 0 0 1 2 2v2h2v2h-2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8H4V6h2V4a2 2 0 0 1 2-2z" />
             <path d="M6 12h12" />
           </svg>
-          <span className="font-medium">DairyTech</span>
+          <span className="font-medium">Daisy AI</span>
+          <span className="text-sm text-gray-500 ml-2">for Lakeland Dairies</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-6">
           <Link href="/" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             Dashboard
           </Link>
           <Link href="#analytics" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            Weekly Yield
+            Yield Analytics
           </Link>
-          <Link href="#yearly-prediction" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            Yearly Prediction
+          <Link href="#supply-chain-map" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
+            Supply Chain
           </Link>
           <Link href="#chatbot" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             AI Assistant
@@ -60,7 +61,7 @@ export default function Navbar() {
           type="button"
           className="hidden md:block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium"
         >
-          Get Started
+          Refresh Predictions
         </button>
 
         {/* Mobile Menu Button */}
@@ -97,14 +98,14 @@ export default function Navbar() {
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Weekly Yield
+              Yield Analytics
             </Link>
             <Link 
-              href="#yearly-prediction" 
+              href="#supply-chain-map" 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Yearly Prediction
+              Supply Chain
             </Link>
             <Link 
               href="#chatbot" 
@@ -117,7 +118,7 @@ export default function Navbar() {
               type="button"
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium w-full"
             >
-              Get Started
+              Refresh Predictions
             </button>
           </div>
         </div>

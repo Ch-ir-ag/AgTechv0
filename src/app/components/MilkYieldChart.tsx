@@ -224,16 +224,16 @@ export default function MilkYieldChart() {
   };
   
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm h-full border border-gray-100">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-medium text-gray-800">
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm h-full border border-gray-100">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
+        <h2 className="text-xl font-medium text-gray-800 mb-3 sm:mb-0">
           {getChartTitle()}
         </h2>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => handleTimePeriodChange('weekly')}
-              className={`px-3 py-1 text-sm rounded-md ${
+              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                 timePeriod === 'weekly'
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -243,7 +243,7 @@ export default function MilkYieldChart() {
             </button>
             <button
               onClick={() => handleTimePeriodChange('monthly')}
-              className={`px-3 py-1 text-sm rounded-md ${
+              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                 timePeriod === 'monthly'
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -253,7 +253,7 @@ export default function MilkYieldChart() {
             </button>
             <button
               onClick={() => handleTimePeriodChange('yearly')}
-              className={`px-3 py-1 text-sm rounded-md ${
+              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                 timePeriod === 'yearly'
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -262,15 +262,15 @@ export default function MilkYieldChart() {
               Yearly
             </button>
           </div>
-          <div className="flex items-center space-x-2">
-            <label htmlFor="yearSelect" className="text-sm text-gray-600">
+          <div className="flex items-center mt-2 sm:mt-0">
+            <label htmlFor="yearSelect" className="text-xs sm:text-sm text-gray-600 mr-2">
               Compare:
             </label>
             <select
               id="yearSelect"
               value={selectedYear}
               onChange={handleYearChange}
-              className="border border-gray-200 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-200 rounded-md px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {availableYears.map((year) => (
                 <option key={year} value={year}>
@@ -281,14 +281,14 @@ export default function MilkYieldChart() {
           </div>
         </div>
       </div>
-      <div className="h-[400px]">
+      <div className="h-[300px] sm:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={milkYieldData[timePeriod][selectedYear as "2025" | "2024" | "2023"]}
             margin={{
               top: 5,
-              right: 30,
-              left: 20,
+              right: 20,
+              left: 10,
               bottom: 5,
             }}
           >
@@ -328,7 +328,7 @@ export default function MilkYieldChart() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-4 text-sm text-gray-600">
+      <div className="mt-4 text-xs sm:text-sm text-gray-600">
         <p>Data represents {timePeriod.slice(0, -2)} milk production in liters, comparing current year with previous year.</p>
         <p className="mt-1">Last updated: 2025-03-03</p>
         <p className="mt-1 text-xs text-gray-500">Error bars indicate confidence intervals (±3% of predicted values)</p>

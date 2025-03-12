@@ -241,12 +241,12 @@ export default function PredictionSettings() {
   
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-medium text-gray-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+        <h2 className="text-xl font-medium text-gray-800 mb-2 sm:mb-0">
           {isManualMode ? 'Customizable Prediction Settings' : 'AI Predicted Milk Parameters'}
         </h2>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center mt-2 sm:mt-0">
           <div className="flex items-center">
             <span className="text-sm text-gray-600 mr-2">Mode:</span>
             <button
@@ -280,8 +280,8 @@ export default function PredictionSettings() {
       
       {!isManualMode && (
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h4 className="text-sm font-medium text-gray-700">Prediction Period</h4>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+            <h4 className="text-sm font-medium text-gray-700 mb-2 sm:mb-0">Prediction Period</h4>
             <button
               onClick={refreshPredictions}
               className="flex items-center text-sm text-blue-600 hover:text-blue-800"
@@ -305,12 +305,12 @@ export default function PredictionSettings() {
             </button>
           </div>
           
-          <div className="grid grid-cols-4 gap-2 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
             {['week', 'month', 'quarter', 'year'].map((period) => (
               <button
                 key={period}
                 onClick={() => setPredictionPeriod(period as PredictionPeriod)}
-                className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                className={`px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-md transition-colors ${
                   predictionPeriod === period
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -323,9 +323,9 @@ export default function PredictionSettings() {
         </div>
       )}
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         {/* Parameter Display/Controls */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Milk Volume */}
           <div>
             <div className="flex justify-between mb-1">
@@ -333,7 +333,7 @@ export default function PredictionSettings() {
                 Milk Volume (L/day)
               </label>
               <div className="flex items-center">
-                <span className="text-sm text-blue-600 font-medium">
+                <span className="text-sm text-blue-600 font-medium truncate max-w-[100px] sm:max-w-none">
                   {formatLargeNumber(isManualMode ? manualValues.milkVolume : predictedValues.milkVolume)}
                 </span>
                 {!isManualMode && (
@@ -372,7 +372,7 @@ export default function PredictionSettings() {
                 </div>
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
                   <span>20M</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 text-center px-1 truncate">
                     CI: {formatLargeNumber(predictedValues.confidenceIntervals.milkVolume.low)}-{formatLargeNumber(predictedValues.confidenceIntervals.milkVolume.high)}
                   </span>
                   <span>60M</span>
@@ -613,11 +613,11 @@ export default function PredictionSettings() {
               <h4 className="text-sm font-medium text-gray-700 mb-2">
                 Expected Yield ({getPeriodLabel(predictionPeriod)})
               </h4>
-              <div className="flex items-center">
+              <div className="flex flex-col sm:flex-row sm:items-center">
                 <span className="text-2xl font-bold text-blue-600">
                   {formatLargeNumber(predictionResults.expectedYield)} L
                 </span>
-                <span className="ml-2 text-xs text-gray-500">
+                <span className="mt-1 sm:mt-0 sm:ml-2 text-xs text-gray-500">
                   (95% CI: {formatLargeNumber(predictionResults.confidenceLow)} - {formatLargeNumber(predictionResults.confidenceHigh)} L)
                 </span>
               </div>
@@ -628,7 +628,7 @@ export default function PredictionSettings() {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-1">Quality Score</h4>
                 <div className="flex items-center">

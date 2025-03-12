@@ -24,6 +24,13 @@ export default function Home() {
             </p>
           </div>
           
+          {/* Weekly Milk Yield Comparison */}
+          <div className="mb-8">
+            <section id="analytics" className="h-full">
+              <MilkYieldChart />
+            </section>
+          </div>
+          
           {/* Prediction Settings */}
           <div className="mb-8">
             <PredictionSettings />
@@ -31,11 +38,6 @@ export default function Home() {
           
           {/* Charts Section */}
           <div className="grid grid-cols-1 gap-6 mb-8">
-            {/* Weekly Milk Yield Comparison */}
-            <section id="analytics" className="h-full">
-              <MilkYieldChart />
-            </section>
-            
             {/* Yearly Milk Yield vs Prediction */}
             <section id="yearly-prediction" className="h-full">
               <YearlyYieldChart />
@@ -50,7 +52,7 @@ export default function Home() {
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-3xl font-bold text-blue-500">1,650</p>
+              <p className="text-3xl font-bold text-blue-500">165M</p>
               <p className="text-gray-600 text-sm">Current Monthly Yield (L)</p>
               <p className="text-xs text-gray-500 mt-1">±4% confidence interval</p>
             </div>
@@ -60,7 +62,7 @@ export default function Home() {
               <p className="text-xs text-gray-500 mt-1">±0.8% confidence interval</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-3xl font-bold text-blue-500">19.8K</p>
+              <p className="text-3xl font-bold text-blue-500">2.1B</p>
               <p className="text-gray-600 text-sm">Projected Annual Yield (L)</p>
               <p className="text-xs text-gray-500 mt-1">±3.2% confidence interval</p>
             </div>

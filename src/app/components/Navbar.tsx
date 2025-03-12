@@ -56,14 +56,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Get Started Button */}
-        <button 
-          type="button"
-          className="hidden md:block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium"
-        >
-          Refresh Predictions
-        </button>
-
         {/* Mobile Menu Button */}
         <button
           type="button"
@@ -114,12 +106,6 @@ export default function Navbar() {
             >
               AI Assistant
             </Link>
-            <button 
-              type="button"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium w-full"
-            >
-              Refresh Predictions
-            </button>
           </div>
         </div>
       )}

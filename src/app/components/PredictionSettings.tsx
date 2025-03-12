@@ -20,13 +20,13 @@ export default function PredictionSettings() {
   
   // Predicted values (simulated AI predictions)  
   const [predictedValues, setPredictedValues] = useState({
-    milkVolume: 1650,
+    milkVolume: 165000000,
     fatContent: 4.2,
     proteinContent: 3.5,
     lactoseLevel: 4.8,
     ureaConcentration: 28,
     confidenceIntervals: {
-      milkVolume: { low: 1580, high: 1720 },
+      milkVolume: { low: 158000000, high: 172000000 },
       fatContent: { low: 4.0, high: 4.4 },
       proteinContent: { low: 3.4, high: 3.6 },
       lactoseLevel: { low: 4.7, high: 4.9 },
@@ -36,7 +36,7 @@ export default function PredictionSettings() {
   
   // Manual adjustment values (only used in manual mode)
   const [manualValues, setManualValues] = useState({
-    milkVolume: 1650,
+    milkVolume: 165000000,
     fatContent: 4.2,
     proteinContent: 3.5,
     lactoseLevel: 4.8,
@@ -45,9 +45,9 @@ export default function PredictionSettings() {
   
   // Calculated prediction results (simulated)
   const [predictionResults, setPredictionResults] = useState({
-    expectedYield: 1650,
-    confidenceLow: 1580,
-    confidenceHigh: 1720,
+    expectedYield: 165000000,
+    confidenceLow: 158000000,
+    confidenceHigh: 172000000,
     qualityScore: 87,
     profitMargin: 12.4,
     optimizationScore: 89
@@ -68,7 +68,7 @@ export default function PredictionSettings() {
         'year': 12
       };
       
-      const baseYield = 1650;
+      const baseYield = 165000000;
       const multiplier = multipliers[period];
       const adjustedYield = Math.round(baseYield * multiplier);
       
@@ -109,8 +109,8 @@ export default function PredictionSettings() {
     
     // This is a frontend-only simulation with no backend logic
     // Simple formula to simulate prediction changes based on inputs
-    const baseYield = 30000;
-    const volumeFactor = activeValues.milkVolume / 1000;
+    const baseYield = 30000000000;
+    const volumeFactor = activeValues.milkVolume / 165000000;
     const fatFactor = activeValues.fatContent / 4.0;
     const proteinFactor = activeValues.proteinContent / 3.3;
     const lactoseFactor = activeValues.lactoseLevel / 4.7;
@@ -174,6 +174,18 @@ export default function PredictionSettings() {
     }
   };
   
+  // Format large numbers with appropriate suffix (K, M, B)
+  const formatLargeNumber = (num: number): string => {
+    if (num >= 1000000000) {
+      return `${(num / 1000000000).toFixed(1)}B`;
+    } else if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(1)}M`;
+    } else if (num >= 1000) {
+      return `${(num / 1000).toFixed(1)}K`;
+    }
+    return num.toString();
+  };
+  
   // Handle manual value changes
   const handleManualValueChange = (name: string, value: number) => {
     setManualValues(prev => ({
@@ -221,17 +233,6 @@ export default function PredictionSettings() {
         </h2>
         
         <div className="flex items-center space-x-4">
-          <button
-            onClick={refreshPredictions}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
-            disabled={isLoading}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Refresh Predictions
-          </button>
-          
           <div className="flex items-center">
             <span className="text-sm text-gray-600 mr-2">Mode:</span>
             <button
@@ -319,7 +320,7 @@ export default function PredictionSettings() {
               </label>
               <div className="flex items-center">
                 <span className="text-sm text-blue-600 font-medium">
-                  {isManualMode ? manualValues.milkVolume : predictedValues.milkVolume}
+                  {formatLargeNumber(isManualMode ? manualValues.milkVolume : predictedValues.milkVolume)}
                 </span>
                 {!isManualMode && (
                   <span className="text-xs text-gray-500 ml-1">
@@ -333,16 +334,16 @@ export default function PredictionSettings() {
               <>
                 <input
                   type="range"
-                  min="500"
-                  max="2000"
-                  step="50"
+                  min="50000000"
+                  max="200000000"
+                  step="5000000"
                   value={manualValues.milkVolume}
                   onChange={(e) => handleManualValueChange('milkVolume', parseInt(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
                 />
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>500</span>
-                  <span>2000</span>
+                  <span>50M</span>
+                  <span>200M</span>
                 </div>
               </>
             ) : (
@@ -351,16 +352,16 @@ export default function PredictionSettings() {
                   <div 
                     className="bg-blue-500 h-2 rounded-full" 
                     style={{ 
-                      width: `${Math.min(100, ((predictedValues.milkVolume - 500) / (2000 - 500)) * 100)}%` 
+                      width: `${Math.min(100, ((predictedValues.milkVolume - 50000000) / (200000000 - 50000000)) * 100)}%` 
                     }}
                   ></div>
                 </div>
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>500</span>
+                  <span>50M</span>
                   <span className="text-xs text-gray-500">
-                    CI: {predictedValues.confidenceIntervals.milkVolume.low}-{predictedValues.confidenceIntervals.milkVolume.high}
+                    CI: {formatLargeNumber(predictedValues.confidenceIntervals.milkVolume.low)}-{formatLargeNumber(predictedValues.confidenceIntervals.milkVolume.high)}
                   </span>
-                  <span>2000</span>
+                  <span>200M</span>
                 </div>
               </div>
             )}
@@ -600,10 +601,10 @@ export default function PredictionSettings() {
               </h4>
               <div className="flex items-center">
                 <span className="text-2xl font-bold text-blue-600">
-                  {predictionResults.expectedYield.toLocaleString()} L
+                  {formatLargeNumber(predictionResults.expectedYield)} L
                 </span>
                 <span className="ml-2 text-xs text-gray-500">
-                  (95% CI: {predictionResults.confidenceLow.toLocaleString()} - {predictionResults.confidenceHigh.toLocaleString()} L)
+                  (95% CI: {formatLargeNumber(predictionResults.confidenceLow)} - {formatLargeNumber(predictionResults.confidenceHigh)} L)
                 </span>
               </div>
               <p className="text-xs text-gray-600 mt-1">

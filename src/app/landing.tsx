@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Logo from './components/Logo';
 
 export default function Landing() {
@@ -57,11 +57,13 @@ export default function Landing() {
             </main>
           </div>
         </div>
-        <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-          <img
-            className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-            src = "https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 relative h-56 sm:h-72 md:h-96 lg:h-full">
+          <Image
+            src="https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Dairy farm"
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
           />
         </div>
       </div>

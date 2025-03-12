@@ -20,13 +20,13 @@ export default function PredictionSettings() {
   
   // Predicted values (simulated AI predictions)  
   const [predictedValues, setPredictedValues] = useState({
-    milkVolume: 165000000,
+    milkVolume: 40000000, // Approximately weekly milk volume (2.1B / 52 weeks)
     fatContent: 4.2,
     proteinContent: 3.5,
     lactoseLevel: 4.8,
     ureaConcentration: 28,
     confidenceIntervals: {
-      milkVolume: { low: 158000000, high: 172000000 },
+      milkVolume: { low: 38400000, high: 41600000 }, // ±4% confidence interval
       fatContent: { low: 4.0, high: 4.4 },
       proteinContent: { low: 3.4, high: 3.6 },
       lactoseLevel: { low: 4.7, high: 4.9 },
@@ -36,7 +36,7 @@ export default function PredictionSettings() {
   
   // Manual adjustment values (only used in manual mode)
   const [manualValues, setManualValues] = useState({
-    milkVolume: 165000000,
+    milkVolume: 40000000, // Match the predicted value
     fatContent: 4.2,
     proteinContent: 3.5,
     lactoseLevel: 4.8,
@@ -45,12 +45,12 @@ export default function PredictionSettings() {
   
   // Calculated prediction results (simulated)
   const [predictionResults, setPredictionResults] = useState({
-    expectedYield: 165000000,
-    confidenceLow: 158000000,
-    confidenceHigh: 172000000,
-    qualityScore: 87,
-    profitMargin: 12.4,
-    optimizationScore: 89
+    expectedYield: 40000000, // Weekly yield (2.1B / 52)
+    confidenceLow: 38400000, // -4%
+    confidenceHigh: 41600000, // +4%
+    qualityScore: 86,
+    profitMargin: 16.3,
+    optimizationScore: 81
   });
   
   // Function to update predictions based on selected time period - wrapped in useCallback
@@ -62,15 +62,18 @@ export default function PredictionSettings() {
     // Simulate different predictions based on time period
     setTimeout(() => {
       const multipliers = {
-        'week': 0.25,
-        'month': 1,
-        'quarter': 3,
-        'year': 12
+        'week': 1/52,  // Weekly portion of annual yield
+        'month': 1/12, // Monthly portion of annual yield
+        'quarter': 1/4, // Quarterly portion of annual yield
+        'year': 1      // Full annual yield
       };
       
-      const baseYield = 165000000;
+      const annualYield = 2000000000; // 2 billion liters annually
+      const growthFactor = 1.05; // 5% growth from previous year
+      const adjustedAnnualYield = annualYield * growthFactor;
+      
       const multiplier = multipliers[period];
-      const adjustedYield = Math.round(baseYield * multiplier);
+      const adjustedYield = Math.round(adjustedAnnualYield * multiplier);
       
       setPredictedValues(prev => ({
         ...prev,
@@ -109,16 +112,27 @@ export default function PredictionSettings() {
     
     // This is a frontend-only simulation with no backend logic
     // Simple formula to simulate prediction changes based on inputs
-    const baseYield = 30000000000;
-    const volumeFactor = activeValues.milkVolume / 165000000;
-    const fatFactor = activeValues.fatContent / 4.0;
-    const proteinFactor = activeValues.proteinContent / 3.3;
-    const lactoseFactor = activeValues.lactoseLevel / 4.7;
-    const ureaFactor = 1 - Math.abs(activeValues.ureaConcentration - 24) / 30;
+    const baseYield = 2000000000; // Annual yield of 2 billion liters
+    const maxYield = 2500000000; // Maximum annual yield of 2.5 billion liters
     
-    const calculatedYield = Math.round(
-      baseYield * volumeFactor * fatFactor * proteinFactor * lactoseFactor * ureaFactor
-    );
+    const periodMultiplier = predictionPeriod === 'week' ? (1/52) : 
+                            predictionPeriod === 'month' ? (1/12) : 
+                            predictionPeriod === 'quarter' ? (1/4) : 1;
+    
+    // Calculate impact factors based on milk parameters
+    const fatImpact = (activeValues.fatContent - 4.0) / 4.0 * 0.1 + 1; // ±10% impact
+    const proteinImpact = (activeValues.proteinContent - 3.3) / 3.3 * 0.15 + 1; // ±15% impact
+    const lactoseImpact = (activeValues.lactoseLevel - 4.7) / 4.7 * 0.05 + 1; // ±5% impact
+    const ureaImpact = 1 - Math.abs(activeValues.ureaConcentration - 24) / 24 * 0.1; // ±10% impact
+    
+    // Calculate yield with quality factors applied
+    let adjustedYield = baseYield * fatImpact * proteinImpact * lactoseImpact * ureaImpact;
+    
+    // Ensure the yield stays within reasonable bounds
+    adjustedYield = Math.max(baseYield * 0.9, Math.min(maxYield, adjustedYield));
+    
+    // Apply period multiplier
+    const calculatedYield = Math.round(adjustedYield * periodMultiplier);
     
     // Calculate confidence interval (±3%)
     const confidenceLow = Math.round(calculatedYield * 0.97);
@@ -126,15 +140,15 @@ export default function PredictionSettings() {
     
     // Calculate other metrics
     const qualityScore = Math.round(
-      85 + (fatFactor - 1) * 20 + (proteinFactor - 1) * 25 - Math.abs(ureaFactor - 1) * 15
+      85 + (fatImpact - 1) * 100 + (proteinImpact - 1) * 100 - Math.abs(ureaImpact - 1) * 50
     );
     
     const profitMargin = (
-      16 + (fatFactor - 1) * 10 + (proteinFactor - 1) * 8 - Math.abs(ureaFactor - 1) * 5
+      16 + (fatImpact - 1) * 50 + (proteinImpact - 1) * 40 - Math.abs(ureaImpact - 1) * 25
     ).toFixed(1);
     
     const optimizationScore = Math.min(100, Math.max(60, Math.round(
-      80 + (fatFactor - 1) * 15 + (proteinFactor - 1) * 20 - Math.abs(ureaFactor - 1) * 10
+      80 + (fatImpact - 1) * 75 + (proteinImpact - 1) * 100 - Math.abs(ureaImpact - 1) * 50
     )));
     
     setPredictionResults({
@@ -145,7 +159,7 @@ export default function PredictionSettings() {
       profitMargin: parseFloat(profitMargin),
       optimizationScore
     });
-  }, [isManualMode, manualValues, predictedValues]);
+  }, [isManualMode, manualValues, predictedValues, predictionPeriod]);
   
   // Simulate fetching new predictions (in a real app, this would call an API)
   const refreshPredictions = () => {
@@ -334,16 +348,16 @@ export default function PredictionSettings() {
               <>
                 <input
                   type="range"
-                  min="50000000"
-                  max="200000000"
-                  step="5000000"
+                  min="20000000"
+                  max="60000000"
+                  step="1000000"
                   value={manualValues.milkVolume}
                   onChange={(e) => handleManualValueChange('milkVolume', parseInt(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
                 />
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>50M</span>
-                  <span>200M</span>
+                  <span>20M</span>
+                  <span>60M</span>
                 </div>
               </>
             ) : (
@@ -352,16 +366,16 @@ export default function PredictionSettings() {
                   <div 
                     className="bg-blue-500 h-2 rounded-full" 
                     style={{ 
-                      width: `${Math.min(100, ((predictedValues.milkVolume - 50000000) / (200000000 - 50000000)) * 100)}%` 
+                      width: `${Math.min(100, ((predictedValues.milkVolume - 20000000) / (60000000 - 20000000)) * 100)}%` 
                     }}
                   ></div>
                 </div>
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>50M</span>
+                  <span>20M</span>
                   <span className="text-xs text-gray-500">
                     CI: {formatLargeNumber(predictedValues.confidenceIntervals.milkVolume.low)}-{formatLargeNumber(predictedValues.confidenceIntervals.milkVolume.high)}
                   </span>
-                  <span>200M</span>
+                  <span>60M</span>
                 </div>
               </div>
             )}

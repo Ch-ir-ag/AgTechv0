@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Logo from './Logo';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,14 +32,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-blue-500 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M8 2h8a2 2 0 0 1 2 2v2h2v2h-2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8H4V6h2V4a2 2 0 0 1 2-2z" />
-            <path d="M6 12h12" />
-          </svg>
-          <span className="font-medium">Daisy AI</span>
-          <span className="text-sm text-gray-500 ml-2">for Lakeland Dairies</span>
-        </Link>
+        <Logo className="text-blue-500" />
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6">

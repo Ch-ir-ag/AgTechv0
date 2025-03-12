@@ -121,7 +121,12 @@ interface TooltipProps {
     value: number;
     name: string;
     dataKey: string;
-    payload?: any;
+    payload?: {
+      period: string;
+      thisYear: number;
+      comparisonYear: number;
+      confidenceLevel?: number;
+    };
   }>;
   label?: string;
 }

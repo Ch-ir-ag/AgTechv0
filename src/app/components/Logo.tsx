@@ -3,10 +3,9 @@ import Link from 'next/link';
 
 interface LogoProps {
   className?: string;
-  showTagline?: boolean;
 }
 
-export default function Logo({ className = '', showTagline = true }: LogoProps) {
+export default function Logo({ className = '' }: LogoProps) {
   return (
     <Link href="/" className={`flex items-center ${className}`}>
       {/* Logo image - this will be replaced by uploading a new image to /public/logo.png */}
@@ -19,8 +18,7 @@ export default function Logo({ className = '', showTagline = true }: LogoProps) 
           priority
         />
       </div>
-      
-     
     </Link>
   );
 } 
+

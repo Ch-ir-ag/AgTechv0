@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DairyCo-op | Milk Yield Analytics",
+  title: "Daisy AI | Milk Yield Analytics",
   description: "Professional AgTech platform for dairy cooperative analytics and insights",
 };
 

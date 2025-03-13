@@ -20,10 +20,7 @@ export default function Logo({ className = '', showTagline = true }: LogoProps) 
         />
       </div>
       
-      {/* Optional tagline */}
-      {showTagline && (
-        <span className="text-sm text-gray-500 ml-1">for Lakeland Dairies</span>
-      )}
+     
     </Link>
   );
 } 

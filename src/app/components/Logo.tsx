@@ -14,6 +14,7 @@ export default function Logo({ className = '' }: LogoProps) {
           src="/logo.png" 
           alt="Daisy AI Logo" 
           fill
+          sizes="(max-width: 768px) 100px, 128px"
           style={{ objectFit: 'contain' }}
           priority
         />
@@ -21,4 +22,3 @@ export default function Logo({ className = '' }: LogoProps) {
     </Link>
   );
 } 
-

@@ -59,10 +59,11 @@ export default function Landing() {
         </div>
         <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 relative h-56 sm:h-72 md:h-96 lg:h-full">
           <Image
-            src="https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Dairy farm"
+            src="/images/COWIMAGE1.png"
+            alt="Daisy AI"
             fill
             priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{ objectFit: 'cover' }}
           />
         </div>

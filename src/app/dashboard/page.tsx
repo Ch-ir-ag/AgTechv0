@@ -16,7 +16,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Lakeland Dairies <span className="text-blue-500">Yield Prediction Dashboard</span>
+              <span className="text-black">Yield Prediction Dashboard</span>
             </h1>
             <p className="text-gray-600 max-w-3xl mx-auto">
               Monitor your dairy production metrics and get accurate AI-powered predictions for future milk yield

@@ -97,7 +97,6 @@ const calculateModelMetrics = () => {
     sumActualSquaredDiff += actualDiff * actualDiff;
   });
   
-  const mse = sumSquaredError / dairyData.length;
   const r2 = 1 - (sumSquaredError / sumActualSquaredDiff);
   
   // Calculate average accuracy from the data

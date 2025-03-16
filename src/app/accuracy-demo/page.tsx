@@ -98,7 +98,6 @@ const calculateModelMetrics = () => {
   });
   
   const mse = sumSquaredError / dairyData.length;
-  const rmse = Math.sqrt(mse);
   const r2 = 1 - (sumSquaredError / sumActualSquaredDiff);
   
   // Calculate average accuracy from the data
@@ -436,7 +435,7 @@ export default function AccuracyDemo() {
                     <Label value="Predicted Volume (Liters)" angle={-90} position="left" offset={-5} />
                   </YAxis>
                   <Tooltip 
-                    formatter={(value, name, props) => {
+                    formatter={(value, name) => {
                       if (name === 'predictedVolume' || name === 'actualVolume' || name === 'adjustedPrediction') {
                         return [`${Number(value).toLocaleString()} L`, name === 'adjustedPrediction' ? 'Predicted Volume' : ''];
                       }

@@ -48,6 +48,9 @@ export default function Navbar() {
           <Link href="#chatbot" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             AI Assistant
           </Link>
+          <Link href="/accuracy-demo" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
+            Accuracy Demo
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -99,6 +102,13 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               AI Assistant
+            </Link>
+            <Link 
+              href="/accuracy-demo" 
+              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Accuracy Demo
             </Link>
           </div>
         </div>

@@ -81,7 +81,7 @@ const milkYieldData = {
     ],
   },
   yearly: {
-    2025: [
+  2025: [
       { period: '2018', thisYear: 1800000000, comparisonYear: 1650000000, confidenceLevel: 54000000 },
       { period: '2019', thisYear: 1950000000, comparisonYear: 1800000000, confidenceLevel: 58500000 },
       { period: '2020', thisYear: 2100000000, comparisonYear: 1950000000, confidenceLevel: 63000000 },
@@ -90,8 +90,8 @@ const milkYieldData = {
       { period: '2023', thisYear: 2550000000, comparisonYear: 2400000000, confidenceLevel: 76500000 },
       { period: '2024', thisYear: 2700000000, comparisonYear: 2550000000, confidenceLevel: 81000000 },
       { period: '2025', thisYear: 2850000000, comparisonYear: 2700000000, confidenceLevel: 85500000 },
-    ],
-    2024: [
+  ],
+  2024: [
       { period: '2017', thisYear: 1650000000, comparisonYear: 1500000000, confidenceLevel: 49500000 },
       { period: '2018', thisYear: 1800000000, comparisonYear: 1650000000, confidenceLevel: 54000000 },
       { period: '2019', thisYear: 1950000000, comparisonYear: 1800000000, confidenceLevel: 58500000 },
@@ -100,8 +100,8 @@ const milkYieldData = {
       { period: '2022', thisYear: 2400000000, comparisonYear: 2250000000, confidenceLevel: 72000000 },
       { period: '2023', thisYear: 2550000000, comparisonYear: 2400000000, confidenceLevel: 76500000 },
       { period: '2024', thisYear: 2700000000, comparisonYear: 2550000000, confidenceLevel: 81000000 },
-    ],
-    2023: [
+  ],
+  2023: [
       { period: '2016', thisYear: 1500000000, comparisonYear: 1350000000, confidenceLevel: 45000000 },
       { period: '2017', thisYear: 1650000000, comparisonYear: 1500000000, confidenceLevel: 49500000 },
       { period: '2018', thisYear: 1800000000, comparisonYear: 1650000000, confidenceLevel: 54000000 },
@@ -264,22 +264,22 @@ export default function MilkYieldChart() {
           </div>
           <div className="flex items-center mt-2 sm:mt-0">
             <label htmlFor="yearSelect" className="text-xs sm:text-sm text-gray-600 mr-2">
-              Compare:
-            </label>
-            <select
-              id="yearSelect"
-              value={selectedYear}
-              onChange={handleYearChange}
+            Compare:
+          </label>
+          <select
+            id="yearSelect"
+            value={selectedYear}
+            onChange={handleYearChange}
               className="border border-gray-200 rounded-md px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {availableYears.map((year) => (
-                <option key={year} value={year}>
-                  {year} vs {parseInt(year) - 1}
-                </option>
-              ))}
-            </select>
-          </div>
+          >
+            {availableYears.map((year) => (
+              <option key={year} value={year}>
+                {year} vs {parseInt(year) - 1}
+              </option>
+            ))}
+          </select>
         </div>
+      </div>
       </div>
       <div className="h-[300px] sm:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">

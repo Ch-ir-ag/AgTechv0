@@ -13,7 +13,8 @@ import {
   Line,
   ComposedChart,
   Label,
-  ReferenceLine
+  ReferenceLine,
+  Bar
 } from 'recharts';
 import Navbar from '../components/Navbar';
 
@@ -173,6 +174,7 @@ export default function AccuracyDemo() {
     r2: "0.0000",
     avgAccuracy: "0.00"
   });
+  const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
   
   // Update adjusted data when selected factors change
   useEffect(() => {
@@ -228,6 +230,8 @@ export default function AccuracyDemo() {
   // Prepare data for time series
   const timeSeriesData = adjustedData.map(item => ({
     month: `${item.month.substring(0, 3)} ${item.year.toString().substring(2)}`,
+    fullMonth: item.month,
+    year: item.year,
     actualVolume: item.actualVolume,
     predictedVolume: item.adjustedPrediction,
     residual: item.adjustedResidual,
@@ -240,6 +244,59 @@ export default function AccuracyDemo() {
         const itemYear = `20${item.month.split(' ')[1]}`;
         return itemYear === selectedYear;
       });
+  
+  // Process data for the time-period specific view
+  const getTimeAdjustedData = () => {
+    if (timePeriod === 'weekly') {
+      // Split monthly data into weekly (divide by 4)
+      return filteredTimeSeriesData.flatMap((item, monthIndex) => {
+        const baseVolume = item.actualVolume / 4;
+        const basePredicted = item.predictedVolume / 4;
+        
+        // Create 4 weeks for each month with better naming
+        return Array.from({ length: 4 }, (_, i) => {
+          // Create a more descriptive week identifier
+          const weekNumber = i + 1;
+          // Use abbreviated month name to save space
+          const shortMonth = item.fullMonth.substring(0, 3);
+          
+          return {
+            period: `W${weekNumber}, ${shortMonth} ${item.year}`,
+            fullPeriod: `Week ${weekNumber}, ${item.fullMonth} ${item.year}`,
+            monthIndex: monthIndex, // Store the month index for sorting
+            weekIndex: i, // Store the week index for sorting
+            actualVolume: Math.round(baseVolume),
+            predictedVolume: Math.round(basePredicted),
+            // Add small random variations to make the graph more realistic (±1.5%)
+            adjustedActualVolume: Math.round(baseVolume * (1 + (Math.random() * 0.03 - 0.015))),
+            adjustedPredictedVolume: Math.round(basePredicted * (1 + (Math.random() * 0.03 - 0.015)))
+          };
+        });
+      }).sort((a, b) => {
+        // Sort by year, then month index, then week index
+        if (a.period.split(' ')[2] !== b.period.split(' ')[2]) {
+          return parseInt(a.period.split(' ')[2]) - parseInt(b.period.split(' ')[2]);
+        }
+        if (a.monthIndex !== b.monthIndex) {
+          return a.monthIndex - b.monthIndex;
+        }
+        return a.weekIndex - b.weekIndex;
+      });
+    } else {
+      // Monthly view (default)
+      return filteredTimeSeriesData.map(item => ({
+        period: `${item.fullMonth} ${item.year}`,
+        fullPeriod: `${item.fullMonth} ${item.year}`,
+        actualVolume: Math.round(item.actualVolume),
+        predictedVolume: Math.round(item.predictedVolume),
+        // These adjusted values are the same for monthly view
+        adjustedActualVolume: Math.round(item.actualVolume),
+        adjustedPredictedVolume: Math.round(item.predictedVolume)
+      }));
+    }
+  };
+  
+  const timeAdjustedData = getTimeAdjustedData();
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
@@ -472,6 +529,99 @@ export default function AccuracyDemo() {
                   />
                 </ScatterChart>
               </ResponsiveContainer>
+            </div>
+          </div>
+          
+          {/* New time period-based visualization */}
+          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-medium text-gray-800">
+                Milk Volume Comparison by Time Period
+              </h2>
+              <div className="inline-flex shadow-sm rounded-md">
+                <button
+                  onClick={() => setTimePeriod('weekly')}
+                  className={`px-4 py-2 text-sm font-medium rounded-l-md ${
+                    timePeriod === 'weekly' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                  } border border-gray-300`}
+                >
+                  Weekly
+                </button>
+                <button
+                  onClick={() => setTimePeriod('monthly')}
+                  className={`px-4 py-2 text-sm font-medium rounded-r-md ${
+                    timePeriod === 'monthly' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                  } border-t border-r border-b border-gray-300`}
+                >
+                  Monthly
+                </button>
+              </div>
+            </div>
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart
+                  data={timeAdjustedData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: timePeriod === 'weekly' ? 100 : 80 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="period" 
+                    angle={-45} 
+                    textAnchor="end" 
+                    height={80}
+                    interval={timePeriod === 'weekly' ? (selectedYear === 'all' ? 3 : 1) : 0}  // Adjust interval based on data volume
+                    tick={{ fontSize: timePeriod === 'weekly' ? 10 : 12 }}  // Smaller font for weekly view
+                  />
+                  <YAxis 
+                    yAxisId="left"
+                    tickFormatter={(value) => `${Math.round(value / 1000)}K`}
+                    domain={[0, 'auto']}
+                  >
+                    <Label value="Volume (Liters)" angle={-90} position="left" offset={-5} />
+                  </YAxis>
+                  <Tooltip 
+                    formatter={(value, name) => {
+                      const formattedValue = `${Math.round(Number(value)).toLocaleString()} L`;
+                      if (name === 'actualVolume' || name === 'adjustedActualVolume') {
+                        return [formattedValue, 'Actual Volume'];
+                      }
+                      if (name === 'predictedVolume' || name === 'adjustedPredictedVolume') {
+                        return [formattedValue, 'Predicted Volume'];
+                      }
+                      return [formattedValue, name];
+                    }}
+                    labelFormatter={(value) => timeAdjustedData.find(item => item.period === value)?.fullPeriod || value}
+                    contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', border: '1px solid #ccc', borderRadius: '4px', padding: '8px' }}
+                  />
+                  <Legend verticalAlign="top" height={36} />
+                  <Bar 
+                    yAxisId="left" 
+                    dataKey="adjustedActualVolume" 
+                    name="Actual Volume" 
+                    fill="rgba(72, 128, 230, 0.8)" 
+                    barSize={timePeriod === 'weekly' ? (selectedYear === 'all' ? 6 : 10) : 20}
+                  />
+                  <Bar 
+                    yAxisId="left" 
+                    dataKey="adjustedPredictedVolume" 
+                    name="Predicted Volume" 
+                    fill="rgba(255, 115, 0, 0.8)" 
+                    barSize={timePeriod === 'weekly' ? (selectedYear === 'all' ? 6 : 10) : 20}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 text-center">
+              <p>This chart shows direct comparison between actual and predicted milk volumes over {timePeriod === 'weekly' ? 'weeks' : 'months'}.</p>
+              {timePeriod === 'weekly' && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Note: Weekly data is derived by dividing monthly volumes by 4 with small random variations to visualize the pattern.
+                </p>
+              )}
             </div>
           </div>
           

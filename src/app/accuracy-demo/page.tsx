@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  ScatterChart,
-  Scatter,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -32,7 +30,6 @@ interface DairyDataItem {
   predictedVolume: number;
   residual: number;
   accuracy: number;
-  name?: string;  // Optional name field
 }
 
 interface AdjustedDairyDataItem extends DairyDataItem {
@@ -48,11 +45,6 @@ interface FactorSelection {
   scc: boolean;
   totalCows: boolean;
   seasonality: boolean;
-}
-
-interface MetricsData {
-  r2: string;
-  avgAccuracy: string;
 }
 
 interface TimeSeriesDataItem {
@@ -187,14 +179,7 @@ export default function AccuracyDemo() {
     totalCows: true,
     seasonality: true
   });
-  const [adjustedData, setAdjustedData] = useState<AdjustedDairyDataItem[]>([]);
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
-  
-  // Update adjusted data when selected factors change
-  useEffect(() => {
-    const newAdjustedData = createAdjustedPredictions(selectedFactors);
-    setAdjustedData(newAdjustedData);
-  }, [selectedFactors]);
   
   // Prepare data for time series
   const timeSeriesData: TimeSeriesDataItem[] = dairyData.map(item => ({
@@ -520,11 +505,11 @@ export default function AccuracyDemo() {
                     }}
                   />
                   <Legend />
-                  <Scatter 
+                  <Line 
                     name="Actual Volume" 
                     dataKey="actualVolume" 
-                    fill="rgba(72, 128, 230, 0.8)" 
-                    shape="circle"
+                    stroke="rgba(72, 128, 230, 0.8)"
+                    dot={{ fill: "rgba(72, 128, 230, 0.8)" }}
                   />
                   <Line
                     type="monotone"

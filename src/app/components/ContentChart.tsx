@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   LineChart,
   Line,
@@ -40,15 +39,12 @@ interface TooltipProps {
   label?: string;
 }
 
-interface ChartDataPoint {
-  name: string;
-  [key: string]: string | number;
-}
-
-interface ContentChartProps {
-  chartData: ChartDataPoint[];
-  dataKey: string;
-  color: string;
+interface ContentData {
+  period: string;
+  actualFat?: number;
+  predictedFat?: number;
+  actualProtein?: number;
+  predictedProtein?: number;
 }
 
 // Custom tooltip component
@@ -67,14 +63,14 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   return null;
 };
 
-export default function ContentChart({ chartData, dataKey, color }: ContentChartProps) {
+export default function ContentChart() {
   const [selectedYear, setSelectedYear] = useState<"2025" | "2024">("2025");
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
   const [contentType, setContentType] = useState<'fat' | 'protein'>('fat');
   const [contentData, setContentData] = useState(defaultContentData);
   const [showInputForm, setShowInputForm] = useState(false);
 
-  const handleDataSubmit = (newData: any) => {
+  const handleDataSubmit = (newData: ContentData) => {
     setContentData(prevData => ({
       ...prevData,
       [timePeriod]: {

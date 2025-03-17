@@ -32,21 +32,6 @@ interface DairyDataItem {
   accuracy: number;
 }
 
-interface AdjustedDairyDataItem extends DairyDataItem {
-  adjustedPrediction: number;
-  adjustedAccuracy: number;
-  adjustedResidual: number;
-  name: string;
-}
-
-interface FactorSelection {
-  fatPercent: boolean;
-  proteinPercent: boolean;
-  scc: boolean;
-  totalCows: boolean;
-  seasonality: boolean;
-}
-
 interface TimeSeriesDataItem {
   month: string;
   fullMonth: string;
@@ -104,70 +89,6 @@ const factorWeights = {
   scc: 0.1,            // 10% contribution
   totalCows: 0.3,      // 30% contribution
   seasonality: 0.2     // 20% contribution (month_sin, month_cos)
-};
-
-// Calculate model accuracy metrics
-const calculateModelMetrics = () => {
-  // This function is no longer needed
-  return {
-    avgAccuracy: "95.6"
-  };
-};
-
-const metrics = calculateModelMetrics();
-
-// Create an adjusted prediction based on selected factors
-const createAdjustedPredictions = (selectedFactors: FactorSelection): AdjustedDairyDataItem[] => {
-  return dairyData.map(item => {
-    // Start with a base prediction that's far from accurate
-    let adjustedPrediction = item.actualVolume * 0.5; // Start at 50% accuracy
-    let contributionFactor = 0;
-    
-    // Add contribution from each selected factor
-    if (selectedFactors.fatPercent) {
-      adjustedPrediction += (item.predictedVolume - adjustedPrediction) * factorWeights.fatPercent;
-      contributionFactor += factorWeights.fatPercent;
-    }
-    
-    if (selectedFactors.proteinPercent) {
-      adjustedPrediction += (item.predictedVolume - adjustedPrediction) * factorWeights.proteinPercent;
-      contributionFactor += factorWeights.proteinPercent;
-    }
-    
-    if (selectedFactors.scc) {
-      adjustedPrediction += (item.predictedVolume - adjustedPrediction) * factorWeights.scc;
-      contributionFactor += factorWeights.scc;
-    }
-    
-    if (selectedFactors.totalCows) {
-      adjustedPrediction += (item.predictedVolume - adjustedPrediction) * factorWeights.totalCows;
-      contributionFactor += factorWeights.totalCows;
-    }
-    
-    if (selectedFactors.seasonality) {
-      adjustedPrediction += (item.predictedVolume - adjustedPrediction) * factorWeights.seasonality;
-      contributionFactor += factorWeights.seasonality;
-    }
-    
-    // If no factors are selected, use a very basic prediction
-    if (contributionFactor === 0) {
-      adjustedPrediction = item.actualVolume * 0.5;
-    }
-    
-    // Calculate adjusted accuracy
-    const adjustedAccuracy = (adjustedPrediction / item.actualVolume) * 100;
-    
-    // Calculate residual
-    const adjustedResidual = item.actualVolume - adjustedPrediction;
-    
-    return {
-      ...item,
-      adjustedPrediction,
-      adjustedAccuracy,
-      adjustedResidual,
-      name: `${item.month} ${item.year}`
-    };
-  });
 };
 
 export default function AccuracyDemo() {

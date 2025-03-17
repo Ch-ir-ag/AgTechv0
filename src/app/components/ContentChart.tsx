@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useState } from 'react';
 import {
   LineChart,
@@ -29,24 +30,36 @@ const defaultContentData = {
   }
 };
 
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    dataKey: string;
+    name: string;
+  }>;
+  label?: string;
+}
+
+interface ChartDataPoint {
+  name: string;
+  [key: string]: string | number;
+}
+
+interface ContentChartProps {
+  chartData: ChartDataPoint[];
+  dataKey: string;
+  color: string;
+}
+
 // Custom tooltip component
-const ContentTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     const isProtein = payload[0].dataKey.includes('Protein');
-    const color = isProtein ? 'text-green-600' : 'text-blue-600';
-    const type = isProtein ? 'Protein' : 'Fat';
-    
     return (
-      <div className="bg-white p-3 border border-gray-200 rounded-md shadow-sm">
-        <p className="font-medium text-gray-900">{label}</p>
-        <p className={`text-sm ${color}`}>
-          Actual {type}: {payload[0].value?.toFixed(1)}%
-        </p>
-        <p className={`text-sm ${color} opacity-75`}>
-          Predicted {type}: {payload[1].value?.toFixed(1)}%
-        </p>
-        <p className="text-xs text-gray-500 mt-1">
-          Prediction Accuracy: 95.6%
+      <div className="bg-white p-2 border border-gray-200 rounded shadow">
+        <p className="text-sm">{`${label}`}</p>
+        <p className="text-sm font-semibold text-blue-600">
+          {`${payload[0].value.toLocaleString()}${isProtein ? '%' : ' L'}`}
         </p>
       </div>
     );
@@ -54,7 +67,7 @@ const ContentTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function ContentChart() {
+export default function ContentChart({ chartData, dataKey, color }: ContentChartProps) {
   const [selectedYear, setSelectedYear] = useState<"2025" | "2024">("2025");
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
   const [contentType, setContentType] = useState<'fat' | 'protein'>('fat');
@@ -206,7 +219,7 @@ export default function ContentChart() {
                     style: { fill: '#6b7280' }
                   }}
                 />
-                <Tooltip content={<ContentTooltip />} />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend 
                   wrapperStyle={{ paddingTop: '10px' }}
                   iconType="circle"

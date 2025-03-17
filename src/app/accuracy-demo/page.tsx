@@ -32,6 +32,7 @@ interface DairyDataItem {
   predictedVolume: number;
   residual: number;
   accuracy: number;
+  name?: string;  // Optional name field
 }
 
 interface AdjustedDairyDataItem extends DairyDataItem {
@@ -52,6 +53,16 @@ interface FactorSelection {
 interface MetricsData {
   r2: string;
   avgAccuracy: string;
+}
+
+interface TimeSeriesDataItem {
+  month: string;
+  fullMonth: string;
+  year: number;
+  actualVolume: number;
+  predictedVolume: number;
+  residual: number;
+  accuracy: number;
 }
 
 // This represents the data and predictions from the actual model
@@ -105,24 +116,9 @@ const factorWeights = {
 
 // Calculate model accuracy metrics
 const calculateModelMetrics = () => {
-  let sumSquaredError = 0;
-  let sumActualSquaredDiff = 0;
-  const meanActual = dairyData.reduce((sum, item) => sum + item.actualVolume, 0) / dairyData.length;
-  
-  dairyData.forEach(item => {
-    const error = item.actualVolume - item.predictedVolume;
-    sumSquaredError += error * error;
-    
-    const actualDiff = item.actualVolume - meanActual;
-    sumActualSquaredDiff += actualDiff * actualDiff;
-  });
-  
-  const r2 = 1 - (sumSquaredError / sumActualSquaredDiff);
-  
-  // Return fixed average accuracy of 94.5% as requested
+  // This function is no longer needed
   return {
-    r2: r2.toFixed(4),
-    avgAccuracy: "94.5"
+    avgAccuracy: "95.6"
   };
 };
 
@@ -184,7 +180,7 @@ const createAdjustedPredictions = (selectedFactors: FactorSelection): AdjustedDa
 
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
-  const [selectedFactors, setSelectedFactors] = useState<FactorSelection>({
+  const [selectedFactors] = useState<FactorSelection>({
     fatPercent: true,
     proteinPercent: true,
     scc: true,
@@ -192,65 +188,16 @@ export default function AccuracyDemo() {
     seasonality: true
   });
   const [adjustedData, setAdjustedData] = useState<AdjustedDairyDataItem[]>([]);
-  const [adjustedMetrics, setAdjustedMetrics] = useState<MetricsData>({
-    r2: "0.0000",
-    avgAccuracy: "0.00"
-  });
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
   
   // Update adjusted data when selected factors change
   useEffect(() => {
     const newAdjustedData = createAdjustedPredictions(selectedFactors);
     setAdjustedData(newAdjustedData);
-    
-    // Calculate metrics for adjusted data
-    let sumSquaredError = 0;
-    let sumActualSquaredDiff = 0;
-    const meanActual = newAdjustedData.reduce((sum, item) => sum + item.actualVolume, 0) / newAdjustedData.length;
-    
-    newAdjustedData.forEach(item => {
-      const error = item.actualVolume - item.adjustedPrediction;
-      sumSquaredError += error * error;
-      
-      const actualDiff = item.actualVolume - meanActual;
-      sumActualSquaredDiff += actualDiff * actualDiff;
-    });
-    
-    const r2 = 1 - (sumSquaredError / sumActualSquaredDiff);
-    
-    // Calculate a scaled accuracy based on how many factors are selected
-    const factorCount = Object.values(selectedFactors).filter(Boolean).length;
-    const totalFactors = Object.keys(selectedFactors).length;
-    
-    // If all factors are selected, show 94.5%, otherwise calculate a reduced accuracy
-    const avgAccuracy = factorCount === totalFactors 
-      ? "94.5" 
-      : Math.round((factorCount / totalFactors) * 94.5).toString();
-    
-    setAdjustedMetrics({
-      r2: r2.toFixed(4),
-      avgAccuracy: avgAccuracy
-    });
   }, [selectedFactors]);
   
-  // Toggle factor selection
-  const toggleFactor = (factor: keyof FactorSelection) => {
-    setSelectedFactors(prev => ({
-      ...prev,
-      [factor]: !prev[factor]
-    }));
-  };
-  
-  // Filter data based on selected year
-  const filteredAdjustedData = selectedYear === 'all' 
-    ? adjustedData
-    : adjustedData.filter(item => {
-        const itemYear = parseInt(item.name.split(' ').pop() || '0');
-        return itemYear === parseInt(selectedYear);
-      });
-  
   // Prepare data for time series
-  const timeSeriesData = dairyData.map(item => ({
+  const timeSeriesData: TimeSeriesDataItem[] = dairyData.map(item => ({
     month: `${item.month.substring(0, 3)} ${item.year.toString().substring(2)}`,
     fullMonth: item.month,
     year: item.year,
@@ -260,12 +207,10 @@ export default function AccuracyDemo() {
     accuracy: item.accuracy
   }));
   
+  // Filter data based on selected year
   const filteredTimeSeriesData = selectedYear === 'all'
     ? timeSeriesData
-    : timeSeriesData.filter(item => {
-        const itemYear = `20${item.month.split(' ')[1]}`;
-        return itemYear === selectedYear;
-      });
+    : timeSeriesData.filter(item => item.year.toString() === selectedYear);
   
   // Process data for the time-period specific view
   const getTimeAdjustedData = () => {

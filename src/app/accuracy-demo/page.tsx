@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   XAxis,
   YAxis,
@@ -172,13 +172,6 @@ const createAdjustedPredictions = (selectedFactors: FactorSelection): AdjustedDa
 
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
-  const [selectedFactors] = useState<FactorSelection>({
-    fatPercent: true,
-    proteinPercent: true,
-    scc: true,
-    totalCows: true,
-    seasonality: true
-  });
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
   
   // Prepare data for time series

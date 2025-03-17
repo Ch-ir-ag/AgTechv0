@@ -82,15 +82,6 @@ const dairyData: DairyDataItem[] = [
   { year: 2024, month: 'December', fatPercent: 6.00, proteinPercent: 4.49, scc: 196, totalCows: 502, month_sin: 0, month_cos: 1, actualVolume: 64187, predictedVolume: 65850, residual: 65850 - 64187, accuracy: Math.round((65850 / 64187) * 100) }
 ];
 
-// Model factor weights (approximate contribution of each factor to the model)
-const factorWeights = {
-  fatPercent: 0.2,     // 20% contribution
-  proteinPercent: 0.2, // 20% contribution
-  scc: 0.1,            // 10% contribution
-  totalCows: 0.3,      // 30% contribution
-  seasonality: 0.2     // 20% contribution (month_sin, month_cos)
-};
-
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');

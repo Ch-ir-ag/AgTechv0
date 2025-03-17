@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -9,11 +9,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
   ErrorBar,
+  ResponsiveContainer
 } from 'recharts';
 
-// Realistic data for milk yield analytics - structured by time period with confidence levels
+// Sample data for milk yield analytics - structured by time period with confidence levels
 // Scaled to reflect an annual yield of approximately 2 billion liters
 const milkYieldData = {
   weekly: {
@@ -81,40 +81,19 @@ const milkYieldData = {
     ],
   },
   yearly: {
-  2025: [
-      { period: '2018', thisYear: 1800000000, comparisonYear: 1650000000, confidenceLevel: 54000000 },
-      { period: '2019', thisYear: 1950000000, comparisonYear: 1800000000, confidenceLevel: 58500000 },
-      { period: '2020', thisYear: 2100000000, comparisonYear: 1950000000, confidenceLevel: 63000000 },
-      { period: '2021', thisYear: 2250000000, comparisonYear: 2100000000, confidenceLevel: 67500000 },
-      { period: '2022', thisYear: 2400000000, comparisonYear: 2250000000, confidenceLevel: 72000000 },
-      { period: '2023', thisYear: 2550000000, comparisonYear: 2400000000, confidenceLevel: 76500000 },
-      { period: '2024', thisYear: 2700000000, comparisonYear: 2550000000, confidenceLevel: 81000000 },
+    2025: [
       { period: '2025', thisYear: 2850000000, comparisonYear: 2700000000, confidenceLevel: 85500000 },
-  ],
-  2024: [
-      { period: '2017', thisYear: 1650000000, comparisonYear: 1500000000, confidenceLevel: 49500000 },
-      { period: '2018', thisYear: 1800000000, comparisonYear: 1650000000, confidenceLevel: 54000000 },
-      { period: '2019', thisYear: 1950000000, comparisonYear: 1800000000, confidenceLevel: 58500000 },
-      { period: '2020', thisYear: 2100000000, comparisonYear: 1950000000, confidenceLevel: 63000000 },
-      { period: '2021', thisYear: 2250000000, comparisonYear: 2100000000, confidenceLevel: 67500000 },
-      { period: '2022', thisYear: 2400000000, comparisonYear: 2250000000, confidenceLevel: 72000000 },
-      { period: '2023', thisYear: 2550000000, comparisonYear: 2400000000, confidenceLevel: 76500000 },
+    ],
+    2024: [
       { period: '2024', thisYear: 2700000000, comparisonYear: 2550000000, confidenceLevel: 81000000 },
-  ],
-  2023: [
-      { period: '2016', thisYear: 1500000000, comparisonYear: 1350000000, confidenceLevel: 45000000 },
-      { period: '2017', thisYear: 1650000000, comparisonYear: 1500000000, confidenceLevel: 49500000 },
-      { period: '2018', thisYear: 1800000000, comparisonYear: 1650000000, confidenceLevel: 54000000 },
-      { period: '2019', thisYear: 1950000000, comparisonYear: 1800000000, confidenceLevel: 58500000 },
-      { period: '2020', thisYear: 2100000000, comparisonYear: 1950000000, confidenceLevel: 63000000 },
-      { period: '2021', thisYear: 2250000000, comparisonYear: 2100000000, confidenceLevel: 67500000 },
-      { period: '2022', thisYear: 2400000000, comparisonYear: 2250000000, confidenceLevel: 72000000 },
+    ],
+    2023: [
       { period: '2023', thisYear: 2550000000, comparisonYear: 2400000000, confidenceLevel: 76500000 },
     ],
-  },
+  },  
 };
 
-// Define proper types for the tooltip props
+// Define proper types for the tooltip propsm 
 interface TooltipProps {
   active?: boolean;
   payload?: Array<{
@@ -159,57 +138,15 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
       </div>
     );
   }
-
   return null;
 };
 
-// Define time period type
-type TimePeriod = 'weekly' | 'monthly' | 'yearly';
-
 export default function MilkYieldChart() {
-  // State for selected comparison year
   const [selectedYear, setSelectedYear] = useState<"2025" | "2024" | "2023">("2025");
-  const [comparisonYear, setComparisonYear] = useState<"2025" | "2024" | "2023">("2024");
-  // State for selected time period
-  const [timePeriod, setTimePeriod] = useState<TimePeriod>('weekly');
+  const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
   
   // Available years for selection
-  const availableYears = ["2025", "2024", "2023"].sort((a, b) => parseInt(b) - parseInt(a));
-  
-  // Handle year change
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newYear = e.target.value as "2025" | "2024" | "2023";
-    setSelectedYear(newYear);
-    
-    // Set comparison year to previous year
-    const yearIndex = availableYears.indexOf(newYear);
-    if (yearIndex < availableYears.length - 1) {
-      const nextYear = availableYears[yearIndex + 1];
-      // Make sure we only set valid years as comparison
-      if (nextYear === "2025" || nextYear === "2024" || nextYear === "2023") {
-        setComparisonYear(nextYear);
-      }
-    }
-  };
-
-  // Handle time period change
-  const handleTimePeriodChange = (period: TimePeriod) => {
-    setTimePeriod(period);
-  };
-
-  // Get the title based on time period
-  const getChartTitle = () => {
-    switch (timePeriod) {
-      case 'weekly':
-        return 'Weekly Milk Yield Comparison';
-      case 'monthly':
-        return 'Monthly Milk Yield Comparison';
-      case 'yearly':
-        return 'Yearly Milk Yield Comparison';
-      default:
-        return 'Milk Yield Comparison';
-    }
-  };
+  const availableYears = ["2025", "2024", "2023"];
   
   // Format Y-axis ticks for large numbers
   const formatYAxisTick = (value: number): string => {
@@ -222,17 +159,17 @@ export default function MilkYieldChart() {
     }
     return value.toString();
   };
-  
+
   return (
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm h-full border border-gray-100">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
         <h2 className="text-xl font-medium text-gray-800 mb-3 sm:mb-0">
-          {getChartTitle()}
+          {timePeriod.charAt(0).toUpperCase() + timePeriod.slice(1)} Milk Yield Comparison
         </h2>
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => handleTimePeriodChange('weekly')}
+              onClick={() => setTimePeriod('weekly')}
               className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                 timePeriod === 'weekly'
                   ? 'bg-blue-500 text-white'
@@ -242,7 +179,7 @@ export default function MilkYieldChart() {
               Weekly
             </button>
             <button
-              onClick={() => handleTimePeriodChange('monthly')}
+              onClick={() => setTimePeriod('monthly')}
               className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                 timePeriod === 'monthly'
                   ? 'bg-blue-500 text-white'
@@ -252,7 +189,7 @@ export default function MilkYieldChart() {
               Monthly
             </button>
             <button
-              onClick={() => handleTimePeriodChange('yearly')}
+              onClick={() => setTimePeriod('yearly')}
               className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                 timePeriod === 'yearly'
                   ? 'bg-blue-500 text-white'
@@ -262,29 +199,30 @@ export default function MilkYieldChart() {
               Yearly
             </button>
           </div>
-          <div className="flex items-center mt-2 sm:mt-0">
+          <div className="flex items-center">
             <label htmlFor="yearSelect" className="text-xs sm:text-sm text-gray-600 mr-2">
-            Compare:
-          </label>
-          <select
-            id="yearSelect"
-            value={selectedYear}
-            onChange={handleYearChange}
+              Compare:
+            </label>
+            <select
+              id="yearSelect"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value as "2025" | "2024" | "2023")}
               className="border border-gray-200 rounded-md px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {availableYears.map((year) => (
-              <option key={year} value={year}>
-                {year} vs {parseInt(year) - 1}
-              </option>
-            ))}
-          </select>
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>
+                  {year} vs {parseInt(year) - 1}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
-      </div>
+
       <div className="h-[300px] sm:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={milkYieldData[timePeriod][selectedYear as "2025" | "2024" | "2023"]}
+            data={milkYieldData[timePeriod][selectedYear]}
             margin={{
               top: 5,
               right: 20,
@@ -297,6 +235,10 @@ export default function MilkYieldChart() {
               dataKey="period" 
               tick={{ fill: '#6b7280' }} 
               axisLine={{ stroke: '#d1d5db' }}
+              height={60}
+              interval={0}
+              angle={-45}
+              textAnchor="end"
             />
             <YAxis 
               tick={{ fill: '#6b7280' }} 
@@ -311,7 +253,7 @@ export default function MilkYieldChart() {
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ paddingTop: '10px' }} />
-            <Bar 
+            <Bar
               dataKey="thisYear" 
               name={`${selectedYear} Yield`} 
               fill="#60a5fa" 
@@ -319,15 +261,16 @@ export default function MilkYieldChart() {
             >
               <ErrorBar dataKey="confidenceLevel" width={4} strokeWidth={2} stroke="#3b82f6" direction="y" />
             </Bar>
-            <Bar 
+            <Bar
               dataKey="comparisonYear" 
-              name={`${comparisonYear} Yield`} 
+              name={`${parseInt(selectedYear) - 1} Yield`} 
               fill="#3b82f6" 
               radius={[4, 4, 0, 0]} 
             />
           </BarChart>
         </ResponsiveContainer>
       </div>
+
       <div className="mt-4 text-xs sm:text-sm text-gray-600">
         <p>Data represents {timePeriod.slice(0, -2)} milk production in liters, comparing current year with previous year.</p>
         <p className="mt-1">Last updated: 2025-03-03</p>

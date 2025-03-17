@@ -159,11 +159,6 @@ const createAdjustedPredictions = (selectedFactors: FactorSelection): AdjustedDa
   });
 };
 
-// Find max value for perfect prediction line
-const maxVolume = Math.max(
-  ...dairyData.map(item => Math.max(item.actualVolume, item.predictedVolume))
-);
-
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
   const [selectedFactors, setSelectedFactors] = useState<FactorSelection>({

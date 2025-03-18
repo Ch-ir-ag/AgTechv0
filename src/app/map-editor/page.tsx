@@ -12,26 +12,20 @@ export default function MapEditor() {
   const [isResizing, setIsResizing] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
   const [output, setOutput] = useState('');
   
   // Update map size when the component mounts
   useEffect(() => {
     if (mapRef.current) {
-      setMapSize({
-        width: mapRef.current.clientWidth,
-        height: mapRef.current.clientHeight
-      });
+      const width = mapRef.current.clientWidth;
+      const height = mapRef.current.clientHeight;
     }
     
     const handleResize = () => {
       if (mapRef.current) {
-        setMapSize({
-          width: mapRef.current.clientWidth,
-          height: mapRef.current.clientHeight
-        });
+        const width = mapRef.current.clientWidth;
+        const height = mapRef.current.clientHeight;
       }
     };
     
@@ -74,11 +68,6 @@ export default function MapEditor() {
     setStartPoint({
       x: e.clientX,
       y: e.clientY
-    });
-    
-    setDragOffset({
-      x: 0,
-      y: 0
     });
   };
   
@@ -188,7 +177,7 @@ ${code}
               {/* Map Image */}
               <div className="relative w-full h-full">
                 <Image
-                  src="/images/ireland_map.jpg" // Make sure this exists in your public folder
+                  src="/images/ireland_map.jpg"
                   alt="Ireland Map"
                   fill
                   style={{ objectFit: 'contain' }}

@@ -22,11 +22,116 @@ interface ClickableArea {
   name: string;
 }
 
+// Define the clickable area coordinates types directly in the array
+const clickableAreas = [
+  {
+    id: 'antrim',
+    shape: 'rect' as const,
+    coords: [311, 68, 351, 128],
+    name: 'Antrim'
+  },
+  {
+    id: 'down',
+    shape: 'rect' as const,
+    coords: [322, 191, 365, 244],
+    name: 'Down'
+  },
+  {
+    id: 'armagh',
+    shape: 'rect' as const,
+    coords: [276, 203, 310, 243],
+    name: 'Armagh'
+  },
+  {
+    id: 'tyrone',
+    shape: 'rect' as const,
+    coords: [218, 136, 268, 186],
+    name: 'Tyrone'
+  },
+  {
+    id: 'derry',
+    shape: 'rect' as const,
+    coords: [242, 58, 292, 108],
+    name: 'Derry'
+  },
+  {
+    id: 'fermanagh',
+    shape: 'rect' as const,
+    coords: [187, 198, 236, 239],
+    name: 'Fermanagh'
+  },
+  {
+    id: 'monaghan',
+    shape: 'rect' as const,
+    coords: [252, 228, 278, 263],
+    name: 'Monaghan'
+  },
+  {
+    id: 'cavan',
+    shape: 'rect' as const,
+    coords: [222, 274, 257, 316],
+    name: 'Cavan'
+  },
+  {
+    id: 'louth',
+    shape: 'rect' as const,
+    coords: [299, 288, 328, 327],
+    name: 'Louth'
+  },
+  {
+    id: 'meath',
+    shape: 'rect' as const,
+    coords: [269, 342, 308, 384],
+    name: 'Meath'
+  },
+  {
+    id: 'dublin',
+    shape: 'rect' as const,
+    coords: [320, 374, 357, 418],
+    name: 'Dublin'
+  },
+  {
+    id: 'kildare',
+    shape: 'rect' as const,
+    coords: [262, 422, 302, 458],
+    name: 'Kildare'
+  },
+  {
+    id: 'offaly',
+    shape: 'rect' as const,
+    coords: [200, 424, 239, 456],
+    name: 'Offaly '
+  },
+  {
+    id: 'westmeath',
+    shape: 'rect' as const,
+    coords: [206, 364, 258, 397],
+    name: 'Westmeath'
+  },
+  {
+    id: 'longford ',
+    shape: 'rect' as const,
+    coords: [182, 324, 228, 354],
+    name: 'Longford '
+  },
+  {
+    id: 'leitrim',
+    shape: 'rect' as const,
+    coords: [172, 272, 209, 302],
+    name: 'Leitrim'
+  },
+  {
+    id: 'donegal',
+    shape: 'rect' as const,
+    coords: [158, 86, 206, 122],
+    name: 'Donegal'
+  }
+];
+
 export default function InteractiveSupplyChainMap() {
   // State for the selected county
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
   const mapRef = useRef<HTMLDivElement>(null);
   
   // Sample county data - replace with your actual data
@@ -186,153 +291,12 @@ export default function InteractiveSupplyChainMap() {
     }
   };
   
-  // Define clickable areas - these coordinates need to be adjusted for your specific map
-  // Format: [x1, y1, x2, y2] for rect, [x, y, radius] for circle, [x1, y1, x2, y2, ...] for poly
-  // const clickableAreas: ClickableArea[] = [
-  //   {
-  //     id: 'cavan',
-  //     shape: 'rect',
-  //     coords: [100, 150, 200, 250],
-  //     name: 'Cavan'
-  //   },
-  //   {
-  //     id: 'monaghan',
-  //     shape: 'rect',
-  //     coords: [200, 100, 300, 200],
-  //     name: 'Monaghan'
-  //   },
-  //   {
-  //     id: 'louth',
-  //     shape: 'rect',
-  //     coords: [300, 150, 400, 250],
-  //     name: 'Louth'
-  //   },
-  //   {
-  //     id: 'meath',
-  //     shape: 'rect',
-  //     coords: [250, 250, 350, 350],
-  //     name: 'Meath'
-  //   },
-  //   {
-  //     id: 'dublin',
-  //     shape: 'rect',
-  //     coords: [350, 250, 450, 350],
-  //     name: 'Dublin'
-  //   }
-  // ];
-  // Clickable areas for map
-const clickableAreas = [
-  {
-    id: 'antrim',
-    shape: 'rect',
-    coords: [311, 68, 351, 128],
-    name: 'Antrim'
-  },
-  {
-    id: 'down',
-    shape: 'rect',
-    coords: [322, 191, 365, 244],
-    name: 'Down'
-  },
-  {
-    id: 'armagh',
-    shape: 'rect',
-    coords: [276, 203, 310, 243],
-    name: 'Armagh'
-  },
-  {
-    id: 'tyrone',
-    shape: 'rect',
-    coords: [218, 136, 268, 186],
-    name: 'Tyrone'
-  },
-  {
-    id: 'derry',
-    shape: 'rect',
-    coords: [242, 58, 292, 108],
-    name: 'Derry'
-  },
-  {
-    id: 'fermanagh',
-    shape: 'rect',
-    coords: [187, 198, 236, 239],
-    name: 'Fermanagh'
-  },
-  {
-    id: 'monaghan',
-    shape: 'rect',
-    coords: [252, 228, 278, 263],
-    name: 'Monaghan'
-  },
-  {
-    id: 'cavan',
-    shape: 'rect',
-    coords: [222, 274, 257, 316],
-    name: 'Cavan'
-  },
-  {
-    id: 'louth',
-    shape: 'rect',
-    coords: [299, 288, 328, 327],
-    name: 'Louth'
-  },
-  {
-    id: 'meath',
-    shape: 'rect',
-    coords: [269, 342, 308, 384],
-    name: 'Meath'
-  },
-  {
-    id: 'dublin',
-    shape: 'rect',
-    coords: [320, 374, 357, 418],
-    name: 'Dublin'
-  },
-  {
-    id: 'kildare',
-    shape: 'rect',
-    coords: [262, 422, 302, 458],
-    name: 'Kildare'
-  },
-  {
-    id: 'offaly',
-    shape: 'rect',
-    coords: [200, 424, 239, 456],
-    name: 'Offaly '
-  },
-  {
-    id: 'westmeath',
-    shape: 'rect',
-    coords: [206, 364, 258, 397],
-    name: 'Westmeath'
-  },
-  {
-    id: 'longford ',
-    shape: 'rect',
-    coords: [182, 324, 228, 354],
-    name: 'Longford '
-  },
-  {
-    id: 'leitrim',
-    shape: 'rect',
-    coords: [172, 272, 209, 302],
-    name: 'Leitrim'
-  },
-  {
-    id: 'donegal',
-    shape: 'rect',
-    coords: [158, 86, 206, 122],
-    name: 'Donegal'
-  }
-  ];
-  
   // Update the map size when the component mounts or window resizes
   useEffect(() => {
     const updateMapSize = () => {
       if (mapRef.current) {
         const width = mapRef.current.clientWidth;
         const height = mapRef.current.clientHeight;
-        setMapSize({ width, height });
       }
     };
     

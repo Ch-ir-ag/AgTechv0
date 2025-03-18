@@ -307,6 +307,13 @@ export default function MilkYieldChart() {
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'yearly'>('monthly');
   const [metricType, setMetricType] = useState<MetricType>('milk');
   
+  // Effect to ensure time period is 'monthly' when non-milk metrics are selected
+  useEffect(() => {
+    if (metricType !== 'milk') {
+      setTimePeriod('monthly');
+    }
+  }, [metricType]);
+  
   // Available years for selection
   const availableYears = ["2025", "2024", "2023"];
   
@@ -345,13 +352,6 @@ export default function MilkYieldChart() {
         return [];
     }
   };
-
-  // Update time period when metric type changes
-  useEffect(() => {
-    if (metricType !== 'milk') {
-      setTimePeriod('monthly');
-    }
-  }, [metricType]);
 
   // Get the appropriate y-axis label based on metric type
   const getYAxisLabel = () => {

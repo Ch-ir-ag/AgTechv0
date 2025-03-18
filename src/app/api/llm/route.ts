@@ -107,7 +107,7 @@ function extractPercentageChange(text: string): number {
         // Range case (between X and Y or X to Y) - use the average
         const firstValue = parseFloat(matches[0][1]);
         const secondValue = parseFloat(matches[0][3]);
-        let avgPercentage = (firstValue + secondValue) / 200; // Average divided by 100
+        const avgPercentage = (firstValue + secondValue) / 200; // Average divided by 100
         
         // Check if the context indicates a decrease
         const nearbyText = text.substring(

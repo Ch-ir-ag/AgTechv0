@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Define the county data structure
 interface CountyData {
@@ -12,6 +13,7 @@ interface CountyData {
   totalVolume: number;
   avgFat: number;
   avgProtein: number;
+  forecastChange: number; // Percentage change for next month
 }
 
 // Define the clickable area coordinates types directly in the array
@@ -124,6 +126,7 @@ export default function InteractiveSupplyChainMap() {
   // State for the selected county
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [showForecast, setShowForecast] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
   
   // Sample county data - replace with your actual data
@@ -131,155 +134,172 @@ export default function InteractiveSupplyChainMap() {
     antrim: {
       id: 'antrim',
       name: 'Antrim',
-      farms: 380,
+      farms: 304,
       avgYield: 28.5,
-      totalVolume: 10830,
+      totalVolume: 356000,
       avgFat: 4.2,
-      avgProtein: 3.5
+      avgProtein: 3.5,
+      forecastChange: 2.8
     },
     down: {
       id: 'down',
       name: 'Down',
-      farms: 420,
+      farms: 336,
       avgYield: 27.8,
-      totalVolume: 11676,
+      totalVolume: 384000,
       avgFat: 4.1,
-      avgProtein: 3.4
+      avgProtein: 3.4,
+      forecastChange: 3.1
     },
     armagh: {
       id: 'armagh',
       name: 'Armagh',
-      farms: 340,
+      farms: 272,
       avgYield: 27.2,
-      totalVolume: 9248,
+      totalVolume: 304000,
       avgFat: 4.0,
-      avgProtein: 3.3
+      avgProtein: 3.3,
+      forecastChange: 2.5
     },
     tyrone: {
       id: 'tyrone',
       name: 'Tyrone',
-      farms: 450,
+      farms: 360,
       avgYield: 28.0,
-      totalVolume: 12600,
+      totalVolume: 414000,
       avgFat: 4.3,
-      avgProtein: 3.5
+      avgProtein: 3.5,
+      forecastChange: 3.4
     },
     derry: {
       id: 'derry',
       name: 'Derry',
-      farms: 390,
+      farms: 312,
       avgYield: 27.6,
-      totalVolume: 10764,
+      totalVolume: 354000,
       avgFat: 4.2,
-      avgProtein: 3.4
+      avgProtein: 3.4,
+      forecastChange: 2.9
     },
     fermanagh: {
       id: 'fermanagh',
       name: 'Fermanagh',
-      farms: 320,
+      farms: 256,
       avgYield: 26.8,
-      totalVolume: 8576,
+      totalVolume: 282000,
       avgFat: 4.1,
-      avgProtein: 3.3
+      avgProtein: 3.3,
+      forecastChange: 2.2
     },
     monaghan: {
       id: 'monaghan',
       name: 'Monaghan',
-      farms: 380,
+      farms: 304,
       avgYield: 26.9,
-      totalVolume: 10222,
+      totalVolume: 336000,
       avgFat: 4.2,
-      avgProtein: 3.4
+      avgProtein: 3.4,
+      forecastChange: 3.0
     },
     cavan: {
       id: 'cavan',
       name: 'Cavan',
-      farms: 420,
+      farms: 336,
       avgYield: 27.3,
-      totalVolume: 11466,
+      totalVolume: 377000,
       avgFat: 4.3,
-      avgProtein: 3.5
+      avgProtein: 3.5,
+      forecastChange: 3.2
     },
     louth: {
       id: 'louth',
       name: 'Louth',
-      farms: 210,
+      farms: 168,
       avgYield: 25.8,
-      totalVolume: 5418,
+      totalVolume: 178000,
       avgFat: 4.0,
-      avgProtein: 3.2
+      avgProtein: 3.2,
+      forecastChange: 1.8
     },
     meath: {
       id: 'meath',
       name: 'Meath',
-      farms: 315,
+      farms: 252,
       avgYield: 26.3,
-      totalVolume: 8284,
+      totalVolume: 272000,
       avgFat: 4.1,
-      avgProtein: 3.3
+      avgProtein: 3.3,
+      forecastChange: 2.6
     },
     dublin: {
       id: 'dublin',
       name: 'Dublin',
-      farms: 125,
+      farms: 100,
       avgYield: 24.9,
-      totalVolume: 3112,
+      totalVolume: 102000,
       avgFat: 3.9,
-      avgProtein: 3.1
+      avgProtein: 3.1,
+      forecastChange: 1.2
     },
     kildare: {
       id: 'kildare',
       name: 'Kildare',
-      farms: 190,
+      farms: 152,
       avgYield: 25.5,
-      totalVolume: 4845,
+      totalVolume: 159000,
       avgFat: 4.0,
-      avgProtein: 3.2
+      avgProtein: 3.2,
+      forecastChange: 1.6
     },
     offaly: {
       id: 'offaly',
       name: 'Offaly',
-      farms: 235,
+      farms: 188,
       avgYield: 26.0,
-      totalVolume: 6110,
+      totalVolume: 201000,
       avgFat: 4.1,
-      avgProtein: 3.3
+      avgProtein: 3.3,
+      forecastChange: 2.0
     },
     westmeath: {
       id: 'westmeath',
       name: 'Westmeath',
-      farms: 280,
+      farms: 224,
       avgYield: 26.4,
-      totalVolume: 7392,
+      totalVolume: 243000,
       avgFat: 4.1,
-      avgProtein: 3.3
+      avgProtein: 3.3,
+      forecastChange: 2.3
     },
     longford: {
       id: 'longford',
       name: 'Longford',
-      farms: 195,
+      farms: 156,
       avgYield: 25.7,
-      totalVolume: 5011,
+      totalVolume: 165000,
       avgFat: 4.0,
-      avgProtein: 3.2
+      avgProtein: 3.2,
+      forecastChange: 1.7
     },
     leitrim: {
       id: 'leitrim',
       name: 'Leitrim',
-      farms: 175,
+      farms: 140,
       avgYield: 25.2,
-      totalVolume: 4410,
+      totalVolume: 145000,
       avgFat: 3.9,
-      avgProtein: 3.1
+      avgProtein: 3.1,
+      forecastChange: 1.5
     },
     donegal: {
       id: 'donegal',
       name: 'Donegal',
-      farms: 310,
+      farms: 248,
       avgYield: 26.5,
-      totalVolume: 8215,
+      totalVolume: 270000,
       avgFat: 4.1,
-      avgProtein: 3.3
+      avgProtein: 3.3,
+      forecastChange: 2.7
     }
   };
   
@@ -293,7 +313,7 @@ export default function InteractiveSupplyChainMap() {
     };
     
     updateMapSize();
-    setMapLoaded(true);
+    setMapLoaded(true); 
     
     window.addEventListener('resize', updateMapSize);
     return () => window.removeEventListener('resize', updateMapSize);
@@ -302,6 +322,12 @@ export default function InteractiveSupplyChainMap() {
   // Handle county click
   const handleCountyClick = (countyId: string) => {
     setSelectedCounty(countyId);
+    setShowForecast(true);
+  };
+  
+  // Toggle forecast visibility
+  const toggleForecast = () => {
+    setShowForecast(!showForecast);
   };
   
   // Create overlay elements for the clickable areas
@@ -348,6 +374,53 @@ export default function InteractiveSupplyChainMap() {
     });
   };
   
+  // Get current month name
+  const getCurrentMonthName = () => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const currentMonth = new Date().getMonth();
+    return months[currentMonth];
+  };
+
+  // Get next month name
+  const getNextMonthName = () => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const nextMonth = (new Date().getMonth() + 1) % 12;
+    return months[nextMonth];
+  };
+
+  // Get the month after next
+  const getMonthAfterNextName = () => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthAfterNext = (new Date().getMonth() + 2) % 12;
+    return months[monthAfterNext];
+  };
+
+  // Get forecast data for the selected county
+  const getForecastData = (countyId: string) => {
+    const county = countyData[countyId];
+    const currentVolume = county.totalVolume;
+    const nextMonthVolume = Math.round(currentVolume * (1 + county.forecastChange / 100));
+    
+    // Assuming a slight increase for the month after next
+    const followingMonthChange = county.forecastChange * 1.1; // 10% higher than next month
+    const followingMonthVolume = Math.round(currentVolume * (1 + followingMonthChange / 100));
+    
+    return [
+      {
+        month: getCurrentMonthName(),
+        volume: currentVolume,
+      },
+      {
+        month: getNextMonthName(),
+        volume: nextMonthVolume,
+      },
+      {
+        month: getMonthAfterNextName(),
+        volume: followingMonthVolume,
+      }
+    ];
+  };
+  
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
       <h2 className="text-xl font-medium text-gray-800 mb-4">
@@ -384,6 +457,79 @@ export default function InteractiveSupplyChainMap() {
           <div className="absolute bottom-2 left-2 text-xs text-gray-500 z-10">
             Lakeland Dairies collection areas
           </div>
+
+          {/* Forecast Popup */}
+          {selectedCounty && showForecast && (
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-4 z-20 border-2 border-blue-500 min-w-[350px]">
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="font-medium text-gray-800">
+                  {countyData[selectedCounty].name} County Forecast
+                </h4>
+                <button 
+                  onClick={() => setShowForecast(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700">3-Month Milk Yield Forecast</span>
+                </div>
+                
+                <div className="h-[200px] w-full bg-blue-50 p-2 rounded-md">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={getForecastData(selectedCounty)}
+                      margin={{ top: 20, right: 10, left: 10, bottom: 30 }}
+                    >
+                      <XAxis 
+                        dataKey="month" 
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 12 }}
+                      />
+                      <YAxis 
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 12 }}
+                        tickFormatter={(value) => {
+                          if (value >= 1000000) return `${Math.round(value / 1000000)}M`;
+                          if (value >= 1000) return `${Math.round(value / 1000)}K`;
+                          return Math.round(value).toString();
+                        }}
+                      />
+                      <Tooltip 
+                        formatter={(value: any) => [`${Number(value).toLocaleString()} L`, 'Volume']}
+                        labelFormatter={(label) => `${label}`}
+                      />
+                      <Bar 
+                        dataKey="volume" 
+                        fill="#4880E6" 
+                        radius={[4, 4, 0, 0]}
+                        name="Volume (L/day)"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                
+                <div className="flex justify-between mt-2">
+                  <span className="text-gray-600 text-sm">Projected Change (Next Month):</span>
+                  <span className="font-medium text-green-600">+{countyData[selectedCounty].forecastChange.toFixed(1)}%</span>
+                </div>
+                
+                <p className="text-xs text-gray-500">
+                  Based on seasonal patterns, weather forecasts, and historical data. The chart shows daily volumes.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* County Details Panel */}
@@ -406,8 +552,13 @@ export default function InteractiveSupplyChainMap() {
                 </div>
                 
                 <div className="flex justify-between">
-                  <span className="text-gray-600 text-sm">Total Volume (L/day):</span>
+                  <span className="text-gray-600 text-sm">Daily Volume (L):</span>
                   <span className="font-medium">{countyData[selectedCounty].totalVolume.toLocaleString()}</span>
+                </div>
+                
+                <div className="flex justify-between">
+                  <span className="text-gray-600 text-sm">Annual Volume (M liters):</span>
+                  <span className="font-medium">{((countyData[selectedCounty].totalVolume * 365) / 1000000).toFixed(1)}</span>
                 </div>
                 
                 <div className="flex justify-between">
@@ -419,6 +570,13 @@ export default function InteractiveSupplyChainMap() {
                   <span className="text-gray-600 text-sm">Average Protein (%):</span>
                   <span className="font-medium">{countyData[selectedCounty].avgProtein}</span>
                 </div>
+
+                <button
+                  onClick={toggleForecast}
+                  className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded text-sm transition-colors duration-200"
+                >
+                  {showForecast ? 'Hide Forecast' : 'View Next Month Forecast'}
+                </button>
               </div>
             </>
           ) : (
@@ -426,7 +584,24 @@ export default function InteractiveSupplyChainMap() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
               </svg>
-              <p className="text-gray-500">Select a county on the map to view detailed information about milk production and farms in that area.</p>
+              <h3 className="font-medium text-gray-800 mb-3">
+                Lakeland Dairies Summary
+              </h3>
+              <div className="space-y-3 w-full">
+                <div className="flex justify-between">
+                  <span className="text-gray-600 text-sm">Total Farms:</span>
+                  <span className="font-medium">3,200</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600 text-sm">Daily Production:</span>
+                  <span className="font-medium">5.48M liters</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600 text-sm">Annual Production:</span>
+                  <span className="font-medium">2B liters</span>
+                </div>
+                <p className="text-gray-500 text-sm mt-3">Select a county on the map to view detailed information about milk production and farms in that area.</p>
+              </div>
             </div>
           )}
         </div>

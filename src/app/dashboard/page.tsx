@@ -3,7 +3,6 @@ import MilkYieldChart from "../components/MilkYieldChart";
 import YearlyYieldChart from "../components/YearlyYieldChart";
 import Chatbot from "../components/Chatbot";
 import InteractiveSupplyChainMap from "../components/InteractiveSupplyChainMap";
-import PredictionSettings from "../components/PredictionSettings";
 import QuantifiedImpact from "../components/QuantifiedImpact";
 
 export default function Dashboard() {
@@ -31,9 +30,11 @@ export default function Dashboard() {
             </section>
           </div>
           
-          {/* Prediction Settings */}
+          {/* Supply Chain Map */}
           <div className="mb-8">
-            <PredictionSettings />
+            <section id="supply-chain-map" className="h-full">
+              <InteractiveSupplyChainMap />
+            </section>
           </div>
           
           {/* Charts Section */}
@@ -73,14 +74,8 @@ export default function Dashboard() {
             </div>
           </div>
           
-          {/* Supply Chain Map and Chatbot Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* Supply Chain Map */}
-            <section id="supply-chain-map" className="h-full">
-              <InteractiveSupplyChainMap />
-            </section>
-            
-            {/* Chatbot */}
+          {/* Chatbot Section */}
+          <div className="mb-8">
             <section id="chatbot" className="h-full">
               <Chatbot />
             </section>

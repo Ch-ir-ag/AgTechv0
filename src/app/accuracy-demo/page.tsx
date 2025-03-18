@@ -307,7 +307,7 @@ export default function AccuracyDemo() {
       case 'weekly':
         return 'Milk Yield Prediction - Next 7 Days';
       case 'monthly':
-        return 'Milk Yield Prediction - Monthly';
+        return 'Milk Yield Prediction - Monthly (2025)';
       case 'yearly':
         return 'Milk Yield Prediction - Yearly';
       default:
@@ -445,7 +445,7 @@ export default function AccuracyDemo() {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-gray-800">
                 {getPredictionTitle()}
-              </h2>
+            </h2>
               <div className="flex items-center space-x-2">
                 <div className="flex flex-wrap items-center gap-2">
                   <button
@@ -532,7 +532,7 @@ export default function AccuracyDemo() {
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
               <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. 
                 {predictionView === 'weekly' && ` The weekly total is predicted to be approximately ${getPredictionData().reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.`}
-                {predictionView === 'monthly' && ` The average monthly volume is predicted to be approximately ${Math.round(getPredictionData().reduce((sum, month) => sum + month.predictedVolume, 0) / 12).toLocaleString()} liters.`}
+                {predictionView === 'monthly' && ` The predicted monthly volumes for 2025 average approximately ${Math.round(getPredictionData().reduce((sum, month) => sum + month.predictedVolume, 0) / 12).toLocaleString()} liters.`}
                 {predictionView === 'yearly' && ` The 2025 annual volume is predicted to be approximately ${yearlyPredictions[3].predictedVolume.toLocaleString()} liters.`}
               </p>
             </div>
@@ -715,8 +715,8 @@ export default function AccuracyDemo() {
                     tick={{ fill: '#6b7280' }} 
                     axisLine={{ stroke: '#d1d5db' }}
                     height={60}
-                    angle={-45}
-                    textAnchor="end"
+                    angle={-45} 
+                    textAnchor="end" 
                   />
                   <YAxis 
                     tickFormatter={(value) => {

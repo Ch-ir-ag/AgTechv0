@@ -207,6 +207,26 @@ export default function AccuracyDemo() {
   const processQuery = async () => {
     if (!query.trim()) return;
     
+    // Check if query is too short or not a question about milk yields
+    const minQueryLength = 10;
+    const relevantTerms = ['milk', 'yield', 'production', 'volume', 'rainfall', 'temperature', 'feed', 'cows', 'forecast', 'predict'];
+    const isRelevantQuery = relevantTerms.some(term => query.toLowerCase().includes(term));
+    const seemsLikeQuestion = query.includes('?') || 
+                             query.toLowerCase().startsWith('what') || 
+                             query.toLowerCase().startsWith('how') ||
+                             query.toLowerCase().startsWith('why') ||
+                             query.toLowerCase().startsWith('when') ||
+                             query.toLowerCase().startsWith('if') ||
+                             query.toLowerCase().includes('impact') ||
+                             query.toLowerCase().includes('effect') ||
+                             query.toLowerCase().includes('influence') ||
+                             query.toLowerCase().includes('happen');
+    
+    if (query.length < minQueryLength || (!isRelevantQuery && !seemsLikeQuestion)) {
+      setLlmResponse("Please ask a complete question about milk yield factors. For example: 'What would happen to milk production if temperature increased by 5°C?'");
+      return;
+    }
+    
     setIsLoading(true);
     setLastQuery(query);
     

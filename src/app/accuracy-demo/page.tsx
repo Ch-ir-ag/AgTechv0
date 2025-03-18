@@ -346,7 +346,7 @@ export default function AccuracyDemo() {
             </h2>
             <div className="flex flex-col md:flex-row gap-4 mb-4">
               <div className="flex-grow">
-                <input
+                <input 
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -389,7 +389,7 @@ export default function AccuracyDemo() {
               <div className="mt-2 p-4 bg-gray-50 rounded-md border border-gray-200">
                 <p className="text-sm font-medium text-gray-500">Query: {lastQuery}</p>
                 <div className="mt-2 text-gray-700">{llmResponse}</div>
-              </div>
+            </div>
             )}
           </div>
           
@@ -398,7 +398,7 @@ export default function AccuracyDemo() {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-gray-800">
                 Milk Yield Prediction - Next 7 Days
-              </h2>
+            </h2>
               <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
                 Forward Prediction
               </span>

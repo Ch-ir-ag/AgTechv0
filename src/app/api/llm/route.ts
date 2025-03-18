@@ -17,7 +17,7 @@ async function queryHuggingFaceModel(query: string) {
   const prompt = `<s>[INST] You are an AI assistant that specializes in dairy farming and milk production forecasting.
   
   For the following query, provide a VERY BRIEF response with:
-  1. A 1-2 sentence explanation of how the factors mentioned would affect milk production
+  1. A 1 sentence explanation of how the factors mentioned would affect milk production
   2. A clear percentage change estimate (positive or negative) for milk yield
   
   Be extremely concise and always specify a percentage value.

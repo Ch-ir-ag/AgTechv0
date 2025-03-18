@@ -11,7 +11,6 @@ import {
   Line,
   ComposedChart,
   Label,
-  ReferenceLine,
   Bar,
   BarChart
 } from 'recharts';

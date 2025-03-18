@@ -163,7 +163,7 @@ export default function AccuracyDemo() {
             </h1>
             <p className="text-gray-600 max-w-3xl mx-auto">
               Visualizing the performance of our machine learning model predicting milk volume 
-              using polynomial regression with Ridge regularization.
+              using complex neural network systems.
             </p>
           </div>
           

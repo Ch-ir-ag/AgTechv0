@@ -17,7 +17,7 @@ export default function QuantifiedImpact() {
     },
     {
       title: 'Accuracy Improvement',
-      value: '+2.3%',
+      value: '+6%',
       description: 'Improvement in prediction accuracy through enhanced AI algorithms',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,7 +27,7 @@ export default function QuantifiedImpact() {
     },
     {
       title: 'Carbon Footprint',
-      value: '-15%',
+      value: '-4.5%',
       description: 'Reduction in carbon emissions per liter of milk produced',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

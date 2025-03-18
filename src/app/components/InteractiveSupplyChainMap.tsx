@@ -506,7 +506,7 @@ export default function InteractiveSupplyChainMap() {
                         }}
                       />
                       <Tooltip 
-                        formatter={(value: any) => [`${Number(value).toLocaleString()} L`, 'Volume']}
+                        formatter={(value: number) => [`${Number(value).toLocaleString()} L`, 'Volume']}
                         labelFormatter={(label) => `${label}`}
                       />
                       <Bar 

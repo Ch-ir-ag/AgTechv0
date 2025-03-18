@@ -100,18 +100,18 @@ const milkYieldData = {
 const fatPercentageData = {
   monthly: {
     2025: [
-      { period: 'Jan 2025', thisYear: 5.01, comparisonYear: 4.98, confidenceLevel: 0.15 },
-      { period: 'Feb 2025', thisYear: 4.85, comparisonYear: 4.79, confidenceLevel: 0.15 },
-      { period: 'Mar 2025', thisYear: 4.43, comparisonYear: 4.40, confidenceLevel: 0.13 },
-      { period: 'Apr 2025', thisYear: 4.18, comparisonYear: 4.15, confidenceLevel: 0.13 },
-      { period: 'May 2025', thisYear: 4.00, comparisonYear: 3.95, confidenceLevel: 0.12 },
-      { period: 'Jun 2025', thisYear: 4.04, comparisonYear: 4.00, confidenceLevel: 0.12 },
-      { period: 'Jul 2025', thisYear: 4.14, comparisonYear: 4.10, confidenceLevel: 0.12 },
-      { period: 'Aug 2025', thisYear: 4.42, comparisonYear: 4.35, confidenceLevel: 0.13 },
-      { period: 'Sep 2025', thisYear: 4.77, comparisonYear: 4.70, confidenceLevel: 0.14 },
-      { period: 'Oct 2025', thisYear: 5.13, comparisonYear: 5.05, confidenceLevel: 0.15 },
-      { period: 'Nov 2025', thisYear: 5.58, comparisonYear: 5.50, confidenceLevel: 0.17 },
-      { period: 'Dec 2025', thisYear: 6.00, comparisonYear: 5.90, confidenceLevel: 0.18 },
+      { period: 'Jan 2025', thisYear: 5.35, comparisonYear: 4.98, confidenceLevel: 0.15 },
+      { period: 'Feb 2025', thisYear: 5.10, comparisonYear: 4.79, confidenceLevel: 0.15 },
+      { period: 'Mar 2025', thisYear: 4.70, comparisonYear: 4.40, confidenceLevel: 0.13 },
+      { period: 'Apr 2025', thisYear: 4.45, comparisonYear: 4.15, confidenceLevel: 0.13 },
+      { period: 'May 2025', thisYear: 4.25, comparisonYear: 3.95, confidenceLevel: 0.12 },
+      { period: 'Jun 2025', thisYear: 4.30, comparisonYear: 4.00, confidenceLevel: 0.12 },
+      { period: 'Jul 2025', thisYear: 4.40, comparisonYear: 4.10, confidenceLevel: 0.12 },
+      { period: 'Aug 2025', thisYear: 4.65, comparisonYear: 4.35, confidenceLevel: 0.13 },
+      { period: 'Sep 2025', thisYear: 5.00, comparisonYear: 4.70, confidenceLevel: 0.14 },
+      { period: 'Oct 2025', thisYear: 5.30, comparisonYear: 5.05, confidenceLevel: 0.15 },
+      { period: 'Nov 2025', thisYear: 5.75, comparisonYear: 5.50, confidenceLevel: 0.17 },
+      { period: 'Dec 2025', thisYear: 6.20, comparisonYear: 5.90, confidenceLevel: 0.18 },
     ],
     2024: [
       { period: 'Jan 2024', thisYear: 4.98, comparisonYear: 4.90, confidenceLevel: 0.15 },
@@ -148,18 +148,18 @@ const fatPercentageData = {
 const proteinPercentageData = {
   monthly: {
     2025: [
-      { period: 'Jan 2025', thisYear: 3.81, comparisonYear: 3.75, confidenceLevel: 0.11 },
-      { period: 'Feb 2025', thisYear: 3.71, comparisonYear: 3.65, confidenceLevel: 0.11 },
-      { period: 'Mar 2025', thisYear: 3.32, comparisonYear: 3.25, confidenceLevel: 0.10 },
-      { period: 'Apr 2025', thisYear: 3.36, comparisonYear: 3.30, confidenceLevel: 0.10 },
-      { period: 'May 2025', thisYear: 3.47, comparisonYear: 3.40, confidenceLevel: 0.10 },
-      { period: 'Jun 2025', thisYear: 3.55, comparisonYear: 3.50, confidenceLevel: 0.11 },
-      { period: 'Jul 2025', thisYear: 3.68, comparisonYear: 3.60, confidenceLevel: 0.11 },
-      { period: 'Aug 2025', thisYear: 3.78, comparisonYear: 3.70, confidenceLevel: 0.11 },
-      { period: 'Sep 2025', thisYear: 4.00, comparisonYear: 3.90, confidenceLevel: 0.12 },
-      { period: 'Oct 2025', thisYear: 4.21, comparisonYear: 4.10, confidenceLevel: 0.13 },
-      { period: 'Nov 2025', thisYear: 4.19, comparisonYear: 4.10, confidenceLevel: 0.13 },
-      { period: 'Dec 2025', thisYear: 4.49, comparisonYear: 4.40, confidenceLevel: 0.13 },
+      { period: 'Jan 2025', thisYear: 3.95, comparisonYear: 3.75, confidenceLevel: 0.11 },
+      { period: 'Feb 2025', thisYear: 3.85, comparisonYear: 3.65, confidenceLevel: 0.11 },
+      { period: 'Mar 2025', thisYear: 3.45, comparisonYear: 3.25, confidenceLevel: 0.10 },
+      { period: 'Apr 2025', thisYear: 3.50, comparisonYear: 3.30, confidenceLevel: 0.10 },
+      { period: 'May 2025', thisYear: 3.60, comparisonYear: 3.40, confidenceLevel: 0.10 },
+      { period: 'Jun 2025', thisYear: 3.70, comparisonYear: 3.50, confidenceLevel: 0.11 },
+      { period: 'Jul 2025', thisYear: 3.80, comparisonYear: 3.60, confidenceLevel: 0.11 },
+      { period: 'Aug 2025', thisYear: 3.90, comparisonYear: 3.70, confidenceLevel: 0.11 },
+      { period: 'Sep 2025', thisYear: 4.15, comparisonYear: 3.90, confidenceLevel: 0.12 },
+      { period: 'Oct 2025', thisYear: 4.35, comparisonYear: 4.10, confidenceLevel: 0.13 },
+      { period: 'Nov 2025', thisYear: 4.30, comparisonYear: 4.10, confidenceLevel: 0.13 },
+      { period: 'Dec 2025', thisYear: 4.60, comparisonYear: 4.40, confidenceLevel: 0.13 },
     ],
     2024: [
       { period: 'Jan 2024', thisYear: 3.75, comparisonYear: 3.70, confidenceLevel: 0.11 },
@@ -196,18 +196,18 @@ const proteinPercentageData = {
 const lactosePercentageData = {
   monthly: {
     2025: [
-      { period: 'Jan 2025', thisYear: 4.6, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Feb 2025', thisYear: 4.6, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Mar 2025', thisYear: 4.8, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'Apr 2025', thisYear: 4.9, comparisonYear: 4.85, confidenceLevel: 0.15 },
-      { period: 'May 2025', thisYear: 4.9, comparisonYear: 4.85, confidenceLevel: 0.15 },
-      { period: 'Jun 2025', thisYear: 4.8, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'Jul 2025', thisYear: 4.7, comparisonYear: 4.65, confidenceLevel: 0.14 },
-      { period: 'Aug 2025', thisYear: 4.6, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Sep 2025', thisYear: 4.5, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Oct 2025', thisYear: 4.5, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Nov 2025', thisYear: 4.5, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Dec 2025', thisYear: 4.4, comparisonYear: 4.35, confidenceLevel: 0.13 },
+      { period: 'Jan 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
+      { period: 'Feb 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
+      { period: 'Mar 2025', thisYear: 4.9, comparisonYear: 4.75, confidenceLevel: 0.14 },
+      { period: 'Apr 2025', thisYear: 5.0, comparisonYear: 4.85, confidenceLevel: 0.15 },
+      { period: 'May 2025', thisYear: 5.0, comparisonYear: 4.85, confidenceLevel: 0.15 },
+      { period: 'Jun 2025', thisYear: 4.9, comparisonYear: 4.75, confidenceLevel: 0.14 },
+      { period: 'Jul 2025', thisYear: 4.8, comparisonYear: 4.65, confidenceLevel: 0.14 },
+      { period: 'Aug 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
+      { period: 'Sep 2025', thisYear: 4.6, comparisonYear: 4.45, confidenceLevel: 0.14 },
+      { period: 'Oct 2025', thisYear: 4.6, comparisonYear: 4.45, confidenceLevel: 0.14 },
+      { period: 'Nov 2025', thisYear: 4.6, comparisonYear: 4.45, confidenceLevel: 0.14 },
+      { period: 'Dec 2025', thisYear: 4.5, comparisonYear: 4.35, confidenceLevel: 0.13 },
     ],
     2024: [
       { period: 'Jan 2024', thisYear: 4.55, comparisonYear: 4.50, confidenceLevel: 0.14 },
@@ -518,7 +518,7 @@ export default function MilkYieldChart() {
                 position: 'insideLeft',
                 style: { fill: '#6b7280' }
               }}
-              domain={metricType !== 'milk' ? ['auto', 'auto'] : undefined}
+              domain={metricType !== 'milk' ? [0, 6.5] : undefined}
             />
             <Tooltip content={<CustomTooltip metricType={metricType} />} />
             <Legend wrapperStyle={{ paddingTop: '25px' }} />

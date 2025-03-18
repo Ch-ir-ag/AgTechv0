@@ -12,7 +12,8 @@ import {
   ComposedChart,
   Label,
   ReferenceLine,
-  Bar
+  Bar,
+  BarChart
 } from 'recharts';
 import Navbar from '../components/Navbar';
 
@@ -218,6 +219,71 @@ export default function AccuracyDemo() {
               <p className="text-3xl font-bold text-blue-500">95.6%</p>
               <p className="text-gray-600 text-sm">Average Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">Mean prediction accuracy</p>
+            </div>
+          </div>
+          
+          {/* Next Week Prediction Chart */}
+          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-medium text-gray-800">
+                Milk Yield Prediction - Next 7 Days
+              </h2>
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                Forward Prediction
+              </span>
+            </div>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={[
+                    { day: 'Monday', predictedVolume: 12850 },
+                    { day: 'Tuesday', predictedVolume: 13200 },
+                    { day: 'Wednesday', predictedVolume: 13450 },
+                    { day: 'Thursday', predictedVolume: 13720 },
+                    { day: 'Friday', predictedVolume: 13570 },
+                    { day: 'Saturday', predictedVolume: 12670 },
+                    { day: 'Sunday', predictedVolume: 12180 }
+                  ]}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis 
+                    tickFormatter={(value) => {
+                      if (value >= 1000000) return `${Math.round(value / 1000000)}M`;
+                      if (value >= 1000) return `${Math.round(value / 1000)}K`;
+                      return Math.round(value).toString();
+                    }}
+                  >
+                    <Label value="Volume (Liters)" angle={-90} position="left" />
+                  </YAxis>
+                  <Tooltip 
+                    formatter={(value) => [`${Number(value).toLocaleString()} L`, 'Predicted Volume']}
+                  />
+                  <Bar 
+                    dataKey="predictedVolume" 
+                    name="Predicted Volume" 
+                    fill="rgba(54, 162, 235, 0.8)" 
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <ReferenceLine
+                    y={13091} // Average of the predicted values
+                    stroke="#ff7300"
+                    strokeDasharray="3 3"
+                    strokeWidth={2}
+                  >
+                    <Label 
+                      value="Average (13.1K)" 
+                      position="right" 
+                      fill="#ff7300" 
+                      fontSize={12} 
+                    />
+                  </ReferenceLine>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
+              <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. The weekly total is predicted to be approximately 91,640 liters.</p>
             </div>
           </div>
           

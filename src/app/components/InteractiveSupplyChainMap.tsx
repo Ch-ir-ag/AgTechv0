@@ -19,7 +19,7 @@ const clickableAreas = [
   {
     id: 'antrim',
     shape: 'rect' as const,
-    coords: [311, 68, 351, 128],
+    coords: [321, 68, 351, 128],
     name: 'Antrim'
   },
   {
@@ -101,7 +101,7 @@ const clickableAreas = [
     name: 'Westmeath'
   },
   {
-    id: 'longford ',
+    id: 'longford',
     shape: 'rect' as const,
     coords: [182, 324, 228, 354],
     name: 'Longford '
@@ -317,22 +317,25 @@ export default function InteractiveSupplyChainMap() {
           <div
             key={area.id}
             onClick={() => handleCountyClick(area.id)}
-            className={`absolute cursor-pointer transition-all duration-300 hover:bg-blue-500 hover:bg-opacity-40 ${
-              selectedCounty === area.id ? 'bg-blue-500 bg-opacity-60' : 'bg-transparent hover:border-blue-500'
+            className={`absolute cursor-pointer transition-all duration-300 group ${
+              selectedCounty === area.id 
+                ? 'bg-blue-500 bg-opacity-30 border-2 border-blue-500' 
+                : 'bg-transparent border-0 hover:border-0'
             }`}
             style={{
               left: `${left}%`,
               top: `${top}%`,
               width: `${((x2 - x1) / 500) * 100}%`,
               height: `${((y2 - y1) / 500) * 100}%`,
-              border: `2px solid ${selectedCounty === area.id ? 'rgb(59, 130, 246)' : 'transparent'}`,
               borderRadius: '4px',
             }}
           >
             <div className="w-full h-full flex items-center justify-center">
-              <span className={`text-xs font-medium px-2 py-1 rounded ${
-                selectedCounty === area.id ? 'bg-white text-blue-500' : 'bg-white bg-opacity-0 text-transparent'
-              } transition-all duration-300 hover:bg-white hover:bg-opacity-80 hover:text-blue-500`}>
+              <span className={`text-xs font-medium px-2 py-1 rounded transition-all duration-200 shadow-sm ${
+                selectedCounty === area.id 
+                  ? 'bg-white text-blue-500 opacity-100' 
+                  : 'bg-white bg-opacity-70 text-blue-500 opacity-0 group-hover:opacity-100'
+              }`}>
                 {area.name}
               </span>
             </div>

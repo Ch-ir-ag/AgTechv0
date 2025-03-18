@@ -101,7 +101,7 @@ export default function AccuracyDemo() {
   const [llmResponse, setLlmResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
-  const [predictionView, setPredictionView] = useState<'daily' | 'weekly' | 'monthly' | 'yearly'>('daily');
+  const [predictionView, setPredictionView] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
   
   // Weekly forecast data - 8 weeks starting from mid-March
   const weeklyForecastData = [
@@ -322,8 +322,6 @@ export default function AccuracyDemo() {
   // Get the appropriate data based on the view
   const getPredictionData = () => {
     switch(predictionView) {
-      case 'daily':
-        return weeklyPredictions;
       case 'weekly':
         return weeklyForecastData;
       case 'monthly':
@@ -331,15 +329,13 @@ export default function AccuracyDemo() {
       case 'yearly':
         return yearlyPredictions;
       default:
-        return weeklyPredictions;
+        return weeklyForecastData;
     }
   };
   
   // Get dynamic chart title based on view
   const getPredictionTitle = () => {
     switch(predictionView) {
-      case 'daily':
-        return 'Milk Yield Prediction - Next 7 Days';
       case 'weekly':
         return 'Milk Yield Prediction - Next 8 Weeks';
       case 'monthly':
@@ -476,16 +472,6 @@ export default function AccuracyDemo() {
               <div className="flex items-center space-x-2">
                 <div className="flex flex-wrap items-center gap-2">
                   <button
-                    onClick={() => setPredictionView('daily')}
-                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
-                      predictionView === 'daily'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Daily
-                  </button>
-                  <button
                     onClick={() => setPredictionView('weekly')}
                     className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                       predictionView === 'weekly'
@@ -526,7 +512,7 @@ export default function AccuracyDemo() {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
-                    dataKey={predictionView === 'daily' ? 'day' : 'period'} 
+                    dataKey="period" 
                     tick={{ fill: '#6b7280' }} 
                     axisLine={{ stroke: '#d1d5db' }}
                     height={60}
@@ -550,7 +536,6 @@ export default function AccuracyDemo() {
                     formatter={(value) => [`${Number(value).toLocaleString()} L`, 'Predicted Volume']}
                     contentStyle={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
                     labelFormatter={(value) => {
-                      if (predictionView === 'daily') return `${value}`;
                       if (predictionView === 'weekly') return `${value}`;
                       if (predictionView === 'monthly') return `${value} 2025`;
                       return `Year ${value}`;
@@ -569,7 +554,6 @@ export default function AccuracyDemo() {
             </div>
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
               <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. 
-                {predictionView === 'daily' && ` The weekly total is predicted to be approximately ${getPredictionData().reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.`}
                 {predictionView === 'weekly' && ` The 8-week forecast shows an average weekly volume of approximately ${Math.round(getPredictionData().reduce((sum, week) => sum + week.predictedVolume, 0) / 8).toLocaleString()} liters.`}
                 {predictionView === 'monthly' && ` The predicted monthly volumes for 2025 average approximately ${Math.round(getPredictionData().reduce((sum, month) => sum + month.predictedVolume, 0) / 12).toLocaleString()} liters.`}
                 {predictionView === 'yearly' && ` The 2025 annual volume is predicted to be approximately ${yearlyPredictions[3].predictedVolume.toLocaleString()} liters.`}
@@ -795,19 +779,14 @@ export default function AccuracyDemo() {
           </div>
           
           {/* Model Performance Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'daily' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-blue-500">94.2%</p>
-              <p className="text-gray-600 text-sm">Daily Accuracy</p>
-              <p className="text-xs text-gray-500 mt-1">Short-term prediction precision</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'weekly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-blue-500">95.8%</p>
+              <p className="text-3xl font-bold text-blue-500">96.3%</p>
               <p className="text-gray-600 text-sm">Weekly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">8-week forecast reliability</p>
             </div>
             <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'monthly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-blue-500">96.3%</p>
+              <p className="text-3xl font-bold text-blue-500">95.6%</p>
               <p className="text-gray-600 text-sm">Monthly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">Medium-term forecast accuracy</p>
             </div>

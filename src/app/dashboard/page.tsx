@@ -75,7 +75,7 @@ export default function Dashboard() {
           </div>
           
           {/* Chatbot Section */}
-          <div className="mb-8">
+          <div className="mb-0">
             <section id="chatbot" className="h-full">
               <Chatbot />
             </section>

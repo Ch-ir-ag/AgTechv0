@@ -102,6 +102,31 @@ export default function AccuracyDemo() {
   const [llmResponse, setLlmResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
+  const [predictionView, setPredictionView] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
+  
+  // Monthly prediction data
+  const monthlyPredictions = [
+    { period: 'January', predictedVolume: 0 }, // No data for January
+    { period: 'February', predictedVolume: 136129 },
+    { period: 'March', predictedVolume: 338538 },
+    { period: 'April', predictedVolume: 431967 },
+    { period: 'May', predictedVolume: 446966 },
+    { period: 'June', predictedVolume: 443724 },
+    { period: 'July', predictedVolume: 443357 },
+    { period: 'August', predictedVolume: 404855 },
+    { period: 'September', predictedVolume: 353147 },
+    { period: 'October', predictedVolume: 313287 },
+    { period: 'November', predictedVolume: 234097 },
+    { period: 'December', predictedVolume: 82942 }
+  ];
+  
+  // Yearly prediction data
+  const yearlyPredictions = [
+    { period: '2022', predictedVolume: 3800000 },
+    { period: '2023', predictedVolume: 4150000 },
+    { period: '2024', predictedVolume: 4608000 },
+    { period: '2025', predictedVolume: 4950000 }
+  ];
   
   // Prepare data for time series
   const timeSeriesData: TimeSeriesDataItem[] = dairyData.map(item => ({
@@ -268,6 +293,34 @@ export default function AccuracyDemo() {
     setLastQuery('');
   };
 
+  // Get the appropriate data based on the view
+  const getPredictionData = () => {
+    switch(predictionView) {
+      case 'weekly':
+        return weeklyPredictions;
+      case 'monthly':
+        return monthlyPredictions;
+      case 'yearly':
+        return yearlyPredictions;
+      default:
+        return weeklyPredictions;
+    }
+  };
+  
+  // Get dynamic chart title based on view
+  const getPredictionTitle = () => {
+    switch(predictionView) {
+      case 'weekly':
+        return 'Milk Yield Prediction - Next 7 Days';
+      case 'monthly':
+        return 'Milk Yield Prediction - Monthly';
+      case 'yearly':
+        return 'Milk Yield Prediction - Yearly';
+      default:
+        return 'Milk Yield Prediction';
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
       <Navbar />
@@ -397,56 +450,97 @@ export default function AccuracyDemo() {
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-gray-800">
-                Milk Yield Prediction - Next 7 Days
-            </h2>
-              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                Forward Prediction
-              </span>
+                {getPredictionTitle()}
+              </h2>
+              <div className="flex items-center space-x-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => setPredictionView('weekly')}
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
+                      predictionView === 'weekly'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Weekly
+                  </button>
+                  <button
+                    onClick={() => setPredictionView('monthly')}
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
+                      predictionView === 'monthly'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    onClick={() => setPredictionView('yearly')}
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
+                      predictionView === 'yearly'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Yearly
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={weeklyPredictions}
+                  data={getPredictionData()}
                   margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="day" />
+                  <XAxis 
+                    dataKey={predictionView === 'weekly' ? 'day' : 'period'} 
+                    tick={{ fill: '#6b7280' }} 
+                    axisLine={{ stroke: '#d1d5db' }}
+                    height={60}
+                    interval={0}
+                    angle={predictionView === 'yearly' ? 0 : -45}
+                    textAnchor={predictionView === 'yearly' ? 'middle' : 'end'}
+                  />
                   <YAxis 
                     tickFormatter={(value) => {
                       if (value >= 1000000) return `${Math.round(value / 1000000)}M`;
                       if (value >= 1000) return `${Math.round(value / 1000)}K`;
                       return Math.round(value).toString();
                     }}
+                    tick={{ fill: '#6b7280' }} 
+                    axisLine={{ stroke: '#d1d5db' }}
+                    domain={[0, 'auto']}
                   >
                     <Label value="Volume (Liters)" angle={-90} position="left" />
                   </YAxis>
                   <Tooltip 
                     formatter={(value) => [`${Number(value).toLocaleString()} L`, 'Predicted Volume']}
+                    contentStyle={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
+                    labelFormatter={(value) => {
+                      if (predictionView === 'weekly') return `${value}`;
+                      if (predictionView === 'monthly') return `${value} 2025`;
+                      return `Year ${value}`;
+                    }}
                   />
+                  <Legend wrapperStyle={{ paddingTop: '10px' }} />
                   <Bar 
                     dataKey="predictedVolume" 
                     name="Predicted Volume" 
-                    fill="rgba(54, 162, 235, 0.8)" 
+                    fill="#3b82f6" 
                     radius={[4, 4, 0, 0]}
+                    barSize={predictionView === 'yearly' ? 60 : (predictionView === 'monthly' ? 30 : 20)}
                   />
-                  <ReferenceLine
-                    y={weeklyAverage}
-                    stroke="#ff7300"
-                    strokeDasharray="3 3"
-                    strokeWidth={2}
-                  >
-                    <Label 
-                      value={`Average (${Math.round(weeklyAverage / 1000)}K)`}
-                      position="right" 
-                      fill="#ff7300" 
-                      fontSize={12} 
-                    />
-                  </ReferenceLine>
                 </BarChart>
               </ResponsiveContainer>
             </div>
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
-              <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. The weekly total is predicted to be approximately {weeklyPredictions.reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.</p>
+              <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. 
+                {predictionView === 'weekly' && ` The weekly total is predicted to be approximately ${getPredictionData().reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.`}
+                {predictionView === 'monthly' && ` The average monthly volume is predicted to be approximately ${Math.round(getPredictionData().reduce((sum, month) => sum + month.predictedVolume, 0) / 12).toLocaleString()} liters.`}
+                {predictionView === 'yearly' && ` The 2025 annual volume is predicted to be approximately ${yearlyPredictions[3].predictedVolume.toLocaleString()} liters.`}
+              </p>
             </div>
           </div>
           
@@ -546,7 +640,7 @@ export default function AccuracyDemo() {
           {/* Time Series Visualization */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <h2 className="text-xl font-medium text-gray-800 mb-6">
-              Milk Volume Over Time: Actual vs Predicted
+              Milk Volume Over Time: Predicted vs Actual
             </h2>
             <div className="h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -578,106 +672,92 @@ export default function AccuracyDemo() {
                       if (name === 'residual') {
                         return [`${Math.round(Number(value)).toLocaleString()} L`, 'Residual'];
                       }
+                      if (name === 'predictedVolume') {
+                        return [`${Math.round(Number(value)).toLocaleString()} L`, 'Predicted Volume'];
+                      }
+                      if (name === 'actualVolume') {
+                        return [`${Math.round(Number(value)).toLocaleString()} L`, 'Actual Volume'];
+                      }
                       return [Math.round(Number(value)), name];
                     }}
                   />
                   <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="predictedVolume"
+                    stroke="#f97316"
+                    name="Predicted Volume"
+                    strokeWidth={2}
+                  />
                   <Line 
                     name="Actual Volume" 
                     dataKey="actualVolume" 
                     stroke="rgba(72, 128, 230, 0.8)"
                     dot={{ fill: "rgba(72, 128, 230, 0.8)" }}
                   />
-                  <Line
-                    type="monotone"
-                    dataKey="predictedVolume"
-                    stroke="#ff7300"
-                    name="Predicted Volume"
-                    dot={false}
-                    strokeWidth={2}
-                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
           </div>
           
-          {/* Residual Analysis */}
+          {/* Residual Analysis - Replace with 2024 Comparison */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <h2 className="text-xl font-medium text-gray-800 mb-6">
-              Prediction Accuracy by Month
+              2024 Milk Yield: Predicted vs Actual
             </h2>
             <div className="h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                  data={filteredTimeSeriesData}
+                <BarChart
+                  data={dairyData.filter(item => item.year === 2024).map(item => ({
+                    month: item.month,
+                    predictedVolume: item.predictedVolume,
+                    actualVolume: item.actualVolume
+                  }))}
                   margin={{ top: 30, right: 30, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    angle={-45} 
-                    textAnchor="end" 
-                    height={70}
+                    tick={{ fill: '#6b7280' }} 
+                    axisLine={{ stroke: '#d1d5db' }}
+                    height={60}
+                    angle={-45}
+                    textAnchor="end"
                   />
                   <YAxis 
-                    yAxisId="left"
-                    tickFormatter={(value) => `${Math.round(value)}%`}
-                  >
-                    <Label value="Accuracy (%)" angle={-90} position="left" />
-                  </YAxis>
-                  <YAxis 
-                    yAxisId="right"
-                    orientation="right"
                     tickFormatter={(value) => {
-                      if (Math.abs(value) >= 1000) return `${Math.round(value / 1000)}K`;
-                      return Math.round(value).toString();
+                      if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                      if (value >= 1000) return `${(value / 1000).toFixed(0)}K`;
+                      return value.toString();
                     }}
+                    tick={{ fill: '#6b7280' }} 
+                    axisLine={{ stroke: '#d1d5db' }}
+                    domain={[0, 'auto']}
                   >
-                    <Label value="Residual (L)" angle={90} position="right" />
+                    <Label value="Volume (Liters)" angle={-90} position="left" />
                   </YAxis>
                   <Tooltip 
-                    formatter={(value, name) => {
-                      if (name === 'accuracy') {
-                        return [`${Math.round(Number(value))}%`, 'Accuracy'];
-                      }
-                      if (name === 'residual') {
-                        return [`${Math.round(Number(value)).toLocaleString()} L`, 'Residual'];
-                      }
-                      return [Math.round(Number(value)), name];
-                    }}
+                    formatter={(value, name) => [`${Number(value).toLocaleString()} L`, name === 'predictedVolume' ? 'Predicted Volume' : 'Actual Volume']}
+                    contentStyle={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
                   />
-                  <Legend />
-                  <Line
-                    yAxisId="left"
-                    type="monotone"
-                    dataKey="accuracy"
-                    stroke="#82ca9d"
-                    name="Accuracy (%)"
-                    strokeWidth={2}
+                  <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                  <Bar 
+                    dataKey="predictedVolume" 
+                    name="Predicted Volume" 
+                    fill="#f97316" 
+                    radius={[4, 4, 0, 0]}
                   />
-                  <Line
-                    yAxisId="right"
-                    type="monotone"
-                    dataKey="residual"
-                    stroke="#ff0000"
-                    name="Residual"
-                    strokeWidth={2}
+                  <Bar 
+                    dataKey="actualVolume" 
+                    name="Actual Volume" 
+                    fill="#3b82f6" 
+                    radius={[4, 4, 0, 0]}
                   />
-                  <ReferenceLine 
-                    yAxisId="left" 
-                    y={100} 
-                    stroke="green" 
-                    strokeDasharray="3 3" 
-                    label={{ value: "Perfect Accuracy", position: "insideTopRight" }} 
-                  />
-                  <ReferenceLine 
-                    yAxisId="right" 
-                    y={0} 
-                    stroke="blue" 
-                    strokeDasharray="3 3" 
-                  />
-                </ComposedChart>
+                </BarChart>
               </ResponsiveContainer>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
+              <p>This chart compares our model's predictions with the actual milk yield for 2024, showing the accuracy of our forecasting system throughout the year.</p>
             </div>
           </div>
         </div>

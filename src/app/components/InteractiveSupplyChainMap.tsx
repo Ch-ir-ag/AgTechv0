@@ -14,14 +14,6 @@ interface CountyData {
   avgProtein: number;
 }
 
-// Define the clickable area coordinates
-interface ClickableArea {
-  id: string;
-  shape: 'rect' | 'circle' | 'poly';
-  coords: number[];
-  name: string;
-}
-
 // Define the clickable area coordinates types directly in the array
 const clickableAreas = [
   {
@@ -295,8 +287,8 @@ export default function InteractiveSupplyChainMap() {
   useEffect(() => {
     const updateMapSize = () => {
       if (mapRef.current) {
-        const width = mapRef.current.clientWidth;
-        const height = mapRef.current.clientHeight;
+        // width and height removed
+        // No need to set values we don't use
       }
     };
     
@@ -320,8 +312,6 @@ export default function InteractiveSupplyChainMap() {
         const [x1, y1, x2, y2] = area.coords;
         const left = (x1 / 500) * 100;
         const top = (y1 / 500) * 100;
-        const width = ((x2 - x1) / 500) * 100;
-        const height = ((y2 - y1) / 500) * 100;
         
         return (
           <div
@@ -333,8 +323,8 @@ export default function InteractiveSupplyChainMap() {
             style={{
               left: `${left}%`,
               top: `${top}%`,
-              width: `${width}%`,
-              height: `${height}%`,
+              width: `${((x2 - x1) / 500) * 100}%`,
+              height: `${((y2 - y1) / 500) * 100}%`,
               border: `2px solid ${selectedCounty === area.id ? 'rgb(59, 130, 246)' : 'transparent'}`,
               borderRadius: '4px',
             }}

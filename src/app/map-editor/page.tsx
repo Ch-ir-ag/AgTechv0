@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Navbar from '../components/Navbar';
 
 export default function MapEditor() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mapLoaded, setMapLoaded] = useState(false);
   const [markers, setMarkers] = useState<Array<{id: string, x: number, y: number, width: number, height: number}>>([]);
   const [currentRegion, setCurrentRegion] = useState('');
@@ -17,16 +18,9 @@ export default function MapEditor() {
   
   // Update map size when the component mounts
   useEffect(() => {
-    if (mapRef.current) {
-      const width = mapRef.current.clientWidth;
-      const height = mapRef.current.clientHeight;
-    }
-    
     const handleResize = () => {
-      if (mapRef.current) {
-        const width = mapRef.current.clientWidth;
-        const height = mapRef.current.clientHeight;
-      }
+      // We need these functions but don't need to save the values
+      // Now they won't trigger ESLint errors
     };
     
     window.addEventListener('resize', handleResize);

@@ -795,11 +795,26 @@ export default function AccuracyDemo() {
           </div>
           
           {/* Model Performance Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-4xl font-bold text-blue-500">95.6%</p>
-              <p className="text-gray-600 text-sm">Average Accuracy</p>
-              <p className="text-xs text-gray-500 mt-1">Mean prediction accuracy across all data points</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'daily' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-blue-500">94.2%</p>
+              <p className="text-gray-600 text-sm">Daily Accuracy</p>
+              <p className="text-xs text-gray-500 mt-1">Short-term prediction precision</p>
+            </div>
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'weekly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-blue-500">95.8%</p>
+              <p className="text-gray-600 text-sm">Weekly Accuracy</p>
+              <p className="text-xs text-gray-500 mt-1">8-week forecast reliability</p>
+            </div>
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'monthly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-blue-500">96.3%</p>
+              <p className="text-gray-600 text-sm">Monthly Accuracy</p>
+              <p className="text-xs text-gray-500 mt-1">Medium-term forecast accuracy</p>
+            </div>
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'yearly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-blue-500">93.7%</p>
+              <p className="text-gray-600 text-sm">Yearly Accuracy</p>
+              <p className="text-xs text-gray-500 mt-1">Annual projection confidence</p>
             </div>
           </div>
         </div>

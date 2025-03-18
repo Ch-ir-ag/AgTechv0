@@ -36,7 +36,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6">
-          <Link href="/" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
+          <Link href="/dashboard" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             Dashboard
           </Link>
           <Link href="#analytics" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className="md:hidden bg-white shadow-sm">
           <div className="flex flex-col space-y-4 px-4 py-6">
             <Link 
-              href="/" 
+              href="/dashboard" 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >

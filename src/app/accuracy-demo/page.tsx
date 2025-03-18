@@ -221,63 +221,6 @@ export default function AccuracyDemo() {
             </div>
           </div>
           
-          {/* Bar Chart - Actual vs Predicted */}
-          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
-            <h2 className="text-xl font-medium text-gray-800 mb-6">
-              Actual vs Predicted Milk Volume
-            </h2>
-            <div className="h-[400px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                  data={filteredTimeSeriesData}
-                  margin={{ top: 30, right: 30, left: 20, bottom: 50 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="month" 
-                    angle={-45} 
-                    textAnchor="end" 
-                    height={70}
-                  />
-                  <YAxis 
-                    tickFormatter={(value) => {
-                      if (value >= 1000000) return `${Math.round(value / 1000000)}M`;
-                      if (value >= 1000) return `${Math.round(value / 1000)}K`;
-                      return Math.round(value).toString();
-                    }}
-                  >
-                    <Label value="Volume (Liters)" angle={-90} position="left" />
-                  </YAxis>
-                  <Tooltip 
-                    formatter={(value, name) => {
-                      const formattedValue = `${Math.round(Number(value)).toLocaleString()} L`;
-                      if (name === 'actualVolume') {
-                        return [formattedValue, 'Actual Volume'];
-                      }
-                      if (name === 'predictedVolume') {
-                        return [formattedValue, 'Predicted Volume'];
-                      }
-                      return [formattedValue, name];
-                    }}
-                  />
-                  <Legend />
-                  <Bar 
-                    dataKey="actualVolume" 
-                    name="Actual Volume" 
-                    fill="rgba(72, 128, 230, 0.8)" 
-                    barSize={20}
-                  />
-                  <Bar 
-                    dataKey="predictedVolume" 
-                    name="Predicted Volume" 
-                    fill="rgba(255, 115, 0, 0.8)" 
-                    barSize={20}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          
           {/* New time period-based visualization */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div className="flex justify-between items-center mb-6">

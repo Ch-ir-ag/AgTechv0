@@ -101,7 +101,19 @@ export default function AccuracyDemo() {
   const [llmResponse, setLlmResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
-  const [predictionView, setPredictionView] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
+  const [predictionView, setPredictionView] = useState<'daily' | 'weekly' | 'monthly' | 'yearly'>('daily');
+  
+  // Weekly forecast data - 8 weeks starting from mid-March
+  const weeklyForecastData = [
+    { period: 'Mar 15-21', predictedVolume: 91500 },
+    { period: 'Mar 22-28', predictedVolume: 94200 },
+    { period: 'Mar 29-Apr 4', predictedVolume: 96800 },
+    { period: 'Apr 5-11', predictedVolume: 99500 },
+    { period: 'Apr 12-18', predictedVolume: 101200 },
+    { period: 'Apr 19-25', predictedVolume: 103800 },
+    { period: 'Apr 26-May 2', predictedVolume: 105400 },
+    { period: 'May 3-9', predictedVolume: 102700 }
+  ];
   
   // Monthly prediction data
   const monthlyPredictions = [
@@ -290,8 +302,10 @@ export default function AccuracyDemo() {
   // Get the appropriate data based on the view
   const getPredictionData = () => {
     switch(predictionView) {
-      case 'weekly':
+      case 'daily':
         return weeklyPredictions;
+      case 'weekly':
+        return weeklyForecastData;
       case 'monthly':
         return monthlyPredictions;
       case 'yearly':
@@ -304,8 +318,10 @@ export default function AccuracyDemo() {
   // Get dynamic chart title based on view
   const getPredictionTitle = () => {
     switch(predictionView) {
-      case 'weekly':
+      case 'daily':
         return 'Milk Yield Prediction - Next 7 Days';
+      case 'weekly':
+        return 'Milk Yield Prediction - Next 8 Weeks';
       case 'monthly':
         return 'Milk Yield Prediction - Monthly (2025)';
       case 'yearly':
@@ -323,7 +339,7 @@ export default function AccuracyDemo() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              ML Model <span className="text-blue-500">Accuracy Demo</span>
+                Kildangan Model <span className="text-blue-500">Accuracy Demo</span>
             </h1>
             <p className="text-gray-600 max-w-3xl mx-auto">
               Visualizing the performance of our machine learning model predicting milk volume 
@@ -436,9 +452,19 @@ export default function AccuracyDemo() {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-gray-800">
                 {getPredictionTitle()}
-            </h2>
+              </h2>
               <div className="flex items-center space-x-2">
                 <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => setPredictionView('daily')}
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
+                      predictionView === 'daily'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Daily
+                  </button>
                   <button
                     onClick={() => setPredictionView('weekly')}
                     className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
@@ -480,7 +506,7 @@ export default function AccuracyDemo() {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
-                    dataKey={predictionView === 'weekly' ? 'day' : 'period'} 
+                    dataKey={predictionView === 'daily' ? 'day' : 'period'} 
                     tick={{ fill: '#6b7280' }} 
                     axisLine={{ stroke: '#d1d5db' }}
                     height={60}
@@ -504,6 +530,7 @@ export default function AccuracyDemo() {
                     formatter={(value) => [`${Number(value).toLocaleString()} L`, 'Predicted Volume']}
                     contentStyle={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
                     labelFormatter={(value) => {
+                      if (predictionView === 'daily') return `${value}`;
                       if (predictionView === 'weekly') return `${value}`;
                       if (predictionView === 'monthly') return `${value} 2025`;
                       return `Year ${value}`;
@@ -522,7 +549,8 @@ export default function AccuracyDemo() {
             </div>
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
               <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. 
-                {predictionView === 'weekly' && ` The weekly total is predicted to be approximately ${getPredictionData().reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.`}
+                {predictionView === 'daily' && ` The weekly total is predicted to be approximately ${getPredictionData().reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.`}
+                {predictionView === 'weekly' && ` The 8-week forecast shows an average weekly volume of approximately ${Math.round(getPredictionData().reduce((sum, week) => sum + week.predictedVolume, 0) / 8).toLocaleString()} liters.`}
                 {predictionView === 'monthly' && ` The predicted monthly volumes for 2025 average approximately ${Math.round(getPredictionData().reduce((sum, month) => sum + month.predictedVolume, 0) / 12).toLocaleString()} liters.`}
                 {predictionView === 'yearly' && ` The 2025 annual volume is predicted to be approximately ${yearlyPredictions[3].predictedVolume.toLocaleString()} liters.`}
               </p>

@@ -21,34 +21,34 @@ type MetricType = 'milk' | 'fat' | 'protein' | 'lactose';
 const milkYieldData = {
   weekly: {
     2025: [
-      { period: 'Jul 15-21', thisYear: 42000000, comparisonYear: 38000000, confidenceLevel: 1260000 },
-      { period: 'Jul 22-28', thisYear: 45000000, comparisonYear: 41000000, confidenceLevel: 1350000 },
-      { period: 'Jul 29-Aug 4', thisYear: 43000000, comparisonYear: 39000000, confidenceLevel: 1290000 },
-      { period: 'Aug 5-11', thisYear: 47000000, comparisonYear: 43000000, confidenceLevel: 1410000 },
-      { period: 'Aug 12-18', thisYear: 46000000, comparisonYear: 42000000, confidenceLevel: 1380000 },
-      { period: 'Aug 19-25', thisYear: 48000000, comparisonYear: 44000000, confidenceLevel: 1440000 },
-      { period: 'Aug 26-Sep 1', thisYear: 50000000, comparisonYear: 46000000, confidenceLevel: 1500000 },
-      { period: 'Sep 2-8', thisYear: 49000000, comparisonYear: 45000000, confidenceLevel: 1470000 },
+      { period: 'Mar 15-21', thisYear: 42000000, comparisonYear: 38000000, confidenceLevel: 1260000 },
+      { period: 'Mar 22-28', thisYear: 45000000, comparisonYear: 41000000, confidenceLevel: 1350000 },
+      { period: 'Mar 29-Apr 4', thisYear: 43000000, comparisonYear: 39000000, confidenceLevel: 1290000 },
+      { period: 'Apr 5-11', thisYear: 47000000, comparisonYear: 43000000, confidenceLevel: 1410000 },
+      { period: 'Apr 12-18', thisYear: 46000000, comparisonYear: 42000000, confidenceLevel: 1380000 },
+      { period: 'Apr 19-25', thisYear: 48000000, comparisonYear: 44000000, confidenceLevel: 1440000 },
+      { period: 'Apr 26-May 2', thisYear: 50000000, comparisonYear: 46000000, confidenceLevel: 1500000 },
+      { period: 'May 3-9', thisYear: 49000000, comparisonYear: 45000000, confidenceLevel: 1470000 },
     ],
     2024: [
-      { period: 'Jul 15-21', thisYear: 38000000, comparisonYear: 36000000, confidenceLevel: 1140000 },
-      { period: 'Jul 22-28', thisYear: 41000000, comparisonYear: 39000000, confidenceLevel: 1230000 },
-      { period: 'Jul 29-Aug 4', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
-      { period: 'Aug 5-11', thisYear: 43000000, comparisonYear: 40000000, confidenceLevel: 1290000 },
-      { period: 'Aug 12-18', thisYear: 42000000, comparisonYear: 39000000, confidenceLevel: 1260000 },
-      { period: 'Aug 19-25', thisYear: 44000000, comparisonYear: 41000000, confidenceLevel: 1320000 },
-      { period: 'Aug 26-Sep 1', thisYear: 46000000, comparisonYear: 43000000, confidenceLevel: 1380000 },
-      { period: 'Sep 2-8', thisYear: 45000000, comparisonYear: 42000000, confidenceLevel: 1350000 },
+      { period: 'Mar 15-21', thisYear: 38000000, comparisonYear: 36000000, confidenceLevel: 1140000 },
+      { period: 'Mar 22-28', thisYear: 41000000, comparisonYear: 39000000, confidenceLevel: 1230000 },
+      { period: 'Mar 29-Apr 4', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
+      { period: 'Apr 5-11', thisYear: 43000000, comparisonYear: 40000000, confidenceLevel: 1290000 },
+      { period: 'Apr 12-18', thisYear: 42000000, comparisonYear: 39000000, confidenceLevel: 1260000 },
+      { period: 'Apr 19-25', thisYear: 44000000, comparisonYear: 41000000, confidenceLevel: 1320000 },
+      { period: 'Apr 26-May 2', thisYear: 46000000, comparisonYear: 43000000, confidenceLevel: 1380000 },
+      { period: 'May 3-9', thisYear: 45000000, comparisonYear: 42000000, confidenceLevel: 1350000 },
     ],
     2023: [
-      { period: 'Jul 15-21', thisYear: 36000000, comparisonYear: 34000000, confidenceLevel: 1080000 },
-      { period: 'Jul 22-28', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
-      { period: 'Jul 29-Aug 4', thisYear: 37000000, comparisonYear: 35000000, confidenceLevel: 1110000 },
-      { period: 'Aug 5-11', thisYear: 40000000, comparisonYear: 38000000, confidenceLevel: 1200000 },
-      { period: 'Aug 12-18', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
-      { period: 'Aug 19-25', thisYear: 41000000, comparisonYear: 39000000, confidenceLevel: 1230000 },
-      { period: 'Aug 26-Sep 1', thisYear: 43000000, comparisonYear: 41000000, confidenceLevel: 1290000 },
-      { period: 'Sep 2-8', thisYear: 42000000, comparisonYear: 40000000, confidenceLevel: 1260000 },
+      { period: 'Mar 15-21', thisYear: 36000000, comparisonYear: 34000000, confidenceLevel: 1080000 },
+      { period: 'Mar 22-28', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
+      { period: 'Mar 29-Apr 4', thisYear: 37000000, comparisonYear: 35000000, confidenceLevel: 1110000 },
+      { period: 'Apr 5-11', thisYear: 40000000, comparisonYear: 38000000, confidenceLevel: 1200000 },
+      { period: 'Apr 12-18', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
+      { period: 'Apr 19-25', thisYear: 41000000, comparisonYear: 39000000, confidenceLevel: 1230000 },
+      { period: 'Apr 26-May 2', thisYear: 43000000, comparisonYear: 41000000, confidenceLevel: 1290000 },
+      { period: 'May 3-9', thisYear: 42000000, comparisonYear: 40000000, confidenceLevel: 1260000 },
     ],
   },
   monthly: {
@@ -546,7 +546,7 @@ export default function MilkYieldChart() {
         ) : (
           <p>Data represents monthly {metricType} percentages in milk, comparing current year with previous year.</p>
         )}
-        <p className="mt-1">Last updated: 2025-09-02</p>
+        <p className="mt-1">Last updated: 2025-03-15</p>
         <p className="mt-1 text-xs text-gray-500">Error bars indicate confidence intervals (±3% of predicted values)</p>
       </div>
     </div>

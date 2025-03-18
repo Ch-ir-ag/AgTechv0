@@ -83,9 +83,25 @@ const dairyData: DairyDataItem[] = [
   { year: 2024, month: 'December', fatPercent: 6.00, proteinPercent: 4.49, scc: 196, totalCows: 502, month_sin: 0, month_cos: 1, actualVolume: 64187, predictedVolume: 65850, residual: 65850 - 64187, accuracy: Math.round((65850 / 64187) * 100) }
 ];
 
+// Default predicted values for next week
+const defaultPredictions = [
+  { day: 'Monday', predictedVolume: 12850 },
+  { day: 'Tuesday', predictedVolume: 13200 },
+  { day: 'Wednesday', predictedVolume: 13450 },
+  { day: 'Thursday', predictedVolume: 13720 },
+  { day: 'Friday', predictedVolume: 13570 },
+  { day: 'Saturday', predictedVolume: 12670 },
+  { day: 'Sunday', predictedVolume: 12180 }
+];
+
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
+  const [query, setQuery] = useState('');
+  const [lastQuery, setLastQuery] = useState('');
+  const [llmResponse, setLlmResponse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
   
   // Prepare data for time series
   const timeSeriesData: TimeSeriesDataItem[] = dairyData.map(item => ({
@@ -150,6 +166,74 @@ export default function AccuracyDemo() {
   };
   
   const timeAdjustedData = getTimeAdjustedData();
+
+  // Calculate weekly predictions average for the reference line
+  const weeklyAverage = Math.round(
+    weeklyPredictions.reduce((sum, day) => sum + day.predictedVolume, 0) / weeklyPredictions.length
+  );
+
+  // Process the user query and update predictions
+  const processQuery = async () => {
+    if (!query.trim()) return;
+    
+    setIsLoading(true);
+    setLastQuery(query);
+    
+    try {
+      // Call our API endpoint
+      const response = await fetch('/api/llm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: query })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get response');
+      }
+      
+      // Update the predictions based on the percentage change from the LLM
+      if (data.success) {
+        const percentageChange = data.percentageChange;
+        const modifier = 1 + percentageChange;
+        
+        // Apply the modifier to each day's prediction
+        const newPredictions = weeklyPredictions.map(day => ({
+          ...day,
+          predictedVolume: Math.round(day.predictedVolume * modifier)
+        }));
+        
+        setWeeklyPredictions(newPredictions);
+        setLlmResponse(data.response);
+      } else if (data.error) {
+        console.error('API returned error:', data.error);
+        setLlmResponse(`Sorry, there was an error processing your query: ${data.error}`);
+      } else {
+        setLlmResponse("Sorry, there was an error processing your query. Please try again.");
+      }
+    } catch (error) {
+      console.error('Error processing query:', error);
+      setLlmResponse(`Sorry, there was an error processing your query: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      processQuery();
+    }
+  };
+
+  const resetPredictions = () => {
+    setWeeklyPredictions(defaultPredictions);
+    setLlmResponse('');
+    setQuery('');
+    setLastQuery('');
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
@@ -222,6 +306,60 @@ export default function AccuracyDemo() {
             </div>
           </div>
           
+          {/* LLM Query Interface */}
+          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
+            <h2 className="text-xl font-medium text-gray-800 mb-4">
+              Ask About Milk Yield Factors
+            </h2>
+            <div className="flex flex-col md:flex-row gap-4 mb-4">
+              <div className="flex-grow">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="E.g. What would happen to milk forecast if rainfall increased by 50% next week?"
+                  className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={processQuery}
+                  disabled={isLoading || !query.trim()}
+                  className={`px-4 py-2 rounded-md font-medium text-white ${
+                    isLoading || !query.trim() ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+                  } transition-colors`}
+                >
+                  {isLoading ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing
+                    </span>
+                  ) : 'Ask AI'}
+                </button>
+                {(lastQuery || llmResponse) && (
+                  <button
+                    onClick={resetPredictions}
+                    className="px-4 py-2 rounded-md font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+            </div>
+            
+            {llmResponse && (
+              <div className="mt-2 p-4 bg-gray-50 rounded-md border border-gray-200">
+                <p className="text-sm font-medium text-gray-500">Query: {lastQuery}</p>
+                <div className="mt-2 text-gray-700">{llmResponse}</div>
+              </div>
+            )}
+          </div>
+          
           {/* Next Week Prediction Chart */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div className="flex justify-between items-center mb-6">
@@ -235,15 +373,7 @@ export default function AccuracyDemo() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={[
-                    { day: 'Monday', predictedVolume: 12850 },
-                    { day: 'Tuesday', predictedVolume: 13200 },
-                    { day: 'Wednesday', predictedVolume: 13450 },
-                    { day: 'Thursday', predictedVolume: 13720 },
-                    { day: 'Friday', predictedVolume: 13570 },
-                    { day: 'Saturday', predictedVolume: 12670 },
-                    { day: 'Sunday', predictedVolume: 12180 }
-                  ]}
+                  data={weeklyPredictions}
                   margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -267,13 +397,13 @@ export default function AccuracyDemo() {
                     radius={[4, 4, 0, 0]}
                   />
                   <ReferenceLine
-                    y={13091} // Average of the predicted values
+                    y={weeklyAverage}
                     stroke="#ff7300"
                     strokeDasharray="3 3"
                     strokeWidth={2}
                   >
                     <Label 
-                      value="Average (13.1K)" 
+                      value={`Average (${Math.round(weeklyAverage / 1000)}K)`}
                       position="right" 
                       fill="#ff7300" 
                       fontSize={12} 
@@ -283,7 +413,7 @@ export default function AccuracyDemo() {
               </ResponsiveContainer>
             </div>
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
-              <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. The weekly total is predicted to be approximately 91,640 liters.</p>
+              <p>This is a forward-looking prediction based on current farm conditions and seasonal factors. The weekly total is predicted to be approximately {weeklyPredictions.reduce((sum, day) => sum + day.predictedVolume, 0).toLocaleString()} liters.</p>
             </div>
           </div>
           

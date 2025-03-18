@@ -200,14 +200,47 @@ export default function AccuracyDemo() {
         const percentageChange = data.percentageChange;
         const modifier = 1 + percentageChange;
         
+        console.log(`Applying modifier of ${modifier} (${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%)`);
+        
         // Apply the modifier to each day's prediction
         const newPredictions = weeklyPredictions.map(day => ({
           ...day,
-          predictedVolume: Math.round(day.predictedVolume * modifier)
+          predictedVolume: Math.round(defaultPredictions.find(d => d.day === day.day)!.predictedVolume * modifier)
         }));
         
         setWeeklyPredictions(newPredictions);
-        setLlmResponse(data.response);
+        
+        // Format the response to be more concise
+        let displayResponse = data.response;
+        
+        // If the response is too long, extract just the first sentence and append the percentage change
+        if (displayResponse.length > 250) {
+          const sentences = displayResponse.match(/[^.!?]+[.!?]+/g) || [];
+          if (sentences.length > 0) {
+            displayResponse = sentences[0] + 
+              ` Estimated change: ${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%`;
+          }
+        }
+        
+        // Make sure the displayed percentage change matches what was extracted
+        const percentageRegex = /(\+|\-)\d+(\.\d+)?%/g;
+        const matches = [...displayResponse.matchAll(percentageRegex)];
+        if (matches.length > 0) {
+          // Extract the first percentage from the response
+          const displayedPercentage = matches[0][0];
+          // Check if it matches the sign of our calculated percentage
+          const calculatedPercentage = `${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%`;
+          
+          if (displayedPercentage !== calculatedPercentage) {
+            // If not matching, replace the first instance with our calculated value
+            displayResponse = displayResponse.replace(displayedPercentage, calculatedPercentage);
+          }
+        } else if (!displayResponse.includes(`${(percentageChange * 100).toFixed(1)}%`)) {
+          // If no percentage is found in the response, append it
+          displayResponse += ` Estimated change: ${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%`;
+        }
+        
+        setLlmResponse(displayResponse);
       } else if (data.error) {
         console.error('API returned error:', data.error);
         setLlmResponse(`Sorry, there was an error processing your query: ${data.error}`);

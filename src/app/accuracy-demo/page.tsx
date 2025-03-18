@@ -377,15 +377,6 @@ export default function AccuracyDemo() {
             </div>
           </div>
           
-          {/* Model Performance Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-3xl font-bold text-blue-500">95.6%</p>
-              <p className="text-gray-600 text-sm">Average Accuracy</p>
-              <p className="text-xs text-gray-500 mt-1">Mean prediction accuracy</p>
-            </div>
-          </div>
-          
           {/* LLM Query Interface */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <h2 className="text-xl font-medium text-gray-800 mb-4">
@@ -752,6 +743,15 @@ export default function AccuracyDemo() {
             </div>
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
               <p>This chart compares our model&apos;s predictions with the actual milk yield for 2024, showing the accuracy of our forecasting system throughout the year.</p>
+            </div>
+          </div>
+          
+          {/* Model Performance Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+              <p className="text-4xl font-bold text-blue-500">95.6%</p>
+              <p className="text-gray-600 text-sm">Average Accuracy</p>
+              <p className="text-xs text-gray-500 mt-1">Mean prediction accuracy across all data points</p>
             </div>
           </div>
         </div>

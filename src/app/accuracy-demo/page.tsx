@@ -192,11 +192,6 @@ export default function AccuracyDemo() {
   
   const timeAdjustedData = getTimeAdjustedData();
 
-  // Calculate weekly predictions average for the reference line
-  const weeklyAverage = Math.round(
-    weeklyPredictions.reduce((sum, day) => sum + day.predictedVolume, 0) / weeklyPredictions.length
-  );
-
   // Process the user query and update predictions
   const processQuery = async () => {
     if (!query.trim()) return;
@@ -757,7 +752,7 @@ export default function AccuracyDemo() {
               </ResponsiveContainer>
             </div>
             <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
-              <p>This chart compares our model's predictions with the actual milk yield for 2024, showing the accuracy of our forecasting system throughout the year.</p>
+              <p>This chart compares our model&apos;s predictions with the actual milk yield for 2024, showing the accuracy of our forecasting system throughout the year.</p>
             </div>
           </div>
         </div>

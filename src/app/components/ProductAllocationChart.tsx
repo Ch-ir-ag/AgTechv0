@@ -153,24 +153,6 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   return null;
 };
 
-// Alert badge component
-const AlertBadge = ({ limit }: { limit: number }) => {
-  if (limit >= 90) {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
-        Near Capacity
-      </span>
-    );
-  } else if (limit >= 80) {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
-        High Utilisation
-      </span>
-    );
-  }
-  return null;
-};
-
 // Get status text for bullet point
 const getStatusText = (limit: number): string => {
   if (limit >= 90) return ' – Near Capacity';

@@ -31,9 +31,8 @@ export default function Landing() {
                   <span className="block">Improving</span>
                   <span className="block text-blue-600">Dairy Production</span>
                 </h1>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Daisy AI is an advanced analytics platform that helps dairy cooperatives optimize milk production, 
-                  predict yields, and make data-driven decisions for better profitability.
+                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 ">
+                  Daisy AI delivers highly accurate milk yield predictions and smart product allocation, empowering dairy co-operatives to plan production, optimise supply chains, and secure international contracts with confidence.
                 </p>
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                   <div className="rounded-md shadow">
@@ -115,20 +114,6 @@ export default function Landing() {
               <div className="relative">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Real-time Monitoring</h3>
-                  <p className="mt-2 text-base text-gray-500">
-                    Monitor milk quality parameters and production metrics in real-time across your entire operation.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                   </svg>
                 </div>
@@ -136,6 +121,20 @@ export default function Landing() {
                   <h3 className="text-lg leading-6 font-medium text-gray-900">Supply Chain Optimization</h3>
                   <p className="mt-2 text-base text-gray-500">
                     Visualize and optimize your entire supply chain from farm to market with our interactive map.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                  </svg>
+                </div>
+                <div className="ml-16">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">Product Allocation</h3>
+                  <p className="mt-2 text-base text-gray-500">
+                    Intelligently allocate milk resources across product lines to maximise returns based on market demand and pricing.
                   </p>
                 </div>
               </div>

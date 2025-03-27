@@ -18,6 +18,14 @@ import { loadChartData } from '../utils/chartDataLoader';
 // Define metric type
 type MetricType = 'milk' | 'fat' | 'protein' | 'lactose';
 
+// Define the data type for chart data points
+interface DataPoint {
+  period: string;
+  thisYear: number;
+  comparisonYear: number;
+  confidenceLevel: number;
+}
+
 // Define proper types for the tooltip props
 interface TooltipProps {
   active?: boolean;
@@ -124,7 +132,7 @@ export default function MilkYieldChart() {
     thisYear: 2025,
     comparisonYear: 2024
   });
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<DataPoint[]>([]);
   
   // Get company from URL params
   const params = useParams();
@@ -177,14 +185,6 @@ export default function MilkYieldChart() {
   // Load company-specific chart data
   const companyChartData = loadChartData(company) as ChartData;
   
-  // Define the data type for chart data points
-  interface DataPoint {
-    period: string;
-    thisYear: number;
-    comparisonYear: number;
-    confidenceLevel: number;
-  }
-  
   useEffect(() => {
     // Use the company-specific data based on the metric type
     let data: DataPoint[] = [];
@@ -221,21 +221,6 @@ export default function MilkYieldChart() {
       }
     }
     return value.toString();
-  };
-
-  const getDataForMetric = () => {
-    switch (metricType) {
-      case 'milk':
-        return companyChartData.milkYieldData;
-      case 'fat':
-        return companyChartData.fatPercentageData;
-      case 'protein':
-        return companyChartData.proteinPercentageData;
-      case 'lactose':
-        return companyChartData.lactosePercentageData;
-      default:
-        return {};
-    }
   };
 
   const getYAxisLabel = () => {

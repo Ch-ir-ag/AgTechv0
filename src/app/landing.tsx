@@ -1,12 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Logo from './components/Logo';
 
+// Define company interface
+interface Company {
+  id: string;
+  name: string;
+}
+
 export default function Landing() {
   const router = useRouter();
+  const [selectedCompany, setSelectedCompany] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const companies: Company[] = [
+    { id: 'lakeland-dairies', name: 'Lakeland Dairies' }
+  ];
+
+  const handleCompanySelect = (companyId: string) => {
+    setSelectedCompany(companyId);
+    setIsDropdownOpen(false);
+  };
+
+  const goToDashboard = () => {
+    if (selectedCompany) {
+      router.push(`/${selectedCompany}/dashboard`);
+    } else {
+      // Show dropdown if no company is selected
+      setIsDropdownOpen(true);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -34,22 +60,58 @@ export default function Landing() {
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 ">
                   Daisy AI delivers highly accurate milk yield predictions and smart product allocation, empowering dairy co-operatives to plan production, optimise supply chains, and secure international contracts with confidence.
                 </p>
-                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                  <div className="rounded-md shadow">
-                    <button
-                      onClick={() => router.push('/dashboard')}
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
-                    >
-                      View Dashboard
-                    </button>
-                  </div>
-                  <div className="mt-3 sm:mt-0 sm:ml-3">
-                    <a
-                      href="#features"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10"
-                    >
-                      Learn More
-                    </a>
+                <div className="mt-5 sm:mt-8 flex flex-col items-center sm:items-center lg:items-start">
+                  {/* Container to ensure same width for dropdown and button row */}
+                  <div className="w-full max-w-md">
+                    {/* Dropdown */}
+                    <div className="w-full mb-3">
+                      <button
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-full flex items-center justify-between px-8 py-3 border border-gray-200 rounded-md shadow-sm bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 md:py-4 md:text-lg"
+                      >
+                        <span>{selectedCompany ? companies.find(c => c.id === selectedCompany)?.name : 'Select a company'}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+                      
+                      {isDropdownOpen && (
+                        <div className="absolute z-10 mt-1 w-full max-w-md rounded-md bg-white shadow-lg">
+                          <ul className="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                            {companies.map((company) => (
+                              <li
+                                key={company.id}
+                                className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50"
+                                onClick={() => handleCompanySelect(company.id)}
+                              >
+                                {company.name}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Buttons in a row */}
+                    <div className="w-full flex">
+                      <div className="flex-1 rounded-md shadow">
+                        <button
+                          onClick={goToDashboard}
+                          className={`w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white ${selectedCompany ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-400'} md:py-4 md:text-lg`}
+                          disabled={!selectedCompany}
+                        >
+                          View Dashboard
+                        </button>
+                      </div>
+                      <div className="flex-1 ml-3">
+                        <a
+                          href="#features"
+                          className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg"
+                        >
+                          Learn More
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -153,7 +215,13 @@ export default function Landing() {
           <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
             <div className="inline-flex rounded-md shadow">
               <button
-                onClick={() => router.push('/dashboard')}
+                onClick={() => {
+                  if (selectedCompany) {
+                    router.push(`/${selectedCompany}/dashboard`);
+                  } else {
+                    setIsDropdownOpen(true);
+                  }
+                }}
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 Get started

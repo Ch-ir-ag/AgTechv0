@@ -2,11 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  
+  // Extract company from URL if it exists (e.g., /lakeland-dairies/dashboard)
+  const urlParts = pathname.split('/').filter(Boolean);
+  const company = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' 
+    ? urlParts[0] 
+    : 'lakeland-dairies'; // Default to lakeland-dairies
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,17 +44,8 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6">
-          <Link href="/dashboard" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
+          <Link href={`/${company}/dashboard`} className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             Dashboard
-          </Link>
-          <Link href="#analytics" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            Yield Analytics
-          </Link>
-          <Link href="#supply-chain-map" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            Supply Chain
-          </Link>
-          <Link href="#chatbot" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            AI Assistant
           </Link>
           <Link href="/accuracy-demo" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             Accuracy Demo
@@ -76,32 +75,11 @@ export default function Navbar() {
         <div className="md:hidden bg-white shadow-sm">
           <div className="flex flex-col space-y-4 px-4 py-6">
             <Link 
-              href="/dashboard" 
+              href={`/${company}/dashboard`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Dashboard
-            </Link>
-            <Link 
-              href="#analytics" 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Yield Analytics
-            </Link>
-            <Link 
-              href="#supply-chain-map" 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Supply Chain
-            </Link>
-            <Link 
-              href="#chatbot" 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              AI Assistant
             </Link>
             <Link 
               href="/accuracy-demo" 

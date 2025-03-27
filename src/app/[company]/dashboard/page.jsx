@@ -4,11 +4,7 @@ import DashboardClient from "../../components/DashboardClient";
 // List of valid companies
 const validCompanies = ['lakeland-dairies'];
 
-type PageParams = {
-  company: string;
-};
-
-export default function CompanyDashboard({ params }: { params: PageParams }) {
+export default function CompanyDashboard({ params }) {
   // Check if the company is valid
   if (!validCompanies.includes(params.company)) {
     notFound();

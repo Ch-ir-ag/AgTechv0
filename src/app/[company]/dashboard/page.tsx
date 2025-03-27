@@ -1,3 +1,5 @@
+'use client';
+
 import { notFound } from 'next/navigation';
 import Navbar from "../../components/Navbar";
 import MilkYieldChart from "../../components/MilkYieldChart";
@@ -10,13 +12,11 @@ import QuantifiedImpact from "../../components/QuantifiedImpact";
 // List of valid companies
 const validCompanies = ['lakeland-dairies'];
 
-interface CompanyDashboardProps {
-  params: {
-    company: string;
-  };
-}
+type CompanyParams = {
+  company: string;
+};
 
-export default function CompanyDashboard({ params }: CompanyDashboardProps) {
+export default function CompanyDashboard({ params }: { params: CompanyParams }) {
   // Check if the company is valid
   if (!validCompanies.includes(params.company)) {
     notFound();

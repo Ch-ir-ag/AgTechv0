@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from './Logo';
+import { companies } from '../data/companies';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,9 +13,9 @@ export default function Navbar() {
   
   // Extract company from URL if it exists (e.g., /lakeland-dairies/dashboard)
   const urlParts = pathname.split('/').filter(Boolean);
-  const company = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' 
+  const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' 
     ? urlParts[0] 
-    : 'lakeland-dairies'; // Default to lakeland-dairies
+    : Object.keys(companies)[0]; // Use first company as default
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,7 +45,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6">
-          <Link href={`/${company}/dashboard`} className="text-gray-700 hover:text-blue-500 text-sm font-medium">
+          <Link href={`/${currentCompany}/dashboard`} className="text-gray-700 hover:text-blue-500 text-sm font-medium">
             Dashboard
           </Link>
           <Link href="/accuracy-demo" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
@@ -75,7 +76,7 @@ export default function Navbar() {
         <div className="md:hidden bg-white shadow-sm">
           <div className="flex flex-col space-y-4 px-4 py-6">
             <Link 
-              href={`/${company}/dashboard`} 
+              href={`/${currentCompany}/dashboard`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >

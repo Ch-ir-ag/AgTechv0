@@ -10,9 +10,10 @@ import QuantifiedImpact from "./QuantifiedImpact";
 
 interface DashboardClientProps {
   companyName: string;
+  companyData: any; // Add type definition as needed
 }
 
-export default function DashboardClient({ companyName }: DashboardClientProps) {
+export default function DashboardClient({ companyName, companyData }: DashboardClientProps) {
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
       <Navbar />
@@ -40,7 +41,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
           {/* Supply Chain Map */}
           <div className="mb-8">
             <section id="supply-chain-map" className="h-full">
-              <InteractiveSupplyChainMap />
+              <InteractiveSupplyChainMap companyName={companyName} />
             </section>
           </div>
           
@@ -59,7 +60,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
           
           {/* Quantified Impact Section */}
           <div className="mb-8">
-            <QuantifiedImpact />
+            <QuantifiedImpact companyName={companyName} />
           </div>
           
           {/* Stats Section */}
@@ -89,7 +90,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
           {/* Chatbot Section */}
           <div className="mb-0">
             <section id="chatbot" className="h-full">
-              <Chatbot />
+              <Chatbot companyName={companyName} />
             </section>
           </div>
           

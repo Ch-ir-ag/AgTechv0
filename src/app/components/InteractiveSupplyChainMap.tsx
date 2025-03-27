@@ -16,6 +16,11 @@ interface CountyData {
   forecastChange: number; // Percentage change for next month
 }
 
+// Define props for the component
+interface InteractiveSupplyChainMapProps {
+  companyName: string;
+}
+
 // Define the clickable area coordinates types directly in the array
 const clickableAreas = [
   {
@@ -122,7 +127,7 @@ const clickableAreas = [
   }
 ];
 
-export default function InteractiveSupplyChainMap() {
+export default function InteractiveSupplyChainMap({ companyName }: InteractiveSupplyChainMapProps) {
   // State for the selected county
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -424,7 +429,7 @@ export default function InteractiveSupplyChainMap() {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
       <h2 className="text-xl font-medium text-gray-800 mb-4">
-        Lakeland Dairies Supply Chain Map
+        {companyName} Supply Chain Map
       </h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -442,7 +447,7 @@ export default function InteractiveSupplyChainMap() {
             {mapLoaded && (
               <Image
                 src="/images/ireland_map.jpg" // You'll need to add this image to your public/images folder
-                alt="Ireland Map"
+                alt={`${companyName} collection areas`}
                 fill
                 style={{ objectFit: 'contain' }}
                 priority
@@ -455,7 +460,7 @@ export default function InteractiveSupplyChainMap() {
           </div>
           
           <div className="absolute bottom-2 left-2 text-xs text-gray-500 z-10">
-            Lakeland Dairies collection areas
+            {companyName} collection areas
           </div>
 
           {/* Forecast Popup */}
@@ -585,7 +590,7 @@ export default function InteractiveSupplyChainMap() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
               </svg>
               <h3 className="font-medium text-gray-800 mb-3">
-                Lakeland Dairies Summary
+                {companyName} Summary
               </h3>
               <div className="space-y-3 w-full">
                 <div className="flex justify-between">

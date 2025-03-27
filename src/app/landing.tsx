@@ -17,7 +17,8 @@ export default function Landing() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const companies: Company[] = [
-    { id: 'lakeland-dairies', name: 'Lakeland Dairies' }
+    { id: 'lakeland-dairies', name: 'Lakeland Dairies' },
+    { id: 'kerry-dairy', name: 'Kerry Dairy' }
   ];
 
   const handleCompanySelect = (companyId: string) => {

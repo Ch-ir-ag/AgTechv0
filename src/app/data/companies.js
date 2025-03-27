@@ -12,6 +12,11 @@ export const companies = {
     // theme: 'blue', // future use
     // logoVariant: 'default', // future use
   },
+  'kerry-dairy': {
+    name: 'Kerry Dairy',
+    slug: 'kerry-dairy',
+    // Add more company-specific configurations here
+  },
   // Add more companies as they come onboard
   // 'example-company': {
   //   name: 'Example Company',

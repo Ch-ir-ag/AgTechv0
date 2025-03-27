@@ -1,20 +1,26 @@
 import { notFound } from 'next/navigation';
 import DashboardClient from "../../components/DashboardClient";
+import { isValidCompany, formatCompanyName } from "../../data/companies";
+import { loadCompanyData } from "../../utils/companyDataLoader";
 
-// List of valid companies
-const validCompanies = ['lakeland-dairies'];
-
+/**
+ * CompanyDashboard page component
+ * Server component that validates the company and loads the data
+ */
 export default function CompanyDashboard({ params }) {
+  const { company } = params;
+  
   // Check if the company is valid
-  if (!validCompanies.includes(params.company)) {
+  if (!isValidCompany(company)) {
     notFound();
   }
 
-  // Format company name for display (e.g., "lakeland-dairies" -> "Lakeland Dairies")
-  const companyName = params.company
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  // Format company name
+  const companyName = formatCompanyName(company);
+  
+  // Load company data (already returns plain objects)
+  const companyData = loadCompanyData(company);
 
-  return <DashboardClient companyName={companyName} />;
+  // Render the dashboard with company data
+  return <DashboardClient companyName={companyName} companyData={companyData} />;
 } 

@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import DashboardClient from "../../components/DashboardClient";
 import { isValidCompany, formatCompanyName } from "../../data/companies";
-import { loadCompanyData } from "../../utils/companyDataLoader";
 
 /**
  * CompanyDashboard page component
@@ -17,10 +16,7 @@ export default function CompanyDashboard({ params }) {
 
   // Format company name
   const companyName = formatCompanyName(company);
-  
-  // Load company data (already returns plain objects)
-  const companyData = loadCompanyData(company);
 
-  // Render the dashboard with company data
-  return <DashboardClient companyName={companyName} companyData={companyData} />;
+  // Render the dashboard with company name
+  return <DashboardClient companyName={companyName} />;
 } 

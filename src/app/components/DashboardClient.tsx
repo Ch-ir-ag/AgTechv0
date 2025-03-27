@@ -10,10 +10,9 @@ import QuantifiedImpact from "./QuantifiedImpact";
 
 interface DashboardClientProps {
   companyName: string;
-  companyData: any; // Add type definition as needed
 }
 
-export default function DashboardClient({ companyName, companyData }: DashboardClientProps) {
+export default function DashboardClient({ companyName }: DashboardClientProps) {
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
       <Navbar />

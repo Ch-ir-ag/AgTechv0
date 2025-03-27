@@ -12,235 +12,13 @@ import {
   ErrorBar,
   ResponsiveContainer
 } from 'recharts';
+import { useParams } from 'next/navigation';
+import { loadChartData } from '../utils/chartDataLoader';
 
 // Define metric type
 type MetricType = 'milk' | 'fat' | 'protein' | 'lactose';
 
-// Sample data for milk yield analytics - structured by time period with confidence levels
-// Scaled to reflect an annual yield of approximately 2 billion liters
-const milkYieldData = {
-  weekly: {
-    2025: [
-      { period: 'Mar 15-21', thisYear: 42000000, comparisonYear: 38000000, confidenceLevel: 1260000 },
-      { period: 'Mar 22-28', thisYear: 45000000, comparisonYear: 41000000, confidenceLevel: 1350000 },
-      { period: 'Mar 29-Apr 4', thisYear: 43000000, comparisonYear: 39000000, confidenceLevel: 1290000 },
-      { period: 'Apr 5-11', thisYear: 47000000, comparisonYear: 43000000, confidenceLevel: 1410000 },
-      { period: 'Apr 12-18', thisYear: 46000000, comparisonYear: 42000000, confidenceLevel: 1380000 },
-      { period: 'Apr 19-25', thisYear: 48000000, comparisonYear: 44000000, confidenceLevel: 1440000 },
-      { period: 'Apr 26-May 2', thisYear: 50000000, comparisonYear: 46000000, confidenceLevel: 1500000 },
-      { period: 'May 3-9', thisYear: 49000000, comparisonYear: 45000000, confidenceLevel: 1470000 },
-    ],
-    2024: [
-      { period: 'Mar 15-21', thisYear: 38000000, comparisonYear: 36000000, confidenceLevel: 1140000 },
-      { period: 'Mar 22-28', thisYear: 41000000, comparisonYear: 39000000, confidenceLevel: 1230000 },
-      { period: 'Mar 29-Apr 4', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
-      { period: 'Apr 5-11', thisYear: 43000000, comparisonYear: 40000000, confidenceLevel: 1290000 },
-      { period: 'Apr 12-18', thisYear: 42000000, comparisonYear: 39000000, confidenceLevel: 1260000 },
-      { period: 'Apr 19-25', thisYear: 44000000, comparisonYear: 41000000, confidenceLevel: 1320000 },
-      { period: 'Apr 26-May 2', thisYear: 46000000, comparisonYear: 43000000, confidenceLevel: 1380000 },
-      { period: 'May 3-9', thisYear: 45000000, comparisonYear: 42000000, confidenceLevel: 1350000 },
-    ],
-    2023: [
-      { period: 'Mar 15-21', thisYear: 36000000, comparisonYear: 34000000, confidenceLevel: 1080000 },
-      { period: 'Mar 22-28', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
-      { period: 'Mar 29-Apr 4', thisYear: 37000000, comparisonYear: 35000000, confidenceLevel: 1110000 },
-      { period: 'Apr 5-11', thisYear: 40000000, comparisonYear: 38000000, confidenceLevel: 1200000 },
-      { period: 'Apr 12-18', thisYear: 39000000, comparisonYear: 37000000, confidenceLevel: 1170000 },
-      { period: 'Apr 19-25', thisYear: 41000000, comparisonYear: 39000000, confidenceLevel: 1230000 },
-      { period: 'Apr 26-May 2', thisYear: 43000000, comparisonYear: 41000000, confidenceLevel: 1290000 },
-      { period: 'May 3-9', thisYear: 42000000, comparisonYear: 40000000, confidenceLevel: 1260000 },
-    ],
-  },
-  monthly: {
-    2025: [
-      { period: 'Jan 2025', thisYear: 180000000, comparisonYear: 165000000, confidenceLevel: 5400000 },
-      { period: 'Feb 2025', thisYear: 192000000, comparisonYear: 178000000, confidenceLevel: 5760000 },
-      { period: 'Mar 2025', thisYear: 201000000, comparisonYear: 185000000, confidenceLevel: 6030000 },
-      { period: 'Apr 2025', thisYear: 215000000, comparisonYear: 192000000, confidenceLevel: 6450000 },
-      { period: 'May 2025', thisYear: 220000000, comparisonYear: 200000000, confidenceLevel: 6600000 },
-      { period: 'Jun 2025', thisYear: 218000000, comparisonYear: 198000000, confidenceLevel: 6540000 },
-      { period: 'Jul 2025', thisYear: 215000000, comparisonYear: 195000000, confidenceLevel: 6450000 },
-      { period: 'Aug 2025', thisYear: 225000000, comparisonYear: 205000000, confidenceLevel: 6750000 },
-    ],
-    2024: [
-      { period: 'Jan 2024', thisYear: 165000000, comparisonYear: 150000000, confidenceLevel: 4950000 },
-      { period: 'Feb 2024', thisYear: 178000000, comparisonYear: 162000000, confidenceLevel: 5340000 },
-      { period: 'Mar 2024', thisYear: 185000000, comparisonYear: 170000000, confidenceLevel: 5550000 },
-      { period: 'Apr 2024', thisYear: 192000000, comparisonYear: 175000000, confidenceLevel: 5760000 },
-      { period: 'May 2024', thisYear: 200000000, comparisonYear: 182000000, confidenceLevel: 6000000 },
-      { period: 'Jun 2024', thisYear: 198000000, comparisonYear: 180000000, confidenceLevel: 5940000 },
-      { period: 'Jul 2024', thisYear: 195000000, comparisonYear: 178000000, confidenceLevel: 5850000 },
-      { period: 'Aug 2024', thisYear: 205000000, comparisonYear: 185000000, confidenceLevel: 6150000 },
-    ],
-    2023: [
-      { period: 'Jan 2023', thisYear: 150000000, comparisonYear: 140000000, confidenceLevel: 4500000 },
-      { period: 'Feb 2023', thisYear: 162000000, comparisonYear: 150000000, confidenceLevel: 4860000 },
-      { period: 'Mar 2023', thisYear: 170000000, comparisonYear: 158000000, confidenceLevel: 5100000 },
-      { period: 'Apr 2023', thisYear: 175000000, comparisonYear: 162000000, confidenceLevel: 5250000 },
-      { period: 'May 2023', thisYear: 182000000, comparisonYear: 168000000, confidenceLevel: 5460000 },
-      { period: 'Jun 2023', thisYear: 180000000, comparisonYear: 165000000, confidenceLevel: 5400000 },
-      { period: 'Jul 2023', thisYear: 178000000, comparisonYear: 162000000, confidenceLevel: 5340000 },
-      { period: 'Aug 2023', thisYear: 185000000, comparisonYear: 170000000, confidenceLevel: 5550000 },
-    ],
-  },
-  yearly: {
-    2025: [
-      { period: '2025', thisYear: 2850000000, comparisonYear: 2700000000, confidenceLevel: 85500000 },
-    ],
-    2024: [
-      { period: '2024', thisYear: 2700000000, comparisonYear: 2550000000, confidenceLevel: 81000000 },
-    ],
-    2023: [
-      { period: '2023', thisYear: 2550000000, comparisonYear: 2400000000, confidenceLevel: 76500000 },
-    ],
-  },  
-};
-
-// Sample fat percentage data
-const fatPercentageData = {
-  monthly: {
-    2025: [
-      { period: 'Jan 2025', thisYear: 5.35, comparisonYear: 4.98, confidenceLevel: 0.15 },
-      { period: 'Feb 2025', thisYear: 5.10, comparisonYear: 4.79, confidenceLevel: 0.15 },
-      { period: 'Mar 2025', thisYear: 4.70, comparisonYear: 4.40, confidenceLevel: 0.13 },
-      { period: 'Apr 2025', thisYear: 4.45, comparisonYear: 4.15, confidenceLevel: 0.13 },
-      { period: 'May 2025', thisYear: 4.25, comparisonYear: 3.95, confidenceLevel: 0.12 },
-      { period: 'Jun 2025', thisYear: 4.30, comparisonYear: 4.00, confidenceLevel: 0.12 },
-      { period: 'Jul 2025', thisYear: 4.40, comparisonYear: 4.10, confidenceLevel: 0.12 },
-      { period: 'Aug 2025', thisYear: 4.65, comparisonYear: 4.35, confidenceLevel: 0.13 },
-      { period: 'Sep 2025', thisYear: 5.00, comparisonYear: 4.70, confidenceLevel: 0.14 },
-      { period: 'Oct 2025', thisYear: 5.30, comparisonYear: 5.05, confidenceLevel: 0.15 },
-      { period: 'Nov 2025', thisYear: 5.75, comparisonYear: 5.50, confidenceLevel: 0.17 },
-      { period: 'Dec 2025', thisYear: 6.20, comparisonYear: 5.90, confidenceLevel: 0.18 },
-    ],
-    2024: [
-      { period: 'Jan 2024', thisYear: 4.98, comparisonYear: 4.90, confidenceLevel: 0.15 },
-      { period: 'Feb 2024', thisYear: 4.79, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'Mar 2024', thisYear: 4.40, comparisonYear: 4.35, confidenceLevel: 0.13 },
-      { period: 'Apr 2024', thisYear: 4.15, comparisonYear: 4.10, confidenceLevel: 0.12 },
-      { period: 'May 2024', thisYear: 3.95, comparisonYear: 3.90, confidenceLevel: 0.12 },
-      { period: 'Jun 2024', thisYear: 4.00, comparisonYear: 3.95, confidenceLevel: 0.12 },
-      { period: 'Jul 2024', thisYear: 4.10, comparisonYear: 4.05, confidenceLevel: 0.12 },
-      { period: 'Aug 2024', thisYear: 4.35, comparisonYear: 4.30, confidenceLevel: 0.13 },
-      { period: 'Sep 2024', thisYear: 4.70, comparisonYear: 4.65, confidenceLevel: 0.14 },
-      { period: 'Oct 2024', thisYear: 5.05, comparisonYear: 5.00, confidenceLevel: 0.15 },
-      { period: 'Nov 2024', thisYear: 5.50, comparisonYear: 5.40, confidenceLevel: 0.17 },
-      { period: 'Dec 2024', thisYear: 5.90, comparisonYear: 5.80, confidenceLevel: 0.18 },
-    ],
-    2023: [
-      { period: 'Jan 2023', thisYear: 4.90, comparisonYear: 4.85, confidenceLevel: 0.15 },
-      { period: 'Feb 2023', thisYear: 4.75, comparisonYear: 4.70, confidenceLevel: 0.14 },
-      { period: 'Mar 2023', thisYear: 4.35, comparisonYear: 4.30, confidenceLevel: 0.13 },
-      { period: 'Apr 2023', thisYear: 4.10, comparisonYear: 4.05, confidenceLevel: 0.12 },
-      { period: 'May 2023', thisYear: 3.90, comparisonYear: 3.85, confidenceLevel: 0.12 },
-      { period: 'Jun 2023', thisYear: 3.95, comparisonYear: 3.90, confidenceLevel: 0.12 },
-      { period: 'Jul 2023', thisYear: 4.05, comparisonYear: 4.00, confidenceLevel: 0.12 },
-      { period: 'Aug 2023', thisYear: 4.30, comparisonYear: 4.25, confidenceLevel: 0.13 },
-      { period: 'Sep 2023', thisYear: 4.65, comparisonYear: 4.60, confidenceLevel: 0.14 },
-      { period: 'Oct 2023', thisYear: 5.00, comparisonYear: 4.95, confidenceLevel: 0.15 },
-      { period: 'Nov 2023', thisYear: 5.40, comparisonYear: 5.35, confidenceLevel: 0.16 },
-      { period: 'Dec 2023', thisYear: 5.80, comparisonYear: 5.75, confidenceLevel: 0.17 },
-    ],
-  },
-};
-
-// Sample protein percentage data
-const proteinPercentageData = {
-  monthly: {
-    2025: [
-      { period: 'Jan 2025', thisYear: 3.95, comparisonYear: 3.75, confidenceLevel: 0.11 },
-      { period: 'Feb 2025', thisYear: 3.85, comparisonYear: 3.65, confidenceLevel: 0.11 },
-      { period: 'Mar 2025', thisYear: 3.45, comparisonYear: 3.25, confidenceLevel: 0.10 },
-      { period: 'Apr 2025', thisYear: 3.50, comparisonYear: 3.30, confidenceLevel: 0.10 },
-      { period: 'May 2025', thisYear: 3.60, comparisonYear: 3.40, confidenceLevel: 0.10 },
-      { period: 'Jun 2025', thisYear: 3.70, comparisonYear: 3.50, confidenceLevel: 0.11 },
-      { period: 'Jul 2025', thisYear: 3.80, comparisonYear: 3.60, confidenceLevel: 0.11 },
-      { period: 'Aug 2025', thisYear: 3.90, comparisonYear: 3.70, confidenceLevel: 0.11 },
-      { period: 'Sep 2025', thisYear: 4.15, comparisonYear: 3.90, confidenceLevel: 0.12 },
-      { period: 'Oct 2025', thisYear: 4.35, comparisonYear: 4.10, confidenceLevel: 0.13 },
-      { period: 'Nov 2025', thisYear: 4.30, comparisonYear: 4.10, confidenceLevel: 0.13 },
-      { period: 'Dec 2025', thisYear: 4.60, comparisonYear: 4.40, confidenceLevel: 0.13 },
-    ],
-    2024: [
-      { period: 'Jan 2024', thisYear: 3.75, comparisonYear: 3.70, confidenceLevel: 0.11 },
-      { period: 'Feb 2024', thisYear: 3.65, comparisonYear: 3.60, confidenceLevel: 0.11 },
-      { period: 'Mar 2024', thisYear: 3.25, comparisonYear: 3.20, confidenceLevel: 0.10 },
-      { period: 'Apr 2024', thisYear: 3.30, comparisonYear: 3.25, confidenceLevel: 0.10 },
-      { period: 'May 2024', thisYear: 3.40, comparisonYear: 3.35, confidenceLevel: 0.10 },
-      { period: 'Jun 2024', thisYear: 3.50, comparisonYear: 3.45, confidenceLevel: 0.11 },
-      { period: 'Jul 2024', thisYear: 3.60, comparisonYear: 3.55, confidenceLevel: 0.11 },
-      { period: 'Aug 2024', thisYear: 3.70, comparisonYear: 3.65, confidenceLevel: 0.11 },
-      { period: 'Sep 2024', thisYear: 3.90, comparisonYear: 3.85, confidenceLevel: 0.12 },
-      { period: 'Oct 2024', thisYear: 4.10, comparisonYear: 4.00, confidenceLevel: 0.12 },
-      { period: 'Nov 2024', thisYear: 4.10, comparisonYear: 4.00, confidenceLevel: 0.12 },
-      { period: 'Dec 2024', thisYear: 4.40, comparisonYear: 4.30, confidenceLevel: 0.13 },
-    ],
-    2023: [
-      { period: 'Jan 2023', thisYear: 3.70, comparisonYear: 3.65, confidenceLevel: 0.11 },
-      { period: 'Feb 2023', thisYear: 3.60, comparisonYear: 3.55, confidenceLevel: 0.11 },
-      { period: 'Mar 2023', thisYear: 3.20, comparisonYear: 3.15, confidenceLevel: 0.10 },
-      { period: 'Apr 2023', thisYear: 3.25, comparisonYear: 3.20, confidenceLevel: 0.10 },
-      { period: 'May 2023', thisYear: 3.35, comparisonYear: 3.30, confidenceLevel: 0.10 },
-      { period: 'Jun 2023', thisYear: 3.45, comparisonYear: 3.40, confidenceLevel: 0.10 },
-      { period: 'Jul 2023', thisYear: 3.55, comparisonYear: 3.50, confidenceLevel: 0.11 },
-      { period: 'Aug 2023', thisYear: 3.65, comparisonYear: 3.60, confidenceLevel: 0.11 },
-      { period: 'Sep 2023', thisYear: 3.85, comparisonYear: 3.80, confidenceLevel: 0.12 },
-      { period: 'Oct 2023', thisYear: 4.00, comparisonYear: 3.95, confidenceLevel: 0.12 },
-      { period: 'Nov 2023', thisYear: 4.00, comparisonYear: 3.95, confidenceLevel: 0.12 },
-      { period: 'Dec 2023', thisYear: 4.30, comparisonYear: 4.25, confidenceLevel: 0.13 },
-    ],
-  },
-};
-
-// Sample lactose percentage data
-const lactosePercentageData = {
-  monthly: {
-    2025: [
-      { period: 'Jan 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Feb 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Mar 2025', thisYear: 4.9, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'Apr 2025', thisYear: 5.0, comparisonYear: 4.85, confidenceLevel: 0.15 },
-      { period: 'May 2025', thisYear: 5.0, comparisonYear: 4.85, confidenceLevel: 0.15 },
-      { period: 'Jun 2025', thisYear: 4.9, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'Jul 2025', thisYear: 4.8, comparisonYear: 4.65, confidenceLevel: 0.14 },
-      { period: 'Aug 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Sep 2025', thisYear: 4.6, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Oct 2025', thisYear: 4.6, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Nov 2025', thisYear: 4.6, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Dec 2025', thisYear: 4.5, comparisonYear: 4.35, confidenceLevel: 0.13 },
-    ],
-    2024: [
-      { period: 'Jan 2024', thisYear: 4.55, comparisonYear: 4.50, confidenceLevel: 0.14 },
-      { period: 'Feb 2024', thisYear: 4.55, comparisonYear: 4.50, confidenceLevel: 0.14 },
-      { period: 'Mar 2024', thisYear: 4.75, comparisonYear: 4.70, confidenceLevel: 0.14 },
-      { period: 'Apr 2024', thisYear: 4.85, comparisonYear: 4.80, confidenceLevel: 0.15 },
-      { period: 'May 2024', thisYear: 4.85, comparisonYear: 4.80, confidenceLevel: 0.15 },
-      { period: 'Jun 2024', thisYear: 4.75, comparisonYear: 4.70, confidenceLevel: 0.14 },
-      { period: 'Jul 2024', thisYear: 4.65, comparisonYear: 4.60, confidenceLevel: 0.14 },
-      { period: 'Aug 2024', thisYear: 4.55, comparisonYear: 4.50, confidenceLevel: 0.14 },
-      { period: 'Sep 2024', thisYear: 4.45, comparisonYear: 4.40, confidenceLevel: 0.13 },
-      { period: 'Oct 2024', thisYear: 4.45, comparisonYear: 4.40, confidenceLevel: 0.13 },
-      { period: 'Nov 2024', thisYear: 4.45, comparisonYear: 4.40, confidenceLevel: 0.13 },
-      { period: 'Dec 2024', thisYear: 4.35, comparisonYear: 4.30, confidenceLevel: 0.13 },
-    ],
-    2023: [
-      { period: 'Jan 2023', thisYear: 4.50, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Feb 2023', thisYear: 4.50, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Mar 2023', thisYear: 4.70, comparisonYear: 4.65, confidenceLevel: 0.14 },
-      { period: 'Apr 2023', thisYear: 4.80, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'May 2023', thisYear: 4.80, comparisonYear: 4.75, confidenceLevel: 0.14 },
-      { period: 'Jun 2023', thisYear: 4.70, comparisonYear: 4.65, confidenceLevel: 0.14 },
-      { period: 'Jul 2023', thisYear: 4.60, comparisonYear: 4.55, confidenceLevel: 0.14 },
-      { period: 'Aug 2023', thisYear: 4.50, comparisonYear: 4.45, confidenceLevel: 0.14 },
-      { period: 'Sep 2023', thisYear: 4.40, comparisonYear: 4.35, confidenceLevel: 0.13 },
-      { period: 'Oct 2023', thisYear: 4.40, comparisonYear: 4.35, confidenceLevel: 0.13 },
-      { period: 'Nov 2023', thisYear: 4.40, comparisonYear: 4.35, confidenceLevel: 0.13 },
-      { period: 'Dec 2023', thisYear: 4.30, comparisonYear: 4.25, confidenceLevel: 0.13 },
-    ],
-  },
-};
-
-// Define proper types for the tooltip propsm 
+// Define proper types for the tooltip props
 interface TooltipProps {
   active?: boolean;
   payload?: Array<{
@@ -257,297 +35,438 @@ interface TooltipProps {
   label?: string;
 }
 
-// Custom tooltip that handles all metric types
 const CustomTooltip = ({ active, payload, label, metricType }: TooltipProps & { metricType: MetricType }) => {
   if (active && payload && payload.length) {
-    const confidenceLevel = payload[0]?.payload?.confidenceLevel;
-    const confidencePercent = confidenceLevel ? ((confidenceLevel / payload[0].value) * 100).toFixed(1) : null;
+    const data = payload[0].payload;
     
-    // Format large numbers with commas
     const formatNumber = (num: number) => {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
-
-    // Get the appropriate unit based on the metric type
-    const getUnit = () => {
-      switch (metricType) {
-        case 'milk': return 'liters';
-        case 'fat': 
-        case 'protein':
-        case 'lactose': return '%';
-        default: return '';
+      if (metricType === 'milk') {
+        if (num >= 1000000000) {
+          return `${(num / 1000000000).toFixed(2)}B`;
+        }
+        if (num >= 1000000) {
+          return `${(num / 1000000).toFixed(1)}M`;
+        }
+        return num.toLocaleString();
+      } else {
+        return num.toFixed(2);
       }
     };
     
-    const unit = getUnit();
+    const getUnit = () => {
+      switch (metricType) {
+        case 'milk':
+          return 'liters';
+        case 'fat': 
+        case 'protein':
+        case 'lactose':
+          return '%';
+        default:
+          return '';
+      }
+    };
+    
+    // Calculate percent change
+    const percentChange = ((data?.thisYear || 0) - (data?.comparisonYear || 0)) / (data?.comparisonYear || 1) * 100;
+    const absChange = (data?.thisYear || 0) - (data?.comparisonYear || 0);
+    const formattedAbsChange = metricType === 'milk' && absChange >= 1000000000 
+      ? `${(absChange / 1000000000).toFixed(2)}B` 
+      : formatNumber(absChange);
     
     return (
-      <div className="bg-white p-3 border border-gray-200 rounded-md shadow-sm">
-        <p className="font-medium text-gray-900">{label}</p>
-        <p className="text-sm text-blue-500">
-          This Year: {metricType === 'milk' ? formatNumber(payload[0].value) : payload[0].value.toFixed(2)} {unit}
-          {confidencePercent && <span className="text-xs ml-1">(±{confidencePercent}%)</span>}
-        </p>
-        <p className="text-sm text-blue-700">
-          Previous Year: {metricType === 'milk' ? formatNumber(payload[1].value) : payload[1].value.toFixed(2)} {unit}
-        </p>
-        {confidenceLevel && (
-          <p className="text-xs text-gray-500 mt-1">
-            Confidence Interval: ±{metricType === 'milk' ? formatNumber(confidenceLevel) : confidenceLevel.toFixed(2)} {unit}
-          </p>
-        )}
+      <div className="custom-tooltip bg-white p-4 shadow-lg border border-gray-200 rounded-md">
+        <p className="mb-2 font-medium text-gray-900 border-b pb-1">{label}</p>
+        
+        <div className="text-sm space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-blue-600">{metricType === 'milk' ? "2025 Yield:" : "2025:"}</span>
+            <span className="font-medium">{formatNumber(data?.thisYear || 0)} {getUnit()}</span>
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <span className="text-gray-500">{metricType === 'milk' ? "2024 Yield:" : "2024:"}</span>
+            <span className="font-medium text-gray-500">{formatNumber(data?.comparisonYear || 0)} {getUnit()}</span>
+          </div>
+          
+          <div className="flex justify-between items-center mt-1 pt-1 border-t border-gray-100">
+            <span className="text-xs text-gray-600">Change:</span>
+            <span className={`font-medium text-sm ${percentChange >= 0 ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+              {percentChange >= 0 ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              )}
+              {percentChange >= 0 ? '+' : ''}{percentChange.toFixed(1)}% ({formattedAbsChange} {getUnit()})
+            </span>
+          </div>
+          
+          {data?.confidenceLevel && (
+            <div className="mt-1 text-xs text-gray-500 pt-1">
+              Confidence interval: ±{formatNumber(data.confidenceLevel)}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
+  
   return null;
 };
 
 export default function MilkYieldChart() {
-  const [selectedYear, setSelectedYear] = useState<"2025" | "2024" | "2023">("2025");
-  const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'yearly'>('monthly');
+  const [timeframe, setTimeframe] = useState<'weekly' | 'monthly' | 'yearly'>('monthly');
   const [metricType, setMetricType] = useState<MetricType>('milk');
+  const [compareYears, setCompareYears] = useState({
+    thisYear: 2025,
+    comparisonYear: 2024
+  });
+  const [chartData, setChartData] = useState<any[]>([]);
   
-  // Effect to ensure time period is 'monthly' when non-milk metrics are selected
+  // Get company from URL params
+  const params = useParams();
+  const company = typeof params?.company === 'string' ? params.company : 'lakeland-dairies';
+  
+  // Define interface for chart data
+  interface ChartData {
+    milkYieldData: {
+      [key: string]: {
+        [key: number]: Array<{
+          period: string;
+          thisYear: number;
+          comparisonYear: number;
+          confidenceLevel: number;
+        }>;
+      };
+    };
+    fatPercentageData: {
+      [key: string]: {
+        [key: number]: Array<{
+          period: string;
+          thisYear: number;
+          comparisonYear: number;
+          confidenceLevel: number;
+        }>;
+      };
+    };
+    proteinPercentageData: {
+      [key: string]: {
+        [key: number]: Array<{
+          period: string;
+          thisYear: number;
+          comparisonYear: number;
+          confidenceLevel: number;
+        }>;
+      };
+    };
+    lactosePercentageData: {
+      [key: string]: {
+        [key: number]: Array<{
+          period: string;
+          thisYear: number;
+          comparisonYear: number;
+          confidenceLevel: number;
+        }>;
+      };
+    };
+  }
+  
+  // Load company-specific chart data
+  const companyChartData = loadChartData(company) as ChartData;
+  
+  // Define the data type for chart data points
+  interface DataPoint {
+    period: string;
+    thisYear: number;
+    comparisonYear: number;
+    confidenceLevel: number;
+  }
+  
   useEffect(() => {
-    if (metricType !== 'milk') {
-      setTimePeriod('monthly');
+    // Use the company-specific data based on the metric type
+    let data: DataPoint[] = [];
+    switch (metricType) {
+      case 'milk':
+        data = companyChartData.milkYieldData[timeframe][compareYears.thisYear] || [];
+        break;
+      case 'fat':
+        data = companyChartData.fatPercentageData[timeframe]?.[compareYears.thisYear] || [];
+        break;
+      case 'protein':
+        data = companyChartData.proteinPercentageData[timeframe]?.[compareYears.thisYear] || [];
+        break;
+      case 'lactose':
+        data = companyChartData.lactosePercentageData[timeframe]?.[compareYears.thisYear] || [];
+        break;
+      default:
+        data = [];
     }
-  }, [metricType]);
+    
+    setChartData(data);
+  }, [timeframe, metricType, compareYears, companyChartData]);
   
-  // Available years for selection
-  const availableYears = ["2025", "2024", "2023"];
-  
-  // Format Y-axis ticks based on the metric type
   const formatYAxisTick = (value: number): string => {
     if (metricType === 'milk') {
       if (value >= 1000000000) {
         return `${(value / 1000000000).toFixed(1)}B`;
-      } else if (value >= 1000000) {
-        return `${(value / 1000000).toFixed(0)}M`;
-      } else if (value >= 1000) {
+      }
+      if (value >= 1000000) {
+        return `${(value / 1000000).toFixed(1)}M`;
+      }
+      if (value >= 1000) {
         return `${(value / 1000).toFixed(0)}K`;
       }
-      return value.toString();
-    } else {
-      // For percentage metrics, show the value with 1 decimal place
-      return value.toFixed(1);
     }
+    return value.toString();
   };
 
-  // Get the correct data based on selected metric type
   const getDataForMetric = () => {
     switch (metricType) {
       case 'milk':
-        return milkYieldData[timePeriod]?.[selectedYear] || [];
+        return companyChartData.milkYieldData;
       case 'fat':
-        // Only monthly data is available for fat percentages
-        return fatPercentageData.monthly[selectedYear] || [];
+        return companyChartData.fatPercentageData;
       case 'protein':
-        // Only monthly data is available for protein percentages
-        return proteinPercentageData.monthly[selectedYear] || [];
+        return companyChartData.proteinPercentageData;
       case 'lactose':
-        // Only monthly data is available for lactose percentages
-        return lactosePercentageData.monthly[selectedYear] || [];
+        return companyChartData.lactosePercentageData;
       default:
-        return [];
+        return {};
     }
   };
 
-  // Get the appropriate y-axis label based on metric type
   const getYAxisLabel = () => {
     switch (metricType) {
-      case 'milk': return 'Liters';
-      case 'fat': return 'Fat %';
-      case 'protein': return 'Protein %';
-      case 'lactose': return 'Lactose %';
-      default: return '';
+      case 'milk':
+        return 'Liters';
+      case 'fat':
+        return 'Fat %';
+      case 'protein':
+        return 'Protein %';
+      case 'lactose':
+        return 'Lactose %';
     }
   };
-
-  // Get the appropriate chart title based on metric type and time period
+  
   const getChartTitle = () => {
-    const period = timePeriod.charAt(0).toUpperCase() + timePeriod.slice(1);
-    
-    switch (metricType) {
-      case 'milk': return `${period} Milk Yield Comparison`;
-      case 'fat': return `Monthly Fat Content Comparison`;
-      case 'protein': return `Monthly Protein Content Comparison`;
-      case 'lactose': return `Monthly Lactose Content Comparison`;
-      default: return `${period} Comparison`;
+    const metricName = metricType.charAt(0).toUpperCase() + metricType.slice(1);
+    switch (timeframe) {
+      case 'weekly':
+        return `Weekly ${metricName} Comparison`;
+      case 'monthly':
+        return `Monthly ${metricName} Comparison`;
+      case 'yearly':
+        return `Yearly ${metricName} Comparison`;
     }
   };
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm h-full border border-gray-100">
-      <div className="flex flex-col space-y-4 sm:space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-          <h2 className="text-xl font-medium text-gray-800 mb-3 sm:mb-0">
+    <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
+        <h2 className="text-xl font-medium text-gray-800 mb-2 sm:mb-0">
             {getChartTitle()}
           </h2>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-            <div className="flex items-center">
-              <label htmlFor="yearSelect" className="text-xs sm:text-sm text-gray-600 mr-2">
-                Compare:
-              </label>
+        
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-gray-500">Compare:</span>
               <select
-                id="yearSelect"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value as "2025" | "2024" | "2023")}
-                className="border border-gray-200 rounded-md px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {availableYears.map((year) => (
-                  <option key={year} value={year}>
-                    {year} vs {parseInt(year) - 1}
-                  </option>
-                ))}
+            value={`${compareYears.thisYear} vs ${compareYears.comparisonYear}`}
+            onChange={(e) => {
+              const [thisYear, comparisonYear] = e.target.value.split(' vs ').map(Number);
+              setCompareYears({ thisYear, comparisonYear });
+            }}
+            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:outline-none"
+            suppressHydrationWarning
+          >
+            <option value="2025 vs 2024">2025 vs 2024</option>
+            <option value="2024 vs 2023">2024 vs 2023</option>
               </select>
-            </div>
           </div>
         </div>
         
-        {/* Metric Type Selection */}
-        <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-1 gap-5">
+        {/* Metric toggle buttons */}
+        <div className="flex flex-wrap gap-2 bg-gray-50 p-3 rounded-md">
           <button
             onClick={() => setMetricType('milk')}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'milk'
-                ? 'bg-blue-500 text-white'
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
+            suppressHydrationWarning
           >
             Milk Volume
           </button>
           <button
             onClick={() => setMetricType('fat')}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'fat'
-                ? 'bg-blue-500 text-white'
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
+            suppressHydrationWarning
           >
             Fat %
           </button>
           <button
             onClick={() => setMetricType('protein')}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'protein'
-                ? 'bg-blue-500 text-white'
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
+            suppressHydrationWarning
           >
             Protein %
           </button>
           <button
             onClick={() => setMetricType('lactose')}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'lactose'
-                ? 'bg-blue-500 text-white'
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
+            suppressHydrationWarning
           >
             Lactose %
           </button>
         </div>
         
-        {/* Time Period Selection - Only show if Milk Volume is selected */}
-        {metricType === 'milk' && (
-          <div className="flex flex-wrap items-center gap-2">
+        {/* Time period toggle buttons */}
+        <div className="flex flex-wrap gap-2 bg-gray-50 p-3 rounded-md">
             <button
-              onClick={() => setTimePeriod('weekly')}
-              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
-                timePeriod === 'weekly'
-                  ? 'bg-blue-500 text-white'
+            onClick={() => setTimeframe('weekly')}
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+              timeframe === 'weekly' 
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
+            suppressHydrationWarning
             >
               Weekly
             </button>
             <button
-              onClick={() => setTimePeriod('monthly')}
-              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
-                timePeriod === 'monthly'
-                  ? 'bg-blue-500 text-white'
+            onClick={() => setTimeframe('monthly')}
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+              timeframe === 'monthly' 
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
+            suppressHydrationWarning
             >
               Monthly
             </button>
             <button
-              onClick={() => setTimePeriod('yearly')}
-              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
-                timePeriod === 'yearly'
-                  ? 'bg-blue-500 text-white'
+            onClick={() => setTimeframe('yearly')}
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+              timeframe === 'yearly' 
+                ? 'bg-blue-100 text-blue-800 shadow-sm' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
+            suppressHydrationWarning
             >
               Yearly
             </button>
-          </div>
-        )}
       </div>
 
-      <div className="h-[300px] sm:h-[400px] mt-4 sm:mt-6">
+        {/* Chart */}
+        <div className="h-80 sm:h-96 mt-2 border border-gray-100 rounded-lg p-2 bg-gray-50">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={getDataForMetric()}
+              data={chartData}
             margin={{
-              top: 5,
-              right: 20,
-              left: 10,
-              bottom: 40,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis 
-              dataKey="period" 
-              tick={{ fill: '#6b7280' }} 
-              axisLine={{ stroke: '#d1d5db' }}
-              height={60}
-              interval={0}
-              angle={-45}
-              textAnchor="end"
-              dy={10}
-            />
-            <YAxis 
-              tick={{ fill: '#6b7280' }} 
-              axisLine={{ stroke: '#d1d5db' }}
-              tickFormatter={formatYAxisTick}
-              label={{ 
-                value: getYAxisLabel(), 
-                angle: -90, 
-                position: 'insideLeft',
-                style: { fill: '#6b7280' }
+                top: 20,
+                right: 30,
+                left: metricType === 'milk' ? 70 : 40,
+                bottom: 40,
               }}
-              domain={metricType !== 'milk' ? [0, 6.5] : undefined}
-            />
-            <Tooltip content={<CustomTooltip metricType={metricType} />} />
-            <Legend wrapperStyle={{ paddingTop: '25px' }} />
-            <Bar
-              dataKey="thisYear" 
-              name={`${selectedYear} ${metricType === 'milk' ? 'Yield' : 'Value'}`} 
-              fill="#60a5fa" 
-              radius={[4, 4, 0, 0]} 
             >
-              <ErrorBar dataKey="confidenceLevel" width={4} strokeWidth={2} stroke="#3b82f6" direction="y" />
-            </Bar>
-            <Bar
-              dataKey="comparisonYear" 
-              name={`${parseInt(selectedYear) - 1} ${metricType === 'milk' ? 'Yield' : 'Value'}`} 
-              fill="#3b82f6" 
-              radius={[4, 4, 0, 0]} 
-            />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="period" 
+                tick={{ fontSize: 12, fill: '#4b5563' }} 
+                tickMargin={12}
+                height={50}
+                stroke="#d1d5db"
+              />
+              <YAxis 
+                tickFormatter={formatYAxisTick}
+                domain={metricType !== 'milk' ? [0, 'dataMax + 1'] : ['dataMin', 'dataMax']}
+                tick={{ fontSize: 12, fill: '#4b5563' }} 
+                tickMargin={10}
+                stroke="#d1d5db"
+                label={{ 
+                  value: getYAxisLabel(), 
+                  angle: -90, 
+                  position: 'insideLeft',
+                  style: { textAnchor: 'middle', fontSize: '80%', fill: '#4b5563', fontWeight: 500 }
+                }}
+              />
+              <Tooltip content={<CustomTooltip metricType={metricType} />} />
+              <Legend 
+                verticalAlign="top" 
+                height={40}
+                wrapperStyle={{ paddingTop: '10px' }}
+                formatter={(value) => <span style={{ color: '#4b5563', fontSize: '13px' }}>{value}</span>}
+              />
+              <defs>
+                <linearGradient id="colorThisYear" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#60a5fa" stopOpacity={0.8}/>
+                </linearGradient>
+                <linearGradient id="colorCompYear" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#93c5fd" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#bfdbfe" stopOpacity={0.8}/>
+                </linearGradient>
+              </defs>
+              <Bar
+                name={`${compareYears.thisYear} ${metricType}`} 
+                dataKey="thisYear" 
+                fill="url(#colorThisYear)" 
+                barSize={timeframe === 'yearly' ? 60 : 24}
+                radius={[2, 2, 0, 0]}
+                animationDuration={750}
+                animationEasing="ease-out"
+              >
+                <ErrorBar dataKey="confidenceLevel" width={4} strokeWidth={2} stroke="#93c5fd" />
+              </Bar>
+              <Bar
+                name={`${compareYears.comparisonYear} ${metricType}`} 
+                dataKey="comparisonYear" 
+                fill="url(#colorCompYear)"
+                barSize={timeframe === 'yearly' ? 60 : 24}
+                radius={[2, 2, 0, 0]}
+                animationDuration={750}
+                animationEasing="ease-out"
+              />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-4 text-xs sm:text-sm text-gray-600">
-        {metricType === 'milk' ? (
-          <p>Data represents {timePeriod.slice(0, -2)} milk production in liters, comparing current year with previous year.</p>
-        ) : (
-          <p>Data represents monthly {metricType} percentages in milk, comparing current year with previous year.</p>
-        )}
-        <p className="mt-1">Last updated: 2025-03-15</p>
-        <p className="mt-1 text-xs text-gray-500">Error bars indicate confidence intervals (±3% of predicted values)</p>
+        <div className="text-xs text-gray-500 mt-2 bg-gray-50 p-3 rounded-md border border-gray-100">
+          <p>
+            Data represents {timeframe} {metricType === 'milk' ? 'milk production' : `${metricType} content`} {timeframe === 'yearly' ? 'per year' : timeframe === 'monthly' ? 'per month' : 'per week'}, comparing {compareYears.thisYear} with {compareYears.comparisonYear}.
+          </p>
+          {timeframe === 'yearly' && metricType === 'milk' && chartData.length > 0 && (
+            <p className="mt-2 text-gray-700 font-medium">
+              {compareYears.thisYear} Yield: {
+                chartData[0].thisYear >= 1000000000 
+                  ? `${(chartData[0].thisYear / 1000000000).toFixed(2)}B` 
+                  : `${(chartData[0].thisYear / 1000000).toFixed(1)}M`
+              } liters (+{((chartData[0].thisYear - chartData[0].comparisonYear) / chartData[0].comparisonYear * 100).toFixed(1)}%)
+            </p>
+          )}
+          <p className="mt-2">
+            Last updated: 2025-03-15
+          </p>
+          <p className="mt-1">
+            Error bars indicate confidence interval (±3% of predicted values)
+          </p>
+        </div>
       </div>
     </div>
   );

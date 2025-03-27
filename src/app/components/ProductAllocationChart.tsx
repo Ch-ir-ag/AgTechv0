@@ -196,6 +196,7 @@ export default function ProductAllocationChart() {
               value={selectedPlant}
               onChange={(e) => setSelectedPlant(e.target.value)}
               className="border border-gray-200 rounded-md px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              suppressHydrationWarning
             >
               {Object.keys(plantData).map((plant) => (
                 <option key={plant} value={plant}>
@@ -259,7 +260,8 @@ export default function ProductAllocationChart() {
       <div className="mt-4 flex justify-end">
         <button 
           onClick={handleExport}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          suppressHydrationWarning
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -269,7 +271,11 @@ export default function ProductAllocationChart() {
       </div>
       
       <div className="border-t border-gray-100 pt-3 mt-4">
-        <p className="text-xs text-gray-500 text-right">Last updated: {new Date().toLocaleDateString()}</p>
+        <p className="text-xs text-gray-500 text-right">Last updated: {new Date().toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        }).replace(/\//g, '/')}</p>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import DashboardClient from "../../components/DashboardClient";
 import { isValidCompany, formatCompanyName } from "../../data/companies";
+import { loadCompanyData } from "../../utils/companyDataLoader";
+import { loadChartData } from "../../utils/chartDataLoader";
 
 /**
  * CompanyDashboard page component
@@ -16,7 +18,13 @@ export default function CompanyDashboard({ params }) {
 
   // Format company name
   const companyName = formatCompanyName(company);
+  
+  // Load company data if needed for other components
+  // const companyData = loadCompanyData(company);
+  
+  // Since we're using the useParams hook in MilkYieldChart, we don't need to pass chart data
+  // The chart data will be loaded based on the URL in the client component
 
-  // Render the dashboard with company name
+  // Render the dashboard with company name and suppressHydrationWarning
   return <DashboardClient companyName={companyName} />;
 } 

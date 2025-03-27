@@ -10,7 +10,13 @@ import QuantifiedImpact from "../../components/QuantifiedImpact";
 // List of valid companies
 const validCompanies = ['lakeland-dairies'];
 
-export default function CompanyDashboard({ params }: { params: { company: string } }) {
+interface CompanyDashboardProps {
+  params: {
+    company: string;
+  };
+}
+
+export default function CompanyDashboard({ params }: CompanyDashboardProps) {
   // Check if the company is valid
   if (!validCompanies.includes(params.company)) {
     notFound();

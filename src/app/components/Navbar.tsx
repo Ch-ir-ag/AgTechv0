@@ -58,7 +58,7 @@ export default function Navbar() {
                 setTimeout(() => window.scrollTo(0, 0), 0);
               }}
             >
-              Dashboard
+              Forecasting
             </Link>
             <Link 
               href={`/${currentCompany}/product-allocation`} 
@@ -104,7 +104,7 @@ export default function Navbar() {
               }}
               scroll={true}
             >
-              Dashboard
+              Forecasting
             </Link>
             <Link 
               href={`/${currentCompany}/product-allocation`} 

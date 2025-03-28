@@ -9,8 +9,10 @@ import {
 import { useParams } from 'next/navigation';
 
 // Define the data types
-type AllocationStatus = 'Contract Met' | 'Contract Pending' | 'Exceeded Target' | 'Below Target';
+// Note: Type definitions used in the mock data objects but flagged by ESLint are commented out
+// to satisfy the linter while keeping for documentation purposes.
 
+/*
 interface AllocationItem {
   id: number;
   product: string;
@@ -21,8 +23,12 @@ interface AllocationItem {
   status: AllocationStatus;
   statusColor: string;
 }
+*/
 
-type ChartDataItem = {
+type AllocationStatus = 'Contract Met' | 'Contract Pending' | 'Exceeded Target' | 'Below Target';
+
+// Types for chart data
+type PieChartDataItem = {
   name: string;
   value: number;
 };
@@ -37,6 +43,10 @@ type MarginChartDataItem = {
   margin: number;
 };
 
+// Note: The following interfaces are defined and used in the mock data objects,
+// but are flagged as unused by ESLint. We're keeping them commented for documentation
+// but removing them to satisfy the linter.
+/*
 interface FactoryUtilization {
   factory: string;
   utilizationPercent: number;
@@ -73,6 +83,7 @@ interface ScenarioToggle {
   label: string;
   active: boolean;
 }
+*/
 
 // Mock data for Kerry Dairy
 const kerryDairyData = {
@@ -368,7 +379,7 @@ export default function ProductAllocationRecommendations() {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" />
                 <YAxis tickFormatter={(value: number) => formatNumber(value)} />
-                <Tooltip formatter={(value: any) => formatNumber(Number(value))} />
+                <Tooltip formatter={(value: number) => formatNumber(value)} />
                 <Bar dataKey="litres" fill="#60a5fa">
                   <LabelList dataKey="litres" position="top" formatter={(value: number) => formatNumber(value)} />
                 </Bar>
@@ -386,7 +397,7 @@ export default function ProductAllocationRecommendations() {
                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
                 <XAxis type="number" domain={[0, Math.max(...marginChartData.map(d => d.margin)) * 1.2]} />
                 <YAxis type="category" dataKey="name" width={80} />
-                <Tooltip formatter={(value: any) => `€${Number(value).toFixed(2)}`} />
+                <Tooltip formatter={(value: number) => `€${value.toFixed(2)}`} />
                 <Bar dataKey="margin" fill="#34d399" barSize={20} radius={[0, 4, 4, 0]}>
                   <LabelList dataKey="margin" position="right" formatter={(value: number) => `€${value.toFixed(2)}`} />
                 </Bar>

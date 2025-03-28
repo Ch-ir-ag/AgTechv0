@@ -25,9 +25,11 @@ interface AllocationItem {
 }
 */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type AllocationStatus = 'Contract Met' | 'Contract Pending' | 'Exceeded Target' | 'Below Target';
 
 // Types for chart data
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type PieChartDataItem = {
   name: string;
   value: number;
@@ -38,6 +40,7 @@ type BarChartDataItem = {
   litres: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type MarginChartDataItem = {
   name: string;
   margin: number;

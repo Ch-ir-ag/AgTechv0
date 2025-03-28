@@ -1,18 +1,60 @@
 'use client';
 
+import React, { useEffect, useLayoutEffect } from 'react';
 import Navbar from "./Navbar";
 import MilkYieldChart from "./MilkYieldChart";
 import YearlyYieldChart from "./YearlyYieldChart";
-import ProductAllocationChart from "./ProductAllocationChart";
 import Chatbot from "./Chatbot";
 import InteractiveSupplyChainMap from "./InteractiveSupplyChainMap";
-import QuantifiedImpact from "./QuantifiedImpact";
+
+// Create a safe useLayoutEffect that falls back to useEffect for SSR
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 interface DashboardClientProps {
   companyName: string;
 }
 
 export default function DashboardClient({ companyName }: DashboardClientProps) {
+  // Immediately set scroll position to top as soon as possible
+  if (typeof window !== 'undefined') {
+    window.scrollTo(0, 0);
+  }
+
+  // Use layout effect to run before browser paints - higher priority than useEffect
+  useIsomorphicLayoutEffect(() => {
+    // Scroll to top immediately
+    window.scrollTo(0, 0);
+    
+    // To ensure scrolling works after any potential content loads
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+    
+    // Add an event listener to prevent any automatic scrolling
+    const preventScroll = (e: Event) => {
+      window.scrollTo(0, 0);
+    };
+    
+    window.addEventListener('scroll', preventScroll, { once: true });
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', preventScroll);
+    };
+  }, []);
+  
+  // Regular effect as additional safety
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    
+    // Try again after a short delay to catch any delayed scrolling
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
       <Navbar />
@@ -50,16 +92,6 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
             <section id="yearly-prediction" className="h-full">
               <YearlyYieldChart />
             </section>
-            
-            {/* Product Allocation Recommendations */}
-            <section id="product-allocation" className="h-full">
-              <ProductAllocationChart />
-            </section>
-          </div>
-          
-          {/* Quantified Impact Section */}
-          <div className="mb-8">
-            <QuantifiedImpact companyName={companyName} />
           </div>
           
           {/* Stats Section */}

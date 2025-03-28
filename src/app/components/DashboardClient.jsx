@@ -3,7 +3,6 @@
 import Navbar from "./Navbar";
 import MilkYieldChart from "./MilkYieldChart";
 import YearlyYieldChart from "./YearlyYieldChart";
-import ProductAllocationChart from "./ProductAllocationChart";
 import Chatbot from "./Chatbot";
 import InteractiveSupplyChainMap from "./InteractiveSupplyChainMap";
 import QuantifiedImpact from "./QuantifiedImpact";
@@ -57,11 +56,6 @@ export default function DashboardClient({ companyName, companyData }) {
             {/* Yearly Milk Yield vs Prediction */}
             <section id="yearly-prediction" className="h-full">
               <YearlyYieldChart />
-            </section>
-            
-            {/* Product Allocation Recommendations */}
-            <section id="product-allocation" className="h-full">
-              <ProductAllocationChart />
             </section>
           </div>
           

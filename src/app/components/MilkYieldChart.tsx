@@ -367,31 +367,31 @@ export default function MilkYieldChart() {
                 top: 20,
                 right: 30,
                 left: metricType === 'milk' ? 70 : 40,
-                bottom: 40,
-              }}
-            >
+              bottom: 40,
+            }}
+          >
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-              <XAxis 
-                dataKey="period" 
+            <XAxis 
+              dataKey="period" 
                 tick={{ fontSize: 12, fill: '#4b5563' }} 
                 tickMargin={12}
                 height={50}
                 stroke="#d1d5db"
-              />
-              <YAxis 
-                tickFormatter={formatYAxisTick}
+            />
+            <YAxis 
+              tickFormatter={formatYAxisTick}
                 domain={metricType !== 'milk' ? [0, 'dataMax + 1'] : ['dataMin', 'dataMax']}
                 tick={{ fontSize: 12, fill: '#4b5563' }} 
                 tickMargin={10}
                 stroke="#d1d5db"
-                label={{ 
-                  value: getYAxisLabel(), 
-                  angle: -90, 
-                  position: 'insideLeft',
+              label={{ 
+                value: getYAxisLabel(), 
+                angle: -90, 
+                position: 'insideLeft',
                   style: { textAnchor: 'middle', fontSize: '80%', fill: '#4b5563', fontWeight: 500 }
-                }}
-              />
-              <Tooltip content={<CustomTooltip metricType={metricType} />} />
+              }}
+            />
+            <Tooltip content={<CustomTooltip metricType={metricType} />} />
               <Legend 
                 verticalAlign="top" 
                 height={40}
@@ -410,7 +410,7 @@ export default function MilkYieldChart() {
               </defs>
               <Bar
                 name={`${compareYears.thisYear} ${metricType}`} 
-                dataKey="thisYear" 
+              dataKey="thisYear" 
                 fill="url(#colorThisYear)" 
                 barSize={timeframe === 'yearly' ? 60 : 24}
                 radius={[2, 2, 0, 0]}
@@ -418,16 +418,16 @@ export default function MilkYieldChart() {
                 animationEasing="ease-out"
               >
                 <ErrorBar dataKey="confidenceLevel" width={4} strokeWidth={2} stroke="#93c5fd" />
-              </Bar>
-              <Bar
+            </Bar>
+            <Bar
                 name={`${compareYears.comparisonYear} ${metricType}`} 
-                dataKey="comparisonYear" 
+              dataKey="comparisonYear" 
                 fill="url(#colorCompYear)"
                 barSize={timeframe === 'yearly' ? 60 : 24}
                 radius={[2, 2, 0, 0]}
                 animationDuration={750}
                 animationEasing="ease-out"
-              />
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

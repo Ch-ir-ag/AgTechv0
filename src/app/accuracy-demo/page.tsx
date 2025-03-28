@@ -16,6 +16,9 @@ import {
 } from 'recharts';
 import Navbar from '../components/Navbar';
 
+// Add this CSS class for the fadeIn animation
+import './styles.css';
+
 // Define types
 interface DairyDataItem {
   year: number;
@@ -82,26 +85,67 @@ const dairyData: DairyDataItem[] = [
   { year: 2024, month: 'December', fatPercent: 6.00, proteinPercent: 4.49, scc: 196, totalCows: 502, month_sin: 0, month_cos: 1, actualVolume: 64187, predictedVolume: 65850, residual: 65850 - 64187, accuracy: Math.round((65850 / 64187) * 100) }
 ];
 
-// Default predicted values for next week
+// Default predicted values for next week - now using period instead of day for consistency
 const defaultPredictions = [
-  { day: 'Monday', predictedVolume: 12850 },
-  { day: 'Tuesday', predictedVolume: 13200 },
-  { day: 'Wednesday', predictedVolume: 13450 },
-  { day: 'Thursday', predictedVolume: 13720 },
-  { day: 'Friday', predictedVolume: 13570 },
-  { day: 'Saturday', predictedVolume: 12670 },
-  { day: 'Sunday', predictedVolume: 12180 }
+  { period: 'Mar 15-21', predictedVolume: 91500 },
+  { period: 'Mar 22-28', predictedVolume: 94200 },
+  { period: 'Mar 29-Apr 4', predictedVolume: 96800 },
+  { period: 'Apr 5-11', predictedVolume: 99500 },
+  { period: 'Apr 12-18', predictedVolume: 101200 },
+  { period: 'Apr 19-25', predictedVolume: 103800 },
+  { period: 'Apr 26-May 2', predictedVolume: 105400 },
+  { period: 'May 3-9', predictedVolume: 102700 }
+];
+
+// Predefined questions and responses
+const predefinedQuestions = [
+  {
+    id: 1,
+    question: "What would happen to milk production if we had a 2-week period of extreme heat (35°C)?",
+    answer: "High temperatures cause heat stress in cows, reducing their feed intake and milk production.",
+    percentageChange: -0.12, // -12% change
+  },
+  {
+    id: 2,
+    question: "How would a 20% increase in high-quality forage affect milk yield?",
+    answer: "Increasing high-quality forage improves cow nutrition and digestibility, boosting milk production significantly.",
+    percentageChange: 0.15, // +15% change
+  },
+  {
+    id: 3,
+    question: "What if we improved cow comfort by installing new ventilation systems?",
+    answer: "Better ventilation reduces heat stress and improves cow comfort, leading to higher milk yields.",
+    percentageChange: 0.08, // +8% change
+  },
+  {
+    id: 4,
+    question: "How would a reduction in milking frequency from 3x to 2x daily affect production?",
+    answer: "Reducing milking frequency decreases udder stimulation and milk removal, lowering overall production.",
+    percentageChange: -0.13, // -13% change
+  },
+  {
+    id: 5,
+    question: "What impact would adding probiotics to feed have on milk yield?",
+    answer: "Probiotics improve rumen function and digestive health, moderately increasing milk production.",
+    percentageChange: 0.05, // +5% change
+  },
+  {
+    id: 6,
+    question: "How would a severe drought affecting water availability impact milk production?",
+    answer: "Limited water intake significantly reduces milk production as milk is approximately 87% water.",
+    percentageChange: -0.18, // -18% change
+  }
 ];
 
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
-  const [query, setQuery] = useState('');
-  const [lastQuery, setLastQuery] = useState('');
+  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const [llmResponse, setLlmResponse] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
   const [predictionView, setPredictionView] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   // Weekly forecast data - 8 weeks starting from mid-March
   const weeklyForecastData = [
@@ -203,149 +247,83 @@ export default function AccuracyDemo() {
   
   const timeAdjustedData = getTimeAdjustedData();
 
-  // Process the user query and update predictions
-  const processQuery = async () => {
-    if (!query.trim()) return;
+  // Handle question selection
+  const handleQuestionSelect = (questionId: number) => {
+    const selectedQ = predefinedQuestions.find(q => q.id === questionId);
+    if (!selectedQ) return;
     
-    // Check if query is too short or not a question about milk yields
-    const minQueryLength = 10;
-    const relevantTerms = ['milk', 'yield', 'production', 'volume', 'rainfall', 'temperature', 'feed', 'cows', 'forecast', 'predict'];
-    const isRelevantQuery = relevantTerms.some(term => query.toLowerCase().includes(term));
-    const seemsLikeQuestion = query.includes('?') || 
-                             query.toLowerCase().startsWith('what') || 
-                             query.toLowerCase().startsWith('how') ||
-                             query.toLowerCase().startsWith('why') ||
-                             query.toLowerCase().startsWith('when') ||
-                             query.toLowerCase().startsWith('if') ||
-                             query.toLowerCase().includes('impact') ||
-                             query.toLowerCase().includes('effect') ||
-                             query.toLowerCase().includes('influence') ||
-                             query.toLowerCase().includes('happen');
+    setSelectedQuestion(questionId);
+    setLlmResponse(selectedQ.answer);
     
-    if (query.length < minQueryLength || (!isRelevantQuery && !seemsLikeQuestion)) {
-      setLlmResponse("Please ask a complete question about milk yield factors. For example: 'What would happen to milk production if temperature increased by 5°C?'");
-      return;
-    }
+    // Update predictions based on the percentage change
+    const adjustedPredictions = defaultPredictions.map(item => ({
+      ...item,
+      predictedVolume: Math.round(item.predictedVolume * (1 + selectedQ.percentageChange))
+    }));
     
-    setIsLoading(true);
-    setLastQuery(query);
-    
-    try {
-      // Call our API endpoint
-      const response = await fetch('/api/llm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: query })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to get response');
-      }
-      
-      // Update the predictions based on the percentage change from the LLM
-      if (data.success) {
-        const percentageChange = data.percentageChange;
-        const modifier = 1 + percentageChange;
-        
-        console.log(`Applying modifier of ${modifier} (${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%)`);
-        
-        // Apply the modifier to each day's prediction
-        const newPredictions = weeklyPredictions.map(day => ({
-          ...day,
-          predictedVolume: Math.round(defaultPredictions.find(d => d.day === day.day)!.predictedVolume * modifier)
-        }));
-        
-        setWeeklyPredictions(newPredictions);
-        
-        // Format the response to be more concise
-        let displayResponse = data.response;
-        
-        // If the response is too long, extract just the first sentence and append the percentage change
-        if (displayResponse.length > 250) {
-          const sentences = displayResponse.match(/[^.!?]+[.!?]+/g) || [];
-          if (sentences.length > 0) {
-            displayResponse = sentences[0] + 
-              ` Estimated change: ${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%`;
-          }
-        }
-        
-        // Make sure the displayed percentage change matches what was extracted
-        const percentageRegex = /(\+|\-)\d+(\.\d+)?%/g;
-        const matches = [...displayResponse.matchAll(percentageRegex)];
-        if (matches.length > 0) {
-          // Extract the first percentage from the response
-          const displayedPercentage = matches[0][0];
-          // Check if it matches the sign of our calculated percentage
-          const calculatedPercentage = `${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%`;
-          
-          if (displayedPercentage !== calculatedPercentage) {
-            // If not matching, replace the first instance with our calculated value
-            displayResponse = displayResponse.replace(displayedPercentage, calculatedPercentage);
-          }
-        } else if (!displayResponse.includes(`${(percentageChange * 100).toFixed(1)}%`)) {
-          // If no percentage is found in the response, append it
-          displayResponse += ` Estimated change: ${percentageChange > 0 ? '+' : ''}${(percentageChange * 100).toFixed(1)}%`;
-        }
-        
-        setLlmResponse(displayResponse);
-      } else if (data.error) {
-        console.error('API returned error:', data.error);
-        setLlmResponse(`Sorry, there was an error processing your query: ${data.error}`);
-      } else {
-        setLlmResponse("Sorry, there was an error processing your query. Please try again.");
-      }
-    } catch (error) {
-      console.error('Error processing query:', error);
-      setLlmResponse(`Sorry, there was an error processing your query: ${error instanceof Error ? error.message : String(error)}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      processQuery();
-    }
+    setWeeklyPredictions(adjustedPredictions);
   };
 
   const resetPredictions = () => {
-    setWeeklyPredictions(defaultPredictions);
+    setSelectedQuestion(null);
     setLlmResponse('');
-    setQuery('');
-    setLastQuery('');
+    setWeeklyPredictions(defaultPredictions);
   };
 
   // Get the appropriate data based on the view
   const getPredictionData = () => {
+    // If we have a selected question, use the modified weeklyPredictions for weekly view
+    if (predictionView === 'weekly' && selectedQuestion) {
+      return weeklyPredictions;
+    }
+    
+    // Otherwise use the default data
     switch(predictionView) {
       case 'weekly':
-        return weeklyForecastData;
+        return defaultPredictions;
       case 'monthly':
         return monthlyPredictions;
       case 'yearly':
         return yearlyPredictions;
       default:
-        return weeklyForecastData;
+        return defaultPredictions;
     }
   };
   
   // Get dynamic chart title based on view
   const getPredictionTitle = () => {
-    switch(predictionView) {
-      case 'weekly':
-        return 'Milk Yield Prediction - Next 8 Weeks';
-      case 'monthly':
-        return 'Milk Yield Prediction - Monthly (2025)';
-      case 'yearly':
-        return 'Milk Yield Prediction - Yearly';
-      default:
-        return 'Milk Yield Prediction';
+    const baseTitle = predictionView === 'weekly' 
+      ? 'Milk Yield Prediction - Next 8 Weeks' 
+      : (predictionView === 'monthly' 
+          ? 'Milk Yield Prediction - Monthly (2025)' 
+          : 'Milk Yield Prediction - Yearly');
+    
+    // Add indicator when a question is selected
+    if (selectedQuestion && predictionView === 'weekly') {
+      const impact = predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0;
+      const changeText = impact >= 0 ? `+${(impact * 100).toFixed(1)}%` : `${(impact * 100).toFixed(1)}%`;
+      return `${baseTitle} (Impact: ${changeText})`;
     }
+    
+    return baseTitle;
   };
+
+  // Handle rotating questions
+  React.useEffect(() => {
+    if (selectedQuestion) return; // Don't rotate when a question is selected
+    
+    const rotationInterval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentQuestionIndex((prevIndex) => 
+          prevIndex === predefinedQuestions.length - 1 ? 0 : prevIndex + 1
+        );
+        setIsTransitioning(false);
+      }, 400); // Match this with the CSS transition duration
+    }, 4000); // Rotate every 4 seconds
+    
+    return () => clearInterval(rotationInterval);
+  }, [selectedQuestion]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
@@ -414,52 +392,81 @@ export default function AccuracyDemo() {
             <h2 className="text-xl font-medium text-gray-800 mb-4">
               Ask About Milk Yield Factors
             </h2>
-            <div className="flex flex-col md:flex-row gap-4 mb-4">
-              <div className="flex-grow">
-                <input 
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="E.g. What would happen to milk forecast if rainfall increased by 50% next week?"
-                  className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  disabled={isLoading}
-                />
+            <div className="flex flex-col">
+              <div className="relative h-[76px] flex items-center">
+                <div className="w-full bg-gradient-to-r from-blue-50 to-transparent p-0.5 rounded-lg">
+                  <div className="question-container w-full min-h-[74px] flex items-center">
+                    {predefinedQuestions.map((q, index) => (
+                      <div
+                        key={q.id}
+                        onClick={() => handleQuestionSelect(q.id)}
+                        className={`absolute w-full py-3 px-4 rounded-md cursor-pointer transition-all duration-300 ${
+                          selectedQuestion === q.id
+                            ? 'border-blue-300 bg-blue-50 shadow-sm question-card-selected opacity-100'
+                            : index === currentQuestionIndex 
+                              ? `${isTransitioning ? 'opacity-0 blur-sm transform -translate-y-2' : 'opacity-100'}`
+                              : 'opacity-0 pointer-events-none'
+                        }`}
+                      >
+                        <p className="text-sm text-gray-800 leading-snug">{q.question}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="flex gap-2">
+              
+              {selectedQuestion && (
                 <button
-                  onClick={processQuery}
-                  disabled={isLoading || !query.trim()}
-                  className={`px-4 py-2 rounded-md font-medium text-white ${
-                    isLoading || !query.trim() ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-                  } transition-colors`}
+                  onClick={resetPredictions}
+                  className="self-start mt-2 px-3 py-1.5 text-xs font-medium rounded bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center space-x-1 transition-colors"
                 >
-                  {isLoading ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Processing
-                    </span>
-                  ) : 'Ask AI'}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span>Reset</span>
                 </button>
-                {(lastQuery || llmResponse) && (
-                  <button
-                    onClick={resetPredictions}
-                    className="px-4 py-2 rounded-md font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors"
-                  >
-                    Reset
-                  </button>
-                )}
-              </div>
+              )}
             </div>
             
             {llmResponse && (
-              <div className="mt-2 p-4 bg-gray-50 rounded-md border border-gray-200">
-                <p className="text-sm font-medium text-gray-500">Query: {lastQuery}</p>
-                <div className="mt-2 text-gray-700">{llmResponse}</div>
-            </div>
+              <div className="mt-6 animate-fadeIn">
+                <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  Daisy AI's Analysis
+                </h3>
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200 shadow-sm">
+                  <p className="text-gray-700 leading-relaxed">{llmResponse}</p>
+                  
+                  <div className="mt-5 pt-4 border-t border-blue-200">
+                    <p className="text-sm font-semibold text-gray-800 mb-2">Impact on Milk Yield:</p>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                      <div 
+                        className={`text-lg font-bold px-4 py-2 rounded-md ${
+                          selectedQuestion && predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! >= 0 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {selectedQuestion && 
+                          `${predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! >= 0 ? '+' : ''}
+                          ${(predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! * 100).toFixed(1)}%`
+                        }
+                      </div>
+                      <div className="flex items-center text-sm text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        {predictionView === 'weekly' 
+                          ? 'Impact is reflected in the chart below' 
+                          : 'Switch to Weekly view to see impact on chart'
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
           
@@ -545,7 +552,11 @@ export default function AccuracyDemo() {
                   <Bar 
                     dataKey="predictedVolume" 
                     name="Predicted Volume" 
-                    fill="#3b82f6" 
+                    fill={selectedQuestion && predictionView === 'weekly' 
+                      ? (predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! >= 0 
+                          ? "#4ade80" // Green for positive impact
+                          : "#ef4444") // Red for negative impact
+                      : "#60a5fa"} // Default blue
                     radius={[4, 4, 0, 0]}
                     barSize={predictionView === 'yearly' ? 60 : (predictionView === 'monthly' ? 30 : 20)}
                   />

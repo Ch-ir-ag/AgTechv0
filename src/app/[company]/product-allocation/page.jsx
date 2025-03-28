@@ -1,15 +1,13 @@
 import { notFound } from 'next/navigation';
-import DashboardClient from "../../components/DashboardClient";
+import ProductAllocationPage from "../../components/ProductAllocationPage";
 import { isValidCompany, formatCompanyName } from "../../data/companies";
-import { loadCompanyData } from "../../utils/companyDataLoader";
-import { loadChartData } from "../../utils/chartDataLoader";
 import Script from 'next/script';
 
 /**
- * CompanyDashboard page component
+ * Product Allocation page component
  * Server component that validates the company and loads the data
  */
-export default function CompanyDashboard({ params }) {
+export default function CompanyProductAllocation({ params }) {
   const { company } = params;
   
   // Check if the company is valid
@@ -20,16 +18,10 @@ export default function CompanyDashboard({ params }) {
   // Format company name
   const companyName = formatCompanyName(company);
   
-  // Load company data if needed for other components
-  // const companyData = loadCompanyData(company);
-  
-  // Since we're using the useParams hook in MilkYieldChart, we don't need to pass chart data
-  // The chart data will be loaded based on the URL in the client component
-
-  // Render the dashboard with company name and suppressHydrationWarning
+  // Render the product allocation page with company name
   return (
     <>
-      {/* Inline script to immediately scroll to top when navigating directly to dashboard */}
+      {/* Inline script to immediately scroll to top when navigating directly to this page */}
       <Script id="scroll-to-top" strategy="beforeInteractive">
         {`
           if (typeof window !== 'undefined') {
@@ -44,7 +36,7 @@ export default function CompanyDashboard({ params }) {
           }
         `}
       </Script>
-      <DashboardClient companyName={companyName} />
+      <ProductAllocationPage companyName={companyName} />
     </>
   );
 } 

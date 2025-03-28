@@ -127,6 +127,34 @@ const clickableAreas = [
   }
 ];
 
+// Define clickable areas for Kerry Dairy
+const kerryClickableAreas = [
+  {
+    id: 'kerry',
+    shape: 'rect' as const,
+    coords: [160, 280, 230, 340],
+    name: 'Kerry'
+  },
+  {
+    id: 'cork',
+    shape: 'rect' as const,
+    coords: [200, 350, 270, 410],
+    name: 'Cork'
+  },
+  {
+    id: 'limerick',
+    shape: 'rect' as const,
+    coords: [220, 180, 290, 240],
+    name: 'Limerick'
+  },
+  {
+    id: 'clare',
+    shape: 'rect' as const,
+    coords: [130, 230, 190, 280],
+    name: 'Clare'
+  }
+];
+
 export default function InteractiveSupplyChainMap({ companyName }: InteractiveSupplyChainMapProps) {
   // State for the selected county
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
@@ -134,8 +162,11 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
   const [showForecast, setShowForecast] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
   
+  // Determine which clickable areas to use based on the company name
+  const activeClickableAreas = companyName === "Kerry Dairy" ? kerryClickableAreas : clickableAreas;
+  
   // Sample county data - replace with your actual data
-  const countyData: Record<string, CountyData> = {
+  const lakelandCountyData: Record<string, CountyData> = {
     antrim: {
       id: 'antrim',
       name: 'Antrim',
@@ -307,6 +338,83 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
       forecastChange: 2.7
     }
   };
+
+  // Define Kerry-specific county data
+  const kerryCountyData: Record<string, CountyData> = {
+    kerry: {
+      id: 'kerry',
+      name: 'Kerry',
+      farms: 410,
+      avgYield: 28.2,
+      totalVolume: 476000,
+      avgFat: 4.3,
+      avgProtein: 3.6,
+      forecastChange: 3.5
+    },
+    cork: {
+      id: 'cork',
+      name: 'Cork',
+      farms: 580,
+      avgYield: 29.1,
+      totalVolume: 694000,
+      avgFat: 4.4,
+      avgProtein: 3.7,
+      forecastChange: 3.8
+    },
+    limerick: {
+      id: 'limerick',
+      name: 'Limerick',
+      farms: 320,
+      avgYield: 27.8,
+      totalVolume: 366000,
+      avgFat: 4.2,
+      avgProtein: 3.5,
+      forecastChange: 3.2
+    },
+    clare: {
+      id: 'clare',
+      name: 'Clare',
+      farms: 280,
+      avgYield: 26.9,
+      totalVolume: 310000,
+      avgFat: 4.1,
+      avgProtein: 3.4,
+      forecastChange: 2.9
+    },
+    tipperary: {
+      id: 'tipperary',
+      name: 'Tipperary',
+      farms: 350,
+      avgYield: 28.0,
+      totalVolume: 403000,
+      avgFat: 4.3,
+      avgProtein: 3.6,
+      forecastChange: 3.4
+    },
+    waterford: {
+      id: 'waterford',
+      name: 'Waterford',
+      farms: 240,
+      avgYield: 27.5,
+      totalVolume: 272000,
+      avgFat: 4.2,
+      avgProtein: 3.5,
+      forecastChange: 2.8
+    },
+    galway: {
+      id: 'galway',
+      name: 'Galway',
+      farms: 290,
+      avgYield: 26.7,
+      totalVolume: 318000,
+      avgFat: 4.1,
+      avgProtein: 3.4,
+      forecastChange: 2.6
+    }
+  };
+
+  // Select the appropriate county data based on company name
+  const countyData = companyName === "Kerry Dairy" ? kerryCountyData : lakelandCountyData;
   
   // Update the map size when the component mounts or window resizes
   useEffect(() => {
@@ -337,7 +445,7 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
   
   // Create overlay elements for the clickable areas
   const renderOverlays = () => {
-    return clickableAreas.map((area) => {
+    return activeClickableAreas.map((area) => {
       if (area.shape === 'rect') {
         // For rectangular areas
         const [x1, y1, x2, y2] = area.coords;
@@ -446,7 +554,7 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
           <div className="relative w-full h-full">
             {mapLoaded && (
               <Image
-                src="/images/ireland_map.jpg" // You'll need to add this image to your public/images folder
+                src={companyName === "Kerry Dairy" ? "/images/kerry_map.jpg" : "/images/ireland_map.jpg"}
                 alt={`${companyName} collection areas`}
                 fill
                 style={{ objectFit: 'contain' }}
@@ -595,15 +703,15 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
               <div className="space-y-3 w-full">
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Total Farms:</span>
-                  <span className="font-medium">3,200</span>
+                  <span className="font-medium">{companyName === "Kerry Dairy" ? "1,940" : "3,200"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Daily Production:</span>
-                  <span className="font-medium">5.48M liters</span>
+                  <span className="font-medium">{companyName === "Kerry Dairy" ? "2.25M" : "5.48M"} liters</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Annual Production:</span>
-                  <span className="font-medium">2B liters</span>
+                  <span className="font-medium">{companyName === "Kerry Dairy" ? "820M" : "2B"} liters</span>
                 </div>
                 <p className="text-gray-500 text-sm mt-3">Select a county on the map to view detailed information about milk production and farms in that area.</p>
               </div>

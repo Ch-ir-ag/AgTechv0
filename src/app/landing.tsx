@@ -28,7 +28,8 @@ export default function Landing() {
 
   const goToDashboard = () => {
     if (selectedCompany) {
-      router.push(`/${selectedCompany}/dashboard`);
+      // Navigate to dashboard and ensure it starts at the top
+      router.push(`/${selectedCompany}/dashboard`, { scroll: true });
     } else {
       // Show dropdown if no company is selected
       setIsDropdownOpen(true);
@@ -101,16 +102,16 @@ export default function Landing() {
                           className={`w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white ${selectedCompany ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-400'} md:py-4 md:text-lg`}
                           disabled={!selectedCompany}
                         >
-                          View Dashboard
+                          View Demo
                         </button>
                       </div>
                       <div className="flex-1 ml-3">
-                        <a
-                          href="#features"
+                        <button
+                          onClick={() => router.push('/accuracy-demo')}
                           className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg"
                         >
-                          Learn More
-                        </a>
+                          View Kildangan
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -218,7 +219,7 @@ export default function Landing() {
               <button
                 onClick={() => {
                   if (selectedCompany) {
-                    router.push(`/${selectedCompany}/dashboard`);
+                    router.push(`/${selectedCompany}/dashboard`, { scroll: true });
                   } else {
                     setIsDropdownOpen(true);
                   }

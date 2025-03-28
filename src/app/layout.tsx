@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,6 +26,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Script id="reset-scroll-position">
+        {`
+          if (typeof window !== 'undefined') {
+            // Set manual scroll restoration
+            if ('scrollRestoration' in history) {
+              history.scrollRestoration = 'manual';
+            }
+            
+            // Reset scroll position on page load
+            window.addEventListener('load', function() {
+              window.scrollTo(0, 0);
+            });
+            
+            // Force initial scroll position
+            window.scrollTo(0, 0);
+          }
+        `}
+      </Script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

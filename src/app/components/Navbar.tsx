@@ -11,6 +11,9 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   
+  // Check if we're on the accuracy-demo page
+  const isAccuracyDemo = pathname === '/accuracy-demo';
+  
   // Extract company from URL if it exists (e.g., /lakeland-dairies/dashboard)
   const urlParts = pathname.split('/').filter(Boolean);
   const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' 
@@ -43,51 +46,73 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
         <Logo className="text-blue-500" />
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-6">
-          <Link href={`/${currentCompany}/dashboard`} className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            Dashboard
-          </Link>
-          <Link href="/accuracy-demo" className="text-gray-700 hover:text-blue-500 text-sm font-medium">
-            Accuracy Demo
-          </Link>
-        </div>
+        {/* Desktop Navigation - Hidden on accuracy-demo page */}
+        {!isAccuracyDemo && (
+          <div className="hidden md:flex space-x-6">
+            <Link 
+              href={`/${currentCompany}/dashboard`} 
+              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              scroll={true}
+              onClick={(e) => {
+                // Force scroll to top when clicking dashboard link
+                setTimeout(() => window.scrollTo(0, 0), 0);
+              }}
+            >
+              Dashboard
+            </Link>
+            <Link 
+              href={`/${currentCompany}/product-allocation`} 
+              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              scroll={true}
+            >
+              Product Allocation
+            </Link>
+          </div>
+        )}
 
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          className="md:hidden text-gray-700 focus:outline-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+        {/* Mobile Menu Button - Hidden on accuracy-demo page */}
+        {!isAccuracyDemo && (
+          <button
+            type="button"
+            className="md:hidden text-gray-700 focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        )}
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
+      {/* Mobile Menu - Hidden on accuracy-demo page */}
+      {!isAccuracyDemo && isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-sm">
           <div className="flex flex-col space-y-4 px-4 py-6">
             <Link 
               href={`/${currentCompany}/dashboard`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={(e) => {
+                setIsMobileMenuOpen(false);
+                // Force scroll to top when clicking dashboard link
+                setTimeout(() => window.scrollTo(0, 0), 0);
+              }}
+              scroll={true}
             >
               Dashboard
             </Link>
             <Link 
-              href="/accuracy-demo" 
+              href={`/${currentCompany}/product-allocation`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
+              scroll={true}
             >
-              Accuracy Demo
+              Product Allocation
             </Link>
           </div>
         </div>

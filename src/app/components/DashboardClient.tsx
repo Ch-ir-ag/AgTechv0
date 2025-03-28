@@ -31,7 +31,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
     }, 0);
     
     // Add an event listener to prevent any automatic scrolling
-    const preventScroll = (e: Event) => {
+    const preventScroll = () => {
       window.scrollTo(0, 0);
     };
     

@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { 
   PieChart, Pie, Cell, 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
   ResponsiveContainer, LabelList 
 } from 'recharts';
 import { useParams } from 'next/navigation';
 
 // Define the data types
+type AllocationStatus = 'Contract Met' | 'Contract Pending' | 'Exceeded Target' | 'Below Target';
+
 interface AllocationItem {
   id: number;
   product: string;
@@ -16,9 +18,24 @@ interface AllocationItem {
   allocatedLitres: number;
   percentOfTotal: number;
   marginPerLitre: number;
-  status: 'Contract Met' | 'Contract Pending' | 'Exceeded Target' | 'Below Target';
+  status: AllocationStatus;
   statusColor: string;
 }
+
+type ChartDataItem = {
+  name: string;
+  value: number;
+};
+
+type BarChartDataItem = {
+  name: string;
+  litres: number;
+};
+
+type MarginChartDataItem = {
+  name: string;
+  margin: number;
+};
 
 interface FactoryUtilization {
   factory: string;
@@ -190,8 +207,7 @@ export default function ProductAllocationRecommendations() {
   // Select company data based on company slug
   const companyData = companySlug === 'lakeland-dairies' ? lakelandDairiesData : kerryDairyData;
   
-  // State for scenarios
-  const [scenarios, setScenarios] = useState(companyData.scenarioToggles);
+  // State for timeframe and volume
   const [forecastVolume, setForecastVolume] = useState(companyData.forecast.volume);
   const [timeframe, setTimeframe] = useState(companyData.forecast.timeframe);
   
@@ -201,7 +217,7 @@ export default function ProductAllocationRecommendations() {
     value: item.allocatedLitres,
   }));
   
-  const barChartData = companyData.allocations.reduce((acc: any[], item) => {
+  const barChartData = companyData.allocations.reduce((acc: BarChartDataItem[], item) => {
     const existingFactory = acc.find(f => f.name === item.factory);
     if (existingFactory) {
       existingFactory.litres += item.allocatedLitres;
@@ -215,17 +231,6 @@ export default function ProductAllocationRecommendations() {
     name: item.product,
     margin: item.marginPerLitre,
   }));
-  
-  // Toggle a scenario
-  const toggleScenario = (id: string) => {
-    setScenarios(prev => 
-      prev.map(scenario => 
-        scenario.id === id 
-          ? { ...scenario, active: !scenario.active } 
-          : scenario
-      )
-    );
-  };
   
   // Format numbers for display
   const formatNumber = (num: number) => {

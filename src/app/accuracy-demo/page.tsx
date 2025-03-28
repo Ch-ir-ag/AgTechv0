@@ -147,18 +147,6 @@ export default function AccuracyDemo() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   
-  // Weekly forecast data - 8 weeks starting from mid-March
-  const weeklyForecastData = [
-    { period: 'Mar 15-21', predictedVolume: 91500 },
-    { period: 'Mar 22-28', predictedVolume: 94200 },
-    { period: 'Mar 29-Apr 4', predictedVolume: 96800 },
-    { period: 'Apr 5-11', predictedVolume: 99500 },
-    { period: 'Apr 12-18', predictedVolume: 101200 },
-    { period: 'Apr 19-25', predictedVolume: 103800 },
-    { period: 'Apr 26-May 2', predictedVolume: 105400 },
-    { period: 'May 3-9', predictedVolume: 102700 }
-  ];
-  
   // Monthly prediction data
   const monthlyPredictions = [
     { period: 'January', predictedVolume: 0 }, // No data for January
@@ -432,9 +420,9 @@ export default function AccuracyDemo() {
               <div className="mt-6 animate-fadeIn">
                 <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                   </svg>
-                  Daisy AI's Analysis
+                  Daisy AI&apos;s Analysis
                 </h3>
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200 shadow-sm">
                   <p className="text-gray-700 leading-relaxed">{llmResponse}</p>
@@ -444,14 +432,14 @@ export default function AccuracyDemo() {
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                       <div 
                         className={`text-lg font-bold px-4 py-2 rounded-md ${
-                          selectedQuestion && predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! >= 0 
+                          selectedQuestion && (predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-red-100 text-red-800'
                         }`}
                       >
                         {selectedQuestion && 
-                          `${predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! >= 0 ? '+' : ''}
-                          ${(predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! * 100).toFixed(1)}%`
+                          `${(predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0 ? '+' : ''}
+                          ${((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) * 100).toFixed(1)}%`
                         }
                       </div>
                       <div className="flex items-center text-sm text-blue-700">
@@ -553,7 +541,7 @@ export default function AccuracyDemo() {
                     dataKey="predictedVolume" 
                     name="Predicted Volume" 
                     fill={selectedQuestion && predictionView === 'weekly' 
-                      ? (predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange! >= 0 
+                      ? ((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0 
                           ? "#4ade80" // Green for positive impact
                           : "#ef4444") // Red for negative impact
                       : "#60a5fa"} // Default blue
@@ -805,6 +793,49 @@ export default function AccuracyDemo() {
               <p className="text-3xl font-bold text-blue-500">93.7%</p>
               <p className="text-gray-600 text-sm">Yearly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">Annual projection confidence</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:space-x-6 mt-8">
+            <div className={`w-full md:w-3/4 ${predictionView === 'weekly' ? 'opacity-100' : 'opacity-50'}`}>
+              <h3 className="text-lg font-semibold mb-2">Impact on Milk Yield</h3>
+              <p className="mb-4">
+                {selectedQuestion && predefinedQuestions.find(q => q.id === selectedQuestion) && 
+                  <>
+                    The prediction shows a 
+                    <span className={`font-semibold ${
+                      ((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0) 
+                        ? 'text-green-600' 
+                        : 'text-red-600'
+                    }`}>
+                      {" "}
+                      {((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0) ? '+' : ''}
+                      {((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) * 100).toFixed(1)}%
+                    </span> change in expected milk yield.
+                  </>
+                }
+              </p>
+              <p className="text-sm text-gray-600">
+                {predictionView === 'weekly' 
+                  ? 'The chart reflects this change. Toggle to weekly view to see impact.' 
+                  : 'Switch to weekly view to see the impact on predictions.'}
+              </p>
+            </div>
+
+            <div className={`rounded-full h-2 w-full bg-gray-100 overflow-hidden mb-1 ${
+              selectedQuestion ? 'block' : 'hidden'
+            }`}>
+              <div 
+                className={`h-full ${
+                  selectedQuestion && (predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0 
+                    ? 'bg-green-500' 
+                    : 'bg-red-500'
+                }`}
+                style={{ 
+                  width: `${Math.abs(((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) * 100))}%`,
+                  transition: 'width 1s ease-in-out' 
+                }}
+              ></div>
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ export default function Navbar() {
               href={`/${currentCompany}/dashboard`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               scroll={true}
-              onClick={(e) => {
+              onClick={() => {
                 // Force scroll to top when clicking dashboard link
                 setTimeout(() => window.scrollTo(0, 0), 0);
               }}
@@ -97,7 +97,7 @@ export default function Navbar() {
             <Link 
               href={`/${currentCompany}/dashboard`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
-              onClick={(e) => {
+              onClick={() => {
                 setIsMobileMenuOpen(false);
                 // Force scroll to top when clicking dashboard link
                 setTimeout(() => window.scrollTo(0, 0), 0);
@@ -109,7 +109,11 @@ export default function Navbar() {
             <Link 
               href={`/${currentCompany}/product-allocation`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                // Force scroll to top when clicking dashboard link
+                setTimeout(() => window.scrollTo(0, 0), 0);
+              }}
               scroll={true}
             >
               Product Allocation

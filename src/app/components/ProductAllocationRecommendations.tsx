@@ -26,7 +26,7 @@ interface AllocationItem {
 */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type AllocationStatus = 'Contract Met' | 'Contract Pending' | 'Exceeded Target' | 'Below Target';
+type AllocationStatus = 'Under negotiation' | 'Contract assigned' | 'Contract in progress' | 'Contract met';
 
 // Types for chart data
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -70,8 +70,27 @@ interface DemandProduct {
 
 interface MarginLeader {
   product: string;
-  marginPerLitre: number;
+  marginPercent: number;
   isHighest: boolean;
+}
+
+interface CustomerContract {
+  customer: string;
+  product: string;
+  volume: number;
+  marginPercent: number;
+  status: AllocationStatus;
+  statusColor: string;
+}
+
+interface PlantCapacity {
+  factory: string;
+  totalCapacity: number;
+  usedCapacity: number;
+  products: Array<{
+    product: string;
+    volume: number;
+  }>;
 }
 
 interface AIRecommendation {
@@ -96,48 +115,80 @@ const kerryDairyData = {
     timeframe: 'April 2025'
   },
   allocations: [
-    { id: 1, product: 'Whole Milk Powder', factory: 'Charleville', allocatedLitres: 25500000, percentOfTotal: 30, marginPerLitre: 0.22, status: 'Contract Met', statusColor: 'bg-green-100 text-green-800' },
-    { id: 2, product: 'Butter', factory: 'Listowel', allocatedLitres: 24650000, percentOfTotal: 29, marginPerLitre: 0.18, status: 'Exceeded Target', statusColor: 'bg-blue-100 text-blue-800' },
-    { id: 3, product: 'Skim Milk Powder', factory: 'Charleville', allocatedLitres: 12750000, percentOfTotal: 15, marginPerLitre: 0.16, status: 'Contract Met', statusColor: 'bg-green-100 text-green-800' },
-    { id: 4, product: 'Cheese', factory: 'Newmarket', allocatedLitres: 22100000, percentOfTotal: 26, marginPerLitre: 0.19, status: 'Contract Pending', statusColor: 'bg-yellow-100 text-yellow-800' },
+    { id: 1, product: 'Whole Milk Powder', factory: 'Charleville', allocatedLitres: 25500000, percentOfTotal: 30, marginPerLitre: 0.08, marginPercent: 3.2, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { id: 2, product: 'Butter', factory: 'Listowel', allocatedLitres: 24650000, percentOfTotal: 29, marginPerLitre: 0.12, marginPercent: 4.8, status: 'Contract in progress', statusColor: 'bg-blue-100 text-blue-800' },
+    { id: 3, product: 'Skim Milk Powder', factory: 'Charleville', allocatedLitres: 12750000, percentOfTotal: 15, marginPerLitre: 0.05, marginPercent: 1.9, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { id: 4, product: 'Cheese', factory: 'Newmarket', allocatedLitres: 22100000, percentOfTotal: 26, marginPerLitre: 0.14, marginPercent: 5.6, status: 'Under negotiation', statusColor: 'bg-yellow-100 text-yellow-800' },
   ],
   factoryUtilization: [
-    { factory: 'Charleville', utilizationPercent: 95, color: '#60a5fa' },
-    { factory: 'Listowel', utilizationPercent: 93, color: '#34d399' },
-    { factory: 'Newmarket', utilizationPercent: 88, color: '#a78bfa' },
+    { factory: 'Charleville', utilizationPercent: 87, color: '#60a5fa' },
+    { factory: 'Listowel', utilizationPercent: 83, color: '#34d399' },
+    { factory: 'Newmarket', utilizationPercent: 78, color: '#a78bfa' },
+  ],
+  plantCapacity: [
+    { 
+      factory: 'Charleville', 
+      totalCapacity: 44000000, 
+      usedCapacity: 38250000,
+      products: [
+        { product: 'Whole Milk Powder', volume: 25500000 },
+        { product: 'Skim Milk Powder', volume: 12750000 }
+      ]
+    },
+    { 
+      factory: 'Listowel', 
+      totalCapacity: 29500000, 
+      usedCapacity: 24650000,
+      products: [
+        { product: 'Butter', volume: 24650000 }
+      ]
+    },
+    { 
+      factory: 'Newmarket', 
+      totalCapacity: 28000000, 
+      usedCapacity: 22100000,
+      products: [
+        { product: 'Cheese', volume: 22100000 }
+      ]
+    }
+  ],
+  customerContracts: [
+    { customer: 'Mars', product: 'Whole Milk Powder', volume: 15000000, marginPercent: 3.4, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { customer: 'Cadbury', product: 'Butter', volume: 18000000, marginPercent: 5.1, status: 'Contract in progress', statusColor: 'bg-blue-100 text-blue-800' },
+    { customer: 'Nestle', product: 'Cheese', volume: 20000000, marginPercent: 5.8, status: 'Under negotiation', statusColor: 'bg-yellow-100 text-yellow-800' },
   ],
   contractFulfillment: [
-    { customer: 'Friesland', fulfillmentPercent: 94, color: '#60a5fa' },
-    { customer: 'Danone', fulfillmentPercent: 102, color: '#34d399' },
-    { customer: 'Arla', fulfillmentPercent: 87, color: '#f59e0b' },
+    { customer: 'Mars', fulfillmentPercent: 94, color: '#60a5fa' },
+    { customer: 'Cadbury', fulfillmentPercent: 102, color: '#34d399' },
+    { customer: 'Nestle', fulfillmentPercent: 87, color: '#f59e0b' },
   ],
   demandProducts: [
-    { product: 'Butter', changePercent: 18, trend: 'up' },
-    { product: 'Cheese', changePercent: 15, trend: 'up' },
-    { product: 'SMP', changePercent: 5, trend: 'down' },
+    { product: 'Butter', changePercent: 8, trend: 'up' },
+    { product: 'Cheese', changePercent: 5, trend: 'up' },
+    { product: 'SMP', changePercent: 2, trend: 'down' },
   ],
   marginLeaders: [
-    { product: 'WMP', marginPerLitre: 0.22, isHighest: true },
-    { product: 'Cheese', marginPerLitre: 0.19, isHighest: false },
-    { product: 'Butter', marginPerLitre: 0.18, isHighest: false },
+    { product: 'Cheese', marginPercent: 5.6, isHighest: true },
+    { product: 'Butter', marginPercent: 4.8, isHighest: false },
+    { product: 'WMP', marginPercent: 3.2, isHighest: false },
   ],
   aiRecommendations: [
     { 
       id: 1, 
       title: 'Increase Cheese Production',
-      description: 'Divert additional 5% of milk to Cheese due to rising EU market demand (+15% week-on-week)',
+      description: 'Divert additional 3% of milk to Cheese due to rising EU market demand (+5% week-on-week)',
       icon: 'trending-up'
     },
     { 
       id: 2, 
       title: 'Optimize Charleville Output',
-      description: 'Plant operating at 95% capacity - monitor closely for potential bottlenecks',
+      description: 'Plant operating at 87% capacity - monitor closely for potential bottlenecks',
       icon: 'alert-triangle'
     },
     { 
       id: 3, 
       title: 'Maintain WMP Focus',
-      description: 'Current margins favor continuing high WMP production rate at Charleville',
+      description: 'Current margins favor continuing moderate WMP production rate at Charleville',
       icon: 'pie-chart'
     },
   ],
@@ -156,20 +207,71 @@ const lakelandDairiesData = {
     timeframe: 'April 2025'
   },
   allocations: [
-    { id: 1, product: 'Whole Milk Powder', factory: 'Bailieborough', allocatedLitres: 27000000, percentOfTotal: 30, marginPerLitre: 0.21, status: 'Contract Met', statusColor: 'bg-green-100 text-green-800' },
-    { id: 2, product: 'Butter', factory: 'Killeshandra', allocatedLitres: 18000000, percentOfTotal: 20, marginPerLitre: 0.19, status: 'Exceeded Target', statusColor: 'bg-blue-100 text-blue-800' },
-    { id: 3, product: 'Skim Milk Powder', factory: 'Bailieborough', allocatedLitres: 9000000, percentOfTotal: 10, marginPerLitre: 0.17, status: 'Contract Met', statusColor: 'bg-green-100 text-green-800' },
-    { id: 4, product: 'Cheese', factory: 'Killeshandra', allocatedLitres: 12600000, percentOfTotal: 14, marginPerLitre: 0.20, status: 'Contract Pending', statusColor: 'bg-yellow-100 text-yellow-800' },
-    { id: 5, product: 'UHT Milk', factory: 'Ballyraghane', allocatedLitres: 9900000, percentOfTotal: 11, marginPerLitre: 0.15, status: 'Below Target', statusColor: 'bg-red-100 text-red-800' },
-    { id: 6, product: 'Butter', factory: 'Artigarvan', allocatedLitres: 7200000, percentOfTotal: 8, marginPerLitre: 0.18, status: 'Contract Met', statusColor: 'bg-green-100 text-green-800' },
-    { id: 7, product: 'Yogurt', factory: 'Newtownards', allocatedLitres: 6300000, percentOfTotal: 7, marginPerLitre: 0.16, status: 'Contract Pending', statusColor: 'bg-yellow-100 text-yellow-800' },
+    { id: 1, product: 'Whole Milk Powder', factory: 'Bailieborough', allocatedLitres: 27000000, percentOfTotal: 30, marginPerLitre: 0.07, marginPercent: 2.8, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { id: 2, product: 'Butter', factory: 'Killeshandra', allocatedLitres: 18000000, percentOfTotal: 20, marginPerLitre: 0.11, marginPercent: 4.4, status: 'Contract in progress', statusColor: 'bg-blue-100 text-blue-800' },
+    { id: 3, product: 'Skim Milk Powder', factory: 'Bailieborough', allocatedLitres: 9000000, percentOfTotal: 10, marginPerLitre: 0.04, marginPercent: 1.6, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { id: 4, product: 'Cheese', factory: 'Killeshandra', allocatedLitres: 12600000, percentOfTotal: 14, marginPerLitre: 0.13, marginPercent: 5.2, status: 'Contract assigned', statusColor: 'bg-yellow-100 text-yellow-800' },
+    { id: 5, product: 'UHT Milk', factory: 'Ballyraghane', allocatedLitres: 9900000, percentOfTotal: 11, marginPerLitre: 0.06, marginPercent: 2.4, status: 'Under negotiation', statusColor: 'bg-red-100 text-red-800' },
+    { id: 6, product: 'Butter', factory: 'Artigarvan', allocatedLitres: 7200000, percentOfTotal: 8, marginPerLitre: 0.10, marginPercent: 4.0, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { id: 7, product: 'Yogurt', factory: 'Newtownards', allocatedLitres: 6300000, percentOfTotal: 7, marginPerLitre: 0.09, marginPercent: 3.6, status: 'Contract assigned', statusColor: 'bg-yellow-100 text-yellow-800' },
   ],
   factoryUtilization: [
-    { factory: 'Bailieborough', utilizationPercent: 92, color: '#60a5fa' },
-    { factory: 'Killeshandra', utilizationPercent: 88, color: '#34d399' },
+    { factory: 'Bailieborough', utilizationPercent: 84, color: '#60a5fa' },
+    { factory: 'Killeshandra', utilizationPercent: 82, color: '#34d399' },
     { factory: 'Ballyraghane', utilizationPercent: 76, color: '#a78bfa' },
-    { factory: 'Artigarvan', utilizationPercent: 81, color: '#f97316' },
-    { factory: 'Newtownards', utilizationPercent: 71, color: '#ec4899' },
+    { factory: 'Artigarvan', utilizationPercent: 71, color: '#f97316' },
+    { factory: 'Newtownards', utilizationPercent: 64, color: '#ec4899' },
+  ],
+  plantCapacity: [
+    { 
+      factory: 'Bailieborough', 
+      totalCapacity: 42000000, 
+      usedCapacity: 36000000,
+      products: [
+        { product: 'Whole Milk Powder', volume: 27000000 },
+        { product: 'Skim Milk Powder', volume: 9000000 }
+      ]
+    },
+    { 
+      factory: 'Killeshandra', 
+      totalCapacity: 37000000, 
+      usedCapacity: 30600000,
+      products: [
+        { product: 'Butter', volume: 18000000 },
+        { product: 'Cheese', volume: 12600000 }
+      ]
+    },
+    { 
+      factory: 'Ballyraghane', 
+      totalCapacity: 13000000, 
+      usedCapacity: 9900000,
+      products: [
+        { product: 'UHT Milk', volume: 9900000 }
+      ]
+    },
+    { 
+      factory: 'Artigarvan', 
+      totalCapacity: 10000000, 
+      usedCapacity: 7200000,
+      products: [
+        { product: 'Butter', volume: 7200000 }
+      ]
+    },
+    { 
+      factory: 'Newtownards', 
+      totalCapacity: 9800000, 
+      usedCapacity: 6300000,
+      products: [
+        { product: 'Yogurt', volume: 6300000 }
+      ]
+    }
+  ],
+  customerContracts: [
+    { customer: 'Nestle', product: 'Whole Milk Powder', volume: 20000000, marginPercent: 3.0, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
+    { customer: 'Danone', product: 'Yogurt', volume: 6000000, marginPercent: 3.8, status: 'Contract assigned', statusColor: 'bg-yellow-100 text-yellow-800' },
+    { customer: 'Arla', product: 'Butter', volume: 15000000, marginPercent: 4.6, status: 'Contract in progress', statusColor: 'bg-blue-100 text-blue-800' },
+    { customer: 'Mondelez', product: 'Cheese', volume: 10000000, marginPercent: 5.4, status: 'Under negotiation', statusColor: 'bg-red-100 text-red-800' },
+    { customer: 'Unilever', product: 'UHT Milk', volume: 8500000, marginPercent: 2.6, status: 'Under negotiation', statusColor: 'bg-red-100 text-red-800' },
   ],
   contractFulfillment: [
     { customer: 'Nestle', fulfillmentPercent: 97, color: '#60a5fa' },
@@ -177,32 +279,32 @@ const lakelandDairiesData = {
     { customer: 'Arla', fulfillmentPercent: 91, color: '#f59e0b' },
   ],
   demandProducts: [
-    { product: 'Cheese', changePercent: 15, trend: 'up' },
-    { product: 'UHT Milk', changePercent: 10, trend: 'up' },
-    { product: 'WMP', changePercent: 3, trend: 'down' },
+    { product: 'Cheese', changePercent: 5, trend: 'up' },
+    { product: 'UHT Milk', changePercent: 3, trend: 'up' },
+    { product: 'WMP', changePercent: 1, trend: 'down' },
   ],
   marginLeaders: [
-    { product: 'WMP', marginPerLitre: 0.21, isHighest: true },
-    { product: 'Cheese', marginPerLitre: 0.20, isHighest: false },
-    { product: 'Butter', marginPerLitre: 0.19, isHighest: false },
+    { product: 'Cheese', marginPercent: 5.2, isHighest: true },
+    { product: 'Butter', marginPercent: 4.4, isHighest: false },
+    { product: 'Yogurt', marginPercent: 3.6, isHighest: false },
   ],
   aiRecommendations: [
     { 
       id: 1, 
       title: 'Increase Cheese Production',
-      description: 'Allocate additional 7% to Cheese production at Killeshandra due to rising EU demand',
+      description: 'Allocate additional 2% to Cheese production at Killeshandra due to rising EU demand',
       icon: 'trending-up'
     },
     { 
       id: 2, 
       title: 'Optimize Bailieborough Output',
-      description: 'Plant operating near capacity (92%), monitor closely to avoid bottlenecks',
+      description: 'Plant operating near capacity (84%), monitor closely to avoid bottlenecks',
       icon: 'alert-triangle'
     },
     { 
       id: 3, 
       title: 'Leverage Northern Ireland Facilities',
-      description: 'Artigarvan and Newtownards operating at 81% and 71% - opportunity to increase production',
+      description: 'Artigarvan and Newtownards operating at 71% and 64% - opportunity to increase production',
       icon: 'pie-chart'
     },
   ],
@@ -221,12 +323,27 @@ export default function ProductAllocationRecommendations() {
   // Select company data based on company slug
   const companyData = companySlug === 'lakeland-dairies' ? lakelandDairiesData : kerryDairyData;
   
-  // State for timeframe and volume
-  const [forecastVolume, setForecastVolume] = useState(companyData.forecast.volume);
-  const [timeframe, setTimeframe] = useState(companyData.forecast.timeframe);
+  // Get list of all factories for the selector
+  const factoryList = Array.from(new Set(companyData.allocations.map(item => item.factory)));
+  
+  // State for timeframe and volume - keeping these values but not showing dropdowns
+  const forecastVolume = companyData.forecast.volume;
+  const timeframe = companyData.forecast.timeframe;
+  
+  // Set default factory to "All Factories"
+  const [selectedFactory, setSelectedFactory] = useState('All Factories');
+  const [isFactoryDropdownOpen, setIsFactoryDropdownOpen] = useState(false);
+  
+  // Filter data for selected factory
+  const filteredAllocations = companyData.allocations.filter(item => 
+    selectedFactory === 'All Factories' ? true : item.factory === selectedFactory
+  );
+  
+  // Get plant data for the selected factory
+  const selectedPlantData = companyData.plantCapacity.find(plant => plant.factory === selectedFactory);
   
   // Convert allocations to chart-friendly format
-  const pieChartData = companyData.allocations.map(item => ({
+  const pieChartData = filteredAllocations.map(item => ({
     name: item.product,
     value: item.allocatedLitres,
   }));
@@ -241,9 +358,9 @@ export default function ProductAllocationRecommendations() {
     return acc;
   }, []);
   
-  const marginChartData = companyData.allocations.map(item => ({
+  const marginChartData = filteredAllocations.map(item => ({
     name: item.product,
-    margin: item.marginPerLitre,
+    margin: item.marginPercent,
   }));
   
   // Format numbers for display
@@ -259,6 +376,21 @@ export default function ProductAllocationRecommendations() {
   // COLORS for charts
   const COLORS = ['#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f97316', '#f43f5e'];
   
+  // State for expanded plant details
+  const [expandedPlant, setExpandedPlant] = useState<string | null>(null);
+  
+  // Toggle plant details
+  const togglePlantDetails = (factory: string) => {
+    if (expandedPlant === factory) {
+      setExpandedPlant(null);
+    } else {
+      setExpandedPlant(factory);
+    }
+  };
+  
+  // Calculate total allocated volume for the selected factory
+  const totalAllocatedVolume = filteredAllocations.reduce((sum, item) => sum + item.allocatedLitres, 0);
+  
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
       {/* 1. Header Section */}
@@ -266,74 +398,115 @@ export default function ProductAllocationRecommendations() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
           <h2 className="text-xl font-medium text-gray-800">Product Allocation Recommendations</h2>
           
-          <div className="flex items-center space-x-4 mt-4 md:mt-0">
-            <div>
-              <label htmlFor="timeframe" className="text-sm text-gray-600 block mb-1">Timeframe</label>
-              <select 
-                id="timeframe"
-                className="border border-gray-200 rounded text-sm p-2"
-                value={timeframe}
-                onChange={(e) => setTimeframe(e.target.value)}
-                suppressHydrationWarning
-              >
-                <option value="April 2025">April 2025</option>
-                <option value="May 2025">May 2025</option>
-                <option value="Q2 2025">Q2 2025</option>
-              </select>
+          <div className="relative mt-4 md:mt-0">
+            <div 
+              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg shadow-sm bg-white cursor-pointer hover:bg-gray-50 w-64"
+              onClick={() => setIsFactoryDropdownOpen(!isFactoryDropdownOpen)}
+            >
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium">{selectedFactory}</span>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
             </div>
             
-            <div>
-              <label htmlFor="forecastVolume" className="text-sm text-gray-600 block mb-1">Forecast Volume</label>
-              <div className="relative">
-                <select
-                  id="forecastVolume"
-                  className="border border-gray-200 rounded text-sm p-2 pr-8 bg-white"
-                  value={forecastVolume}
-                  onChange={(e) => setForecastVolume(Number(e.target.value))}
-                  suppressHydrationWarning
+            {isFactoryDropdownOpen && (
+              <div className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 py-1 max-h-60 overflow-auto">
+                <div
+                  className="px-4 py-2 text-sm hover:bg-blue-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedFactory('All Factories');
+                    setIsFactoryDropdownOpen(false);
+                  }}
                 >
-                  <option value={75000000}>75M Litres</option>
-                  <option value={85000000}>85M Litres</option>
-                  <option value={90000000}>90M Litres</option>
-                  <option value={95000000}>95M Litres</option>
-                  <option value={100000000}>100M Litres</option>
-                </select>
+                  All Factories
+                </div>
+                {factoryList.map(factory => (
+                  <div
+                    key={factory}
+                    className="px-4 py-2 text-sm hover:bg-blue-100 cursor-pointer"
+                    onClick={() => {
+                      setSelectedFactory(factory);
+                      setIsFactoryDropdownOpen(false);
+                    }}
+                  >
+                    {factory}
+                  </div>
+                ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
         
         <div className="bg-blue-50 p-4 rounded-lg">
           <p className="text-gray-800">
-            <span className="font-medium">Daisy Recommends:</span> Based on a forecast of {formatNumber(forecastVolume)} litres for {timeframe}, 
-            distribute milk supply across {barChartData.length} plants and {pieChartData.length} product types to optimize for 
-            contract fulfillment and margin optimization.
+            <span className="font-medium">Allocation Summary:</span> Based on a forecast of {formatNumber(forecastVolume)} litres for {timeframe}, 
+            {selectedFactory === 'All Factories' 
+              ? ` distribute milk supply across ${barChartData.length} plants and ${pieChartData.length} product types to optimize for contract fulfillment and margin optimization.`
+              : ` allocate ${formatNumber(totalAllocatedVolume)} litres to ${selectedFactory} plant across ${filteredAllocations.length} product types.`
+            }
           </p>
         </div>
       </div>
       
+      {selectedFactory !== 'All Factories' && selectedPlantData && (
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-medium text-gray-800">Factory Efficiency</h3>
+            <div className={`text-lg font-bold rounded-full px-3 py-1 ${
+              selectedPlantData.usedCapacity / selectedPlantData.totalCapacity > 0.80 
+              ? "bg-green-100 text-green-700"
+              : selectedPlantData.usedCapacity / selectedPlantData.totalCapacity > 0.55
+              ? "bg-yellow-100 text-yellow-700" 
+              : "bg-red-100 text-red-700"
+            }`}>
+              {Math.round(selectedPlantData.usedCapacity / selectedPlantData.totalCapacity * 100)}% Efficient
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="text-sm mb-2">
+              <span className="font-medium">Total Capacity:</span> {formatNumber(selectedPlantData.totalCapacity)} litres
+            </div>
+            <div className="text-sm">
+              <span className="font-medium">Current Allocation:</span> {formatNumber(selectedPlantData.usedCapacity)} litres
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* 2. Allocation Table */}
       <div className="p-6 border-b border-gray-100 overflow-x-auto">
-        <h3 className="text-base font-medium text-gray-800 mb-4">Allocation Plan</h3>
+        <h3 className="text-base font-medium text-gray-800 mb-4">
+          {selectedFactory === 'All Factories' ? 'Allocation Plan' : `Allocation Plan for ${selectedFactory}`}
+        </h3>
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr className="bg-gray-50">
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Factory</th>
+              {selectedFactory === 'All Factories' && (
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Factory</th>
+              )}
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allocated Litres</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">% of Total</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Margin (€/L)</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Margin (%)</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {companyData.allocations.map((item) => (
+            {filteredAllocations.map((item) => (
               <tr key={item.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.product}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.factory}</td>
+                {selectedFactory === 'All Factories' && (
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.factory}</td>
+                )}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatNumber(item.allocatedLitres)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.percentOfTotal}%</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">€{item.marginPerLitre.toFixed(2)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.marginPercent}%</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 py-1 text-xs rounded-full ${item.statusColor}`}>
                     {item.status}
@@ -349,7 +522,9 @@ export default function ProductAllocationRecommendations() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 border-b border-gray-100">
         {/* Pie Chart - Allocation by Product */}
         <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-2">Allocation by Product</h3>
+          <h3 className="text-base font-medium text-gray-800 mb-2">
+            {selectedFactory === 'All Factories' ? 'Allocation by Product' : `Product Mix at ${selectedFactory}`}
+          </h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -357,90 +532,205 @@ export default function ProductAllocationRecommendations() {
                   data={pieChartData}
                   cx="50%"
                   cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
+                  labelLine={true}
+                  outerRadius={70}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({ name, percent }: { name: string, percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }: { name: string, percent: number }) => {
+                    // Truncate product name if too long
+                    const displayName = name.length > 12 ? name.substring(0, 10) + '...' : name;
+                    return `${displayName} ${(percent * 100).toFixed(0)}%`;
+                  }}
                 >
                   {pieChartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => formatNumber(value)} />
+                <Tooltip 
+                  formatter={(value: number) => formatNumber(value)} 
+                  contentStyle={{ backgroundColor: 'white', borderRadius: '4px', border: 'none', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }} 
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
         
         {/* Bar Chart - Allocation by Factory */}
+        {selectedFactory === 'All Factories' && (
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h3 className="text-base font-medium text-gray-800 mb-2">Allocation by Factory</h3>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
+                  <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f0f0f0" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                  <YAxis tickFormatter={(value: number) => formatNumber(value)} axisLine={false} tickLine={false} />
+                  <Tooltip 
+                    formatter={(value: number) => formatNumber(value)} 
+                    contentStyle={{ backgroundColor: 'white', borderRadius: '4px', border: 'none', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }} 
+                  />
+                  <Bar dataKey="litres" fill="#60a5fa" radius={[4, 4, 0, 0]}>
+                    <LabelList dataKey="litres" position="top" formatter={(value: number) => formatNumber(value)} style={{ fontSize: '11px', fill: '#4b5563' }} />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+        
+        {/* Bar Chart - Margin per Product */}
         <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-2">Allocation by Factory</h3>
+          <h3 className="text-base font-medium text-gray-800 mb-2">
+            {selectedFactory === 'All Factories' ? 'Margin per Product (%)' : `Margin per Product at ${selectedFactory} (%)`}
+          </h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value: number) => formatNumber(value)} />
-                <Tooltip formatter={(value: number) => formatNumber(value)} />
-                <Bar dataKey="litres" fill="#60a5fa">
-                  <LabelList dataKey="litres" position="top" formatter={(value: number) => formatNumber(value)} />
+              <BarChart data={marginChartData} layout="vertical" margin={{ top: 10, right: 50, left: 20, bottom: 10 }}>
+                <CartesianGrid strokeDasharray="0" horizontal={true} vertical={false} stroke="#f0f0f0" />
+                <XAxis type="number" domain={[0, 7]} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" width={100} axisLine={false} tickLine={false} />
+                <Tooltip 
+                  formatter={(value: number) => `${value}%`} 
+                  contentStyle={{ backgroundColor: 'white', borderRadius: '4px', border: 'none', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }} 
+                />
+                <Bar dataKey="margin" fill="#34d399" barSize={20} radius={[0, 4, 4, 0]}>
+                  <LabelList dataKey="margin" position="right" formatter={(value: number) => `${value}%`} style={{ fontSize: '11px', fill: '#4b5563' }} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
         
-        {/* Bar Chart - Margin per Product */}
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-2">Margin per Product (€/L)</h3>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={marginChartData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-                <XAxis type="number" domain={[0, Math.max(...marginChartData.map(d => d.margin)) * 1.2]} />
-                <YAxis type="category" dataKey="name" width={80} />
-                <Tooltip formatter={(value: number) => `€${value.toFixed(2)}`} />
-                <Bar dataKey="margin" fill="#34d399" barSize={20} radius={[0, 4, 4, 0]}>
-                  <LabelList dataKey="margin" position="right" formatter={(value: number) => `€${value.toFixed(2)}`} />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+        {/* Additional chart for selected factory if needed */}
+        {selectedFactory !== 'All Factories' && (
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h3 className="text-base font-medium text-gray-800 mb-2">Volume by Product at {selectedFactory}</h3>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={filteredAllocations} layout="vertical" margin={{ top: 10, right: 60, left: 20, bottom: 10 }}>
+                  <CartesianGrid strokeDasharray="0" horizontal={true} vertical={false} stroke="#f0f0f0" />
+                  <XAxis type="number" tickFormatter={(value: number) => formatNumber(value)} axisLine={false} tickLine={false} />
+                  <YAxis type="category" dataKey="product" width={110} axisLine={false} tickLine={false} />
+                  <Tooltip 
+                    formatter={(value: number) => formatNumber(value)} 
+                    contentStyle={{ backgroundColor: 'white', borderRadius: '4px', border: 'none', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }} 
+                  />
+                  <Bar dataKey="allocatedLitres" fill="#60a5fa" barSize={20} radius={[0, 4, 4, 0]}>
+                    <LabelList dataKey="allocatedLitres" position="right" formatter={(value: number) => formatNumber(value)} style={{ fontSize: '11px', fill: '#4b5563' }} dx={5} />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       
-      {/* 5. "Daisy Recommends" Insight Cards */}
-      <div className="p-6">
-        <h3 className="text-base font-medium text-gray-800 mb-4">Daisy AI Recommendations</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {companyData.aiRecommendations.map((rec) => (
-            <div key={rec.id} className="bg-white rounded-lg border border-blue-100 overflow-hidden">
-              <div className="bg-blue-50 px-4 py-3 border-b border-blue-100 flex items-center">
-                {rec.icon === 'trending-up' && (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd" />
-                  </svg>
+      {/* 4. Plant Efficiency Section (only show for 'All Factories' view) */}
+      {selectedFactory === 'All Factories' && (
+        <div className="p-6 border-b border-gray-100">
+          <h3 className="text-base font-medium text-gray-800 mb-4">Plant Efficiency Across All Factories</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {companyData.plantCapacity.map((plant, index) => (
+              <div key={index} 
+                  className={`bg-gray-50 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-150 ${expandedPlant === plant.factory ? 'shadow-md' : ''}`}
+                  onClick={() => togglePlantDetails(plant.factory)}>
+                <div className="flex items-center mb-3">
+                  <div className="flex-1">
+                    <h4 className="text-sm font-medium text-gray-800">{plant.factory}</h4>
+                  </div>
+                  <div className={`text-lg font-bold rounded-full px-3 py-1 ${
+                    plant.usedCapacity / plant.totalCapacity > 0.80 
+                    ? "bg-green-100 text-green-700"
+                    : plant.usedCapacity / plant.totalCapacity > 0.55
+                    ? "bg-yellow-100 text-yellow-700" 
+                    : "bg-red-100 text-red-700"
+                  }`}>
+                    {Math.round(plant.usedCapacity / plant.totalCapacity * 100)}%
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>Plant Efficiency Rating</span>
+                  <span>
+                    {expandedPlant === plant.factory ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </span>
+                </div>
+                
+                {expandedPlant === plant.factory && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <div className="text-xs font-medium text-gray-600 mb-2">Products in this plant:</div>
+                    <ul className="space-y-2">
+                      {plant.products.map((product, pIndex) => (
+                        <li key={pIndex} className="text-sm bg-white p-2 rounded border border-gray-100">
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="font-medium text-gray-700">{product.product}</span>
+                            <span className="text-gray-600">{formatNumber(product.volume)} litres</span>
+                          </div>
+                          <div className="text-xs text-gray-500 flex items-center">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-1"></div>
+                            {(product.volume / plant.totalCapacity * 100).toFixed(1)}% of plant capacity
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="text-xs text-gray-500 mt-3 pt-2 border-t border-gray-200">
+                      Total Capacity: {formatNumber(plant.totalCapacity)} litres
+                    </div>
+                  </div>
                 )}
-                {rec.icon === 'alert-triangle' && (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
+                
+                {expandedPlant !== plant.factory && (
+                  <div className="mt-2 text-xs text-blue-500 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                    </svg>
+                    Click for product details
+                  </div>
                 )}
-                {rec.icon === 'pie-chart' && (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-                  </svg>
-                )}
-                <h4 className="text-sm font-medium text-gray-800">{rec.title}</h4>
               </div>
-              <div className="p-4">
-                <p className="text-sm text-gray-600">{rec.description}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      )}
+      
+      {/* 5. Customer Contracts Section */}
+      <div className="p-6 border-b border-gray-100">
+        <h3 className="text-base font-medium text-gray-800 mb-4">Customer Contracts</h3>
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr className="bg-gray-50">
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Volume</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Margin (%)</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {companyData.customerContracts.map((contract, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{contract.customer}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{contract.product}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatNumber(contract.volume)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{contract.marginPercent}%</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`px-2 py-1 text-xs rounded-full ${contract.statusColor}`}>
+                    {contract.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

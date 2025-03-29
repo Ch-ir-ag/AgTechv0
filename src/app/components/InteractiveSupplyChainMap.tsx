@@ -138,7 +138,7 @@ const kerryClickableAreas = [
   {
     id: 'cork',
     shape: 'rect' as const,
-    coords: [200, 350, 270, 410],
+    coords: [220, 300, 290, 360],
     name: 'Cork'
   },
   {
@@ -150,7 +150,7 @@ const kerryClickableAreas = [
   {
     id: 'clare',
     shape: 'rect' as const,
-    coords: [130, 230, 190, 280],
+    coords: [200, 120, 260, 170],
     name: 'Clare'
   }
 ];

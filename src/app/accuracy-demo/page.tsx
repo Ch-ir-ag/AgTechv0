@@ -101,39 +101,39 @@ const defaultPredictions = [
 const predefinedQuestions = [
   {
     id: 1,
-    question: "What would happen to milk production if we had a 2-week period of extreme heat (35°C)?",
-    answer: "High temperatures cause heat stress in cows, reducing their feed intake and milk production.",
-    percentageChange: -0.12, // -12% change
+    question: "How would an extended period of heavy rainfall (>150mm in a month) impact milk production in Ireland?",
+    answer: "Excessive rainfall in Ireland can lead to waterlogged pastures, reducing grass quality and limiting grazing time for cows, negatively affecting milk production.",
+    percentageChange: -0.08, // -8% change
   },
   {
     id: 2,
-    question: "How would a 20% increase in high-quality forage affect milk yield?",
-    answer: "Increasing high-quality forage improves cow nutrition and digestibility, boosting milk production significantly.",
-    percentageChange: 0.15, // +15% change
+    question: "What impact would an unusually mild winter (average 8-10°C) have on early spring milk yields in Ireland?",
+    answer: "Milder Irish winters promote earlier grass growth and better cow comfort, resulting in improved early spring milk yields compared to normal seasonal patterns.",
+    percentageChange: 0.07, // +7% change
   },
   {
     id: 3,
-    question: "What if we improved cow comfort by installing new ventilation systems?",
-    answer: "Better ventilation reduces heat stress and improves cow comfort, leading to higher milk yields.",
-    percentageChange: 0.08, // +8% change
+    question: "How would a summer drought (less than 30mm rainfall over 6 weeks) affect milk production in Ireland?",
+    answer: "Summer droughts in Ireland significantly reduce grass growth, forcing farmers to use supplementary feed and limiting milk production during what should be peak season.",
+    percentageChange: -0.15, // -15% change
   },
   {
     id: 4,
-    question: "How would a reduction in milking frequency from 3x to 2x daily affect production?",
-    answer: "Reducing milking frequency decreases udder stimulation and milk removal, lowering overall production.",
-    percentageChange: -0.13, // -13% change
+    question: "What if we experienced a spring with higher-than-average sunshine hours across the Irish midlands?",
+    answer: "Increased sunshine in spring accelerates grass growth in Ireland's midlands, providing better quality forage and boosting milk production during the critical early lactation period.",
+    percentageChange: 0.11, // +11% change
   },
   {
     id: 5,
-    question: "What impact would adding probiotics to feed have on milk yield?",
-    answer: "Probiotics improve rumen function and digestive health, moderately increasing milk production.",
-    percentageChange: 0.05, // +5% change
+    question: "How would an extended period of Atlantic storms in autumn impact Irish dairy production?",
+    answer: "Autumn Atlantic storms cause housing cattle earlier than planned, reducing grazing days and increasing costs, while wet conditions stress cows and reduce milk output.",
+    percentageChange: -0.10, // -10% change
   },
   {
     id: 6,
-    question: "How would a severe drought affecting water availability impact milk production?",
-    answer: "Limited water intake significantly reduces milk production as milk is approximately 87% water.",
-    percentageChange: -0.18, // -18% change
+    question: "What if we had a particularly cold and frosty Irish spring (multiple nights below 0°C in April)?",
+    answer: "Late frosts damage emerging pasture growth in Ireland, delaying the spring flush of grass and forcing continued reliance on stored feeds, negatively affecting milk yields.",
+    percentageChange: -0.12, // -12% change
   }
 ];
 

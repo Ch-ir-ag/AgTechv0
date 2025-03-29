@@ -3,6 +3,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import ProductAllocationRecommendations from './ProductAllocationRecommendations';
+import ProductAllocationChatbot from './ProductAllocationChatbot';
 
 export default function ProductAllocationPage({ companyName }) {
   return (
@@ -21,6 +22,13 @@ export default function ProductAllocationPage({ companyName }) {
           <div className="space-y-8">
             {/* Product Allocation Recommendations Section */}
             <ProductAllocationRecommendations />
+            
+            {/* Chatbot Section */}
+            <div className="mb-0">
+              <section id="allocation-chatbot" className="h-full">
+                <ProductAllocationChatbot companyName={companyName} />
+              </section>
+            </div>
           </div>
         </div>
       </main>

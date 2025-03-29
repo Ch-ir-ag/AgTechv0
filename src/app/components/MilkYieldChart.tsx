@@ -257,11 +257,11 @@ export default function MilkYieldChart() {
       case 'milk':
         return [0, 'auto' as const];
       case 'fat':
-        return [3.0, 6.0];
+        return [0, 6.0];
       case 'protein':
-        return [3.0, 4.2];
+        return [0, 4.2];
       case 'lactose':
-        return [4.0, 5.5];
+        return [0, 5.5];
       default:
         return [0, 'auto' as const];
     }

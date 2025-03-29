@@ -219,8 +219,11 @@ export default function MilkYieldChart() {
       if (value >= 1000) {
         return `${(value / 1000).toFixed(0)}K`;
       }
+      return value.toString();
+    } else {
+      // For fat, protein, and lactose percentage values, use appropriate precision
+      return value.toFixed(1);
     }
-    return value.toString();
   };
 
   const getYAxisLabel = () => {
@@ -245,6 +248,22 @@ export default function MilkYieldChart() {
         return `Monthly ${metricName} Comparison`;
       case 'yearly':
         return `Yearly ${metricName} Comparison`;
+    }
+  };
+
+  // Get Y-axis domain based on metric type
+  const getYAxisDomain = (): [number, number | 'auto'] => {
+    switch (metricType) {
+      case 'milk':
+        return [0, 'auto' as const];
+      case 'fat':
+        return [3.0, 6.0];
+      case 'protein':
+        return [3.0, 4.2];
+      case 'lactose':
+        return [4.0, 5.5];
+      default:
+        return [0, 'auto' as const];
     }
   };
 
@@ -378,18 +397,18 @@ export default function MilkYieldChart() {
                 height={50}
                 stroke="#d1d5db"
             />
-            <YAxis 
-              tickFormatter={formatYAxisTick}
-                domain={metricType !== 'milk' ? [0, 'dataMax + 1'] : ['dataMin', 'dataMax']}
-                tick={{ fontSize: 12, fill: '#4b5563' }} 
-                tickMargin={10}
-                stroke="#d1d5db"
+            <YAxis
               label={{ 
                 value: getYAxisLabel(), 
                 angle: -90, 
-                position: 'insideLeft',
-                  style: { textAnchor: 'middle', fontSize: '80%', fill: '#4b5563', fontWeight: 500 }
+                position: 'insideLeft', 
+                style: { textAnchor: 'middle', fontSize: '80%', fill: '#4b5563', fontWeight: 500 }
               }}
+              tickFormatter={formatYAxisTick}
+              domain={getYAxisDomain()}
+              tick={{ fontSize: 12, fill: '#4b5563' }} 
+              tickMargin={10}
+              stroke="#d1d5db"
             />
             <Tooltip content={<CustomTooltip metricType={metricType} />} />
               <Legend 

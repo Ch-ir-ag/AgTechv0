@@ -86,6 +86,28 @@ export const milkYieldData = {
 
 // Sample fat percentage data for Lakeland Dairies
 export const fatPercentageData = {
+  weekly: {
+    2025: [
+      { period: 'Mar 15-21', thisYear: 4.75, comparisonYear: 4.45, confidenceLevel: 0.14 },
+      { period: 'Mar 22-28', thisYear: 4.68, comparisonYear: 4.40, confidenceLevel: 0.14 },
+      { period: 'Mar 29-Apr 4', thisYear: 4.60, comparisonYear: 4.35, confidenceLevel: 0.13 },
+      { period: 'Apr 5-11', thisYear: 4.52, comparisonYear: 4.22, confidenceLevel: 0.13 },
+      { period: 'Apr 12-18', thisYear: 4.48, comparisonYear: 4.18, confidenceLevel: 0.13 },
+      { period: 'Apr 19-25', thisYear: 4.43, comparisonYear: 4.15, confidenceLevel: 0.13 },
+      { period: 'Apr 26-May 2', thisYear: 4.38, comparisonYear: 4.08, confidenceLevel: 0.13 },
+      { period: 'May 3-9', thisYear: 4.30, comparisonYear: 4.00, confidenceLevel: 0.12 },
+    ],
+    2024: [
+      { period: 'Mar 15-21', thisYear: 4.45, comparisonYear: 4.38, confidenceLevel: 0.13 },
+      { period: 'Mar 22-28', thisYear: 4.40, comparisonYear: 4.35, confidenceLevel: 0.13 },
+      { period: 'Mar 29-Apr 4', thisYear: 4.35, comparisonYear: 4.30, confidenceLevel: 0.13 },
+      { period: 'Apr 5-11', thisYear: 4.22, comparisonYear: 4.17, confidenceLevel: 0.12 },
+      { period: 'Apr 12-18', thisYear: 4.18, comparisonYear: 4.13, confidenceLevel: 0.12 },
+      { period: 'Apr 19-25', thisYear: 4.15, comparisonYear: 4.10, confidenceLevel: 0.12 },
+      { period: 'Apr 26-May 2', thisYear: 4.08, comparisonYear: 4.03, confidenceLevel: 0.12 },
+      { period: 'May 3-9', thisYear: 4.00, comparisonYear: 3.95, confidenceLevel: 0.12 },
+    ],
+  },
   monthly: {
     2025: [
       { period: 'Jan 2025', thisYear: 5.35, comparisonYear: 4.98, confidenceLevel: 0.15 },
@@ -108,10 +130,43 @@ export const fatPercentageData = {
       { period: 'Aug 2024', thisYear: 4.35, comparisonYear: 4.30, confidenceLevel: 0.13 },
     ],
   },
+  yearly: {
+    2025: [
+      { period: '2025', thisYear: 4.65, comparisonYear: 4.34, confidenceLevel: 0.13 },
+    ],
+    2024: [
+      { period: '2024', thisYear: 4.34, comparisonYear: 4.29, confidenceLevel: 0.13 },
+    ],
+    2023: [
+      { period: '2023', thisYear: 4.29, comparisonYear: 4.24, confidenceLevel: 0.13 },
+    ],
+  },
 };
 
 // Sample protein percentage data for Lakeland Dairies
 export const proteinPercentageData = {
+  weekly: {
+    2025: [
+      { period: 'Mar 15-21', thisYear: 3.50, comparisonYear: 3.30, confidenceLevel: 0.10 },
+      { period: 'Mar 22-28', thisYear: 3.48, comparisonYear: 3.28, confidenceLevel: 0.10 },
+      { period: 'Mar 29-Apr 4', thisYear: 3.46, comparisonYear: 3.26, confidenceLevel: 0.10 },
+      { period: 'Apr 5-11', thisYear: 3.48, comparisonYear: 3.28, confidenceLevel: 0.10 },
+      { period: 'Apr 12-18', thisYear: 3.50, comparisonYear: 3.30, confidenceLevel: 0.10 },
+      { period: 'Apr 19-25', thisYear: 3.52, comparisonYear: 3.32, confidenceLevel: 0.10 },
+      { period: 'Apr 26-May 2', thisYear: 3.55, comparisonYear: 3.35, confidenceLevel: 0.10 },
+      { period: 'May 3-9', thisYear: 3.58, comparisonYear: 3.38, confidenceLevel: 0.10 },
+    ],
+    2024: [
+      { period: 'Mar 15-21', thisYear: 3.30, comparisonYear: 3.25, confidenceLevel: 0.10 },
+      { period: 'Mar 22-28', thisYear: 3.28, comparisonYear: 3.23, confidenceLevel: 0.10 },
+      { period: 'Mar 29-Apr 4', thisYear: 3.26, comparisonYear: 3.21, confidenceLevel: 0.10 },
+      { period: 'Apr 5-11', thisYear: 3.28, comparisonYear: 3.23, confidenceLevel: 0.10 },
+      { period: 'Apr 12-18', thisYear: 3.30, comparisonYear: 3.25, confidenceLevel: 0.10 },
+      { period: 'Apr 19-25', thisYear: 3.32, comparisonYear: 3.27, confidenceLevel: 0.10 },
+      { period: 'Apr 26-May 2', thisYear: 3.35, comparisonYear: 3.30, confidenceLevel: 0.10 },
+      { period: 'May 3-9', thisYear: 3.38, comparisonYear: 3.33, confidenceLevel: 0.10 },
+    ],
+  },
   monthly: {
     2025: [
       { period: 'Jan 2025', thisYear: 3.95, comparisonYear: 3.75, confidenceLevel: 0.11 },
@@ -134,10 +189,43 @@ export const proteinPercentageData = {
       { period: 'Aug 2024', thisYear: 3.70, comparisonYear: 3.65, confidenceLevel: 0.11 },
     ],
   },
+  yearly: {
+    2025: [
+      { period: '2025', thisYear: 3.72, comparisonYear: 3.52, confidenceLevel: 0.11 },
+    ],
+    2024: [
+      { period: '2024', thisYear: 3.52, comparisonYear: 3.47, confidenceLevel: 0.10 },
+    ],
+    2023: [
+      { period: '2023', thisYear: 3.47, comparisonYear: 3.42, confidenceLevel: 0.10 },
+    ],
+  },
 };
 
 // Sample lactose percentage data for Lakeland Dairies
 export const lactosePercentageData = {
+  weekly: {
+    2025: [
+      { period: 'Mar 15-21', thisYear: 4.85, comparisonYear: 4.73, confidenceLevel: 0.14 },
+      { period: 'Mar 22-28', thisYear: 4.88, comparisonYear: 4.74, confidenceLevel: 0.14 },
+      { period: 'Mar 29-Apr 4', thisYear: 4.92, comparisonYear: 4.77, confidenceLevel: 0.14 },
+      { period: 'Apr 5-11', thisYear: 4.95, comparisonYear: 4.80, confidenceLevel: 0.14 },
+      { period: 'Apr 12-18', thisYear: 4.98, comparisonYear: 4.83, confidenceLevel: 0.15 },
+      { period: 'Apr 19-25', thisYear: 5.00, comparisonYear: 4.85, confidenceLevel: 0.15 },
+      { period: 'Apr 26-May 2', thisYear: 5.00, comparisonYear: 4.85, confidenceLevel: 0.15 },
+      { period: 'May 3-9', thisYear: 4.98, comparisonYear: 4.83, confidenceLevel: 0.15 },
+    ],
+    2024: [
+      { period: 'Mar 15-21', thisYear: 4.73, comparisonYear: 4.68, confidenceLevel: 0.14 },
+      { period: 'Mar 22-28', thisYear: 4.74, comparisonYear: 4.69, confidenceLevel: 0.14 },
+      { period: 'Mar 29-Apr 4', thisYear: 4.77, comparisonYear: 4.72, confidenceLevel: 0.14 },
+      { period: 'Apr 5-11', thisYear: 4.80, comparisonYear: 4.75, confidenceLevel: 0.14 },
+      { period: 'Apr 12-18', thisYear: 4.83, comparisonYear: 4.78, confidenceLevel: 0.14 },
+      { period: 'Apr 19-25', thisYear: 4.85, comparisonYear: 4.80, confidenceLevel: 0.14 },
+      { period: 'Apr 26-May 2', thisYear: 4.85, comparisonYear: 4.80, confidenceLevel: 0.14 },
+      { period: 'May 3-9', thisYear: 4.83, comparisonYear: 4.78, confidenceLevel: 0.14 },
+    ],
+  },
   monthly: {
     2025: [
       { period: 'Jan 2025', thisYear: 4.7, comparisonYear: 4.55, confidenceLevel: 0.14 },
@@ -158,6 +246,17 @@ export const lactosePercentageData = {
       { period: 'Jun 2024', thisYear: 4.75, comparisonYear: 4.70, confidenceLevel: 0.14 },
       { period: 'Jul 2024', thisYear: 4.65, comparisonYear: 4.60, confidenceLevel: 0.14 },
       { period: 'Aug 2024', thisYear: 4.55, comparisonYear: 4.50, confidenceLevel: 0.14 },
+    ],
+  },
+  yearly: {
+    2025: [
+      { period: '2025', thisYear: 4.84, comparisonYear: 4.69, confidenceLevel: 0.14 },
+    ],
+    2024: [
+      { period: '2024', thisYear: 4.69, comparisonYear: 4.64, confidenceLevel: 0.14 },
+    ],
+    2023: [
+      { period: '2023', thisYear: 4.64, comparisonYear: 4.59, confidenceLevel: 0.14 },
     ],
   },
 }; 

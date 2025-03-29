@@ -139,7 +139,7 @@ export default function Chatbot({ companyName }: ChatbotProps) {
     
     // If we found a keyword match
     if (bestMatch && maxKeywords > 0) {
-      return bestMatch.answer.replace(/{{companyName}}/g, companyName);
+      return (bestMatch as PredefinedQA).answer.replace(/{{companyName}}/g, companyName);
     }
     
     // Fallback response if no good match

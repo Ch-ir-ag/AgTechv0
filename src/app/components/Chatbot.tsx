@@ -13,7 +13,6 @@ interface Message {
   text: string;
   sender: 'user' | 'bot';
   timestamp?: string;
-  isTyping?: boolean;
 }
 
 // Define predefined Q&A pairs
@@ -88,7 +87,6 @@ export default function Chatbot({ companyName }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [currentSuggestions, setCurrentSuggestions] = useState<string[]>(suggestedQuestions);
-  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -146,49 +144,18 @@ export default function Chatbot({ companyName }: ChatbotProps) {
     return `I've analyzed the ${companyName} data related to your question. Based on recent trends and metrics, we're seeing steady performance in milk production levels, with quality indicators remaining stable. Would you like more specific information about yield forecasts, quality metrics, or regional variations?`;
   };
 
-  // Simulate typing effect for bot messages
-  const simulateTyping = (text: string, messageId: number, delay: number = 30) => {
-    let displayText = '';
-    let charIndex = 0;
-    
-    // Add a typing indicator message
+  // Replace the typing simulation with immediate display of the message
+  const displayMessage = (text: string, messageId: number) => {
+    // Add bot message immediately without typing animation
     setMessages(prev => [
       ...prev, 
       { 
         id: messageId, 
-        text: '...', 
+        text: text, 
         sender: 'bot', 
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isTyping: true 
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
-    
-    setIsTyping(true);
-    
-    // Type out the message character by character
-    const typingInterval = setInterval(() => {
-      displayText += text.charAt(charIndex);
-      charIndex++;
-      
-      // Update the message with current text
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === messageId 
-            ? { 
-                ...msg, 
-                text: displayText,
-                isTyping: charIndex < text.length
-              } 
-            : msg
-        )
-      );
-      
-      // When finished typing
-      if (charIndex >= text.length) {
-        clearInterval(typingInterval);
-        setIsTyping(false);
-      }
-    }, delay);
   };
 
   // Handle send message
@@ -213,18 +180,16 @@ export default function Chatbot({ companyName }: ChatbotProps) {
     // Get the bot response
     const botResponse = findBestAnswer(messageText);
     
-    // Show the bot response with typing effect
-    setTimeout(() => {
-      simulateTyping(botResponse, messages.length + 2);
-      
-      // Generate new suggestions based on current conversation
-      const newSuggestions = suggestedQuestions
-        .filter(q => q !== messageText) // Remove the question that was just asked
-        .sort(() => 0.5 - Math.random()) // Shuffle the remaining questions
-        .slice(0, 3); // Take the first 3
-      
-      setCurrentSuggestions(newSuggestions);
-    }, 500);
+    // Show the bot response immediately without typing effect
+    displayMessage(botResponse, messages.length + 2);
+    
+    // Generate new suggestions based on current conversation
+    const newSuggestions = suggestedQuestions
+      .filter(q => q !== messageText) // Remove the question that was just asked
+      .sort(() => 0.5 - Math.random()) // Shuffle the remaining questions
+      .slice(0, 3); // Take the first 3
+    
+    setCurrentSuggestions(newSuggestions);
   };
 
   // Handle clicking a suggested question
@@ -258,9 +223,7 @@ export default function Chatbot({ companyName }: ChatbotProps) {
               className={`max-w-[80%] rounded-lg px-4 py-2 ${
                 message.sender === 'user'
                   ? 'bg-blue-50 text-gray-800 border border-blue-100'
-                  : message.isTyping
-                    ? 'bg-gray-50 text-gray-800 border border-gray-100 animate-pulse'
-                    : 'bg-gray-50 text-gray-800 border border-gray-100'
+                  : 'bg-gray-50 text-gray-800 border border-gray-100'
               }`}
             >
               <div className="text-sm">{message.text}</div>
@@ -274,22 +237,20 @@ export default function Chatbot({ companyName }: ChatbotProps) {
       </div>
       
       {/* Suggested questions */}
-      {!isTyping && (
-        <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
-          <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
-          <div className="flex flex-wrap gap-2">
-            {currentSuggestions.map((question, index) => (
-              <button
-                key={index}
-                onClick={() => handleSuggestedQuestion(question)}
-                className="text-xs bg-white hover:bg-blue-50 text-gray-700 py-1 px-2 rounded-full border border-gray-200 transition-colors"
-              >
-                {question}
-              </button>
-            ))}
-          </div>
+      <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
+        <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
+        <div className="flex flex-wrap gap-2">
+          {currentSuggestions.map((question, index) => (
+            <button
+              key={index}
+              onClick={() => handleSuggestedQuestion(question)}
+              className="text-xs bg-white hover:bg-blue-50 text-gray-700 py-1 px-2 rounded-full border border-gray-200 transition-colors"
+            >
+              {question}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
       
       {/* Message input */}
       <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200">
@@ -299,29 +260,18 @@ export default function Chatbot({ companyName }: ChatbotProps) {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your question here..."
-            disabled={isTyping}
-            className={`flex-1 px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm ${isTyping ? 'bg-gray-50' : 'bg-white'}`}
+            className="flex-1 px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
           />
           <button
             type="submit"
-            disabled={isTyping || !newMessage.trim()}
+            disabled={!newMessage.trim()}
             className={`px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm font-medium ${
-              isTyping || !newMessage.trim() 
+              !newMessage.trim() 
                 ? 'bg-blue-300 cursor-not-allowed' 
                 : 'bg-blue-500 hover:bg-blue-600'
             }`}
           >
-            {isTyping ? (
-              <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Processing
-              </span>
-            ) : (
-              'Send'
-            )}
+            Send
           </button>
         </div>
         <div className="mt-2 text-xs text-gray-500">

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { 
   PieChart, Pie, Cell, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, LabelList 
+  ResponsiveContainer, LabelList, Legend 
 } from 'recharts';
 import { useParams } from 'next/navigation';
 
@@ -387,8 +387,29 @@ export default function ProductAllocationRecommendations() {
     return num.toString();
   };
   
-  // COLORS for charts
-  const COLORS = ['#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f97316', '#f43f5e'];
+  // COLORS for charts - expanded range to prevent repetition
+  const COLORS = [
+    '#60a5fa', // blue
+    '#34d399', // green
+    '#f59e0b', // amber
+    '#a78bfa', // purple
+    '#f97316', // orange
+    '#f43f5e', // pink
+    '#06b6d4', // cyan
+    '#84cc16', // lime
+    '#8b5cf6', // violet
+    '#ec4899', // pink
+    '#14b8a6', // teal
+    '#eab308', // yellow
+    '#3b82f6', // blue
+    '#22c55e', // green
+    '#ef4444', // red
+    '#d946ef', // fuchsia
+    '#0ea5e9', // sky blue
+    '#64748b', // slate
+    '#6366f1', // indigo
+    '#a855f7'  // purple
+  ];
   
   // State for expanded plant details
   const [expandedPlant, setExpandedPlant] = useState<string | null>(null);
@@ -545,33 +566,58 @@ export default function ProductAllocationRecommendations() {
           <h3 className="text-base font-medium text-gray-800 mb-2">
             {selectedFactory === 'All Factories' ? 'Allocation by Product' : `Product Mix at ${selectedFactory}`}
           </h3>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={true}
-                  outerRadius={70}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ name, percent }: { name: string, percent: number }) => {
-                    // Truncate product name if too long
-                    const displayName = name.length > 12 ? name.substring(0, 10) + '...' : name;
-                    return `${displayName} ${(percent * 100).toFixed(0)}%`;
-                  }}
-                >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value: number) => formatNumber(value)} 
-                  contentStyle={{ backgroundColor: 'white', borderRadius: '4px', border: 'none', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }} 
-                />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="h-[350px] flex flex-col">
+            <div className="flex-1">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={false}
+                    outerRadius={100}
+                    innerRadius={30}
+                    fill="#8884d8"
+                    dataKey="value"
+                    paddingAngle={1}
+                  >
+                    {pieChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value: number, name: string) => [formatNumber(value), name]} 
+                    contentStyle={{ backgroundColor: 'white', borderRadius: '4px', border: 'none', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            
+            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-x-1 gap-y-2 mb-12">
+              {pieChartData.map((entry, index) => (
+                <div key={index} className="flex items-center">
+                  <div 
+                    className="w-3 h-3 rounded-full mr-1 flex-shrink-0" 
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }} 
+                  />
+                  <span className="text-xs font-medium truncate">
+                    {(() => {
+                      // Use shorter abbreviations for milk powders
+                      const name = entry.name;
+                      if (name.includes('Whole Milk Powder')) return 'WMP';
+                      if (name.includes('WMP')) return 'WMP';
+                      if (name.includes('Skim Milk Powder')) return 'SMP';
+                      if (name.includes('SMP')) return 'SMP';
+                      // For other products, keep the original simplification
+                      return name.includes('(') ? name.split('(')[0].trim() : name;
+                    })()}
+                    {' '}
+                    {((entry.value / totalAllocatedVolume) * 100).toFixed(0)}%
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         

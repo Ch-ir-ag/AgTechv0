@@ -22,4 +22,67 @@
 /* Transform for questions */
 .transform {
   transform: translateY(-10px);
+}
+
+/* Styling for the chatbot message container */
+.message-container {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Transition for appearing messages */
+.message-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.message-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.message-exit {
+  opacity: 1;
+}
+
+.message-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Dark mode transition */
+.dark-mode-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Smooth scrolling for messages */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Typing animation for bot messages */
+.typing-animation:after {
+  content: '';
+  animation: typing 1.5s infinite;
+}
+
+@keyframes typing {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+/* Message bubble hover effect */
+.message-bubble {
+  transition: transform 0.2s ease;
+}
+
+.message-bubble:hover {
+  transform: translateY(-2px);
+}
+
+/* Input focus effect */
+.input-focus-effect:focus-within {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 } 

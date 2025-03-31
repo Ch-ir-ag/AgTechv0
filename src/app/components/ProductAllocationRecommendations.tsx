@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { 
   PieChart, Pie, Cell, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, LabelList, Legend 
+  ResponsiveContainer, LabelList 
 } from 'recharts';
 import { useParams } from 'next/navigation';
 

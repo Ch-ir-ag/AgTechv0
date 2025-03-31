@@ -64,6 +64,10 @@ export default function Navbar() {
               href={`/${currentCompany}/product-allocation`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               scroll={true}
+              onClick={() => {
+                // Force scroll to top when clicking product allocation link
+                setTimeout(() => window.scrollTo(0, 0), 0);
+              }}
             >
               Product Allocation
             </Link>
@@ -111,7 +115,7 @@ export default function Navbar() {
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                // Force scroll to top when clicking dashboard link
+                // Force scroll to top when clicking product allocation link
                 setTimeout(() => window.scrollTo(0, 0), 0);
               }}
               scroll={true}

@@ -1,11 +1,52 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from './Navbar';
 import ProductAllocationRecommendations from './ProductAllocationRecommendations';
 import ProductAllocationChatbot from './ProductAllocationChatbot';
 
 export default function ProductAllocationPage({ companyName }) {
+  
+  // Force scroll to top when the component mounts
+  useEffect(() => {
+    // Immediately scroll to top
+    window.scrollTo(0, 0);
+    
+    // Temporarily disable smooth scrolling
+    document.documentElement.style.scrollBehavior = 'auto';
+    
+    // Create a function that forces scroll to top
+    const forceScrollTop = () => {
+      window.scrollTo(0, 0);
+    };
+    
+    // Apply the scroll multiple times to overcome any delayed content loading
+    forceScrollTop();
+    const t1 = setTimeout(forceScrollTop, 50);
+    const t2 = setTimeout(forceScrollTop, 150);
+    const t3 = setTimeout(forceScrollTop, 300);
+    
+    // Prevent any automatic scrolling to anchors/hash links
+    const preventHashScroll = () => {
+      if (window.location.hash) {
+        window.scrollTo(0, 0);
+      }
+    };
+    
+    // Run once and add listener
+    preventHashScroll();
+    window.addEventListener('hashchange', preventHashScroll);
+    
+    // Clean up
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      window.removeEventListener('hashchange', preventHashScroll);
+      document.documentElement.style.scrollBehavior = '';
+    };
+  }, []);
+  
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
       <Navbar />
@@ -23,9 +64,9 @@ export default function ProductAllocationPage({ companyName }) {
             {/* Product Allocation Recommendations Section */}
             <ProductAllocationRecommendations />
             
-            {/* Chatbot Section */}
+            {/* Chatbot Section - removed ID to prevent auto-scroll */}
             <div className="mb-0">
-              <section id="allocation-chatbot" className="h-full">
+              <section className="h-full">
                 <ProductAllocationChatbot companyName={companyName} />
               </section>
             </div>

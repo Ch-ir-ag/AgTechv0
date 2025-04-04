@@ -232,7 +232,7 @@ const lakelandDairiesData = {
   plantCapacity: [
     { 
       factory: 'Bailieborough', 
-      totalCapacity: 42000000, 
+      totalCapacity: 64300000, 
       usedCapacity: 54000000,
       products: [
         { product: 'SMP (Skim Milk Powder)', volume: 27000000 },

@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useEffect, useLayoutEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Navbar from "./Navbar";
 import MilkYieldChart from "./MilkYieldChart";
 import YearlyYieldChart from "./YearlyYieldChart";
 import Chatbot from "./Chatbot";
 import InteractiveSupplyChainMap from "./InteractiveSupplyChainMap";
+import { useAuth } from '../contexts/AuthContext';
 
 // Create a safe useLayoutEffect that falls back to useEffect for SSR
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -15,6 +17,18 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({ companyName }: DashboardClientProps) {
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
+  
+  // Check if user is authenticated for Lakeland Dairies and redirect if not
+  useEffect(() => {
+    // Only perform auth check for lakeland-dairies to ensure backward compatibility
+    const companySlug = companyName.toLowerCase().replace(/\s+/g, '-');
+    if (companySlug === 'lakeland-dairies' && (!isAuthenticated || user?.company !== 'lakeland-dairies')) {
+      router.push('/');
+    }
+  }, [isAuthenticated, user, companyName, router]);
+
   // Immediately set scroll position to top as soon as possible
   if (typeof window !== 'undefined') {
     window.scrollTo(0, 0);

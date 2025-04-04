@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Logo from './Logo';
 import { companies } from '../data/companies';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout, isAuthenticated } = useAuth();
   
   // Check if we're on the accuracy-demo page
   const isAccuracyDemo = pathname === '/accuracy-demo';
@@ -35,6 +38,11 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -48,7 +56,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation - Hidden on accuracy-demo page */}
         {!isAccuracyDemo && (
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex space-x-6 items-center">
             <Link 
               href={`/${currentCompany}/dashboard`} 
               className="text-gray-700 hover:text-blue-500 text-sm font-medium"
@@ -71,6 +79,16 @@ export default function Navbar() {
             >
               Product Allocation
             </Link>
+            
+            {/* Logout Button (only if authenticated) */}
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              >
+                Logout
+              </button>
+            )}
           </div>
         )}
 
@@ -122,6 +140,19 @@ export default function Navbar() {
             >
               Product Allocation
             </Link>
+            
+            {/* Logout Button (only if authenticated) */}
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleLogout();
+                }}
+                className="text-gray-700 hover:text-blue-500 text-sm font-medium text-left"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       )}

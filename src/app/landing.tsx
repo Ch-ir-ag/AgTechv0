@@ -1,41 +1,64 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Logo from './components/Logo';
+import { useAuth } from './contexts/AuthContext';
 
 // Define company interface
 interface Company {
   id: string;
   name: string;
+  requiresAuth?: boolean;
 }
 
 export default function Landing() {
   const router = useRouter();
-  const [selectedCompany, setSelectedCompany] = useState('');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { user, login, logout, isAuthenticated } = useAuth();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
 
-  const companies: Company[] = [
-    { id: 'lakeland-dairies', name: 'Lakeland Dairies' },
-    { id: 'kerry-dairy', name: 'Kerry Dairy' }
-  ];
+  // Auto-redirect authenticated Lakeland users to forecasting
+  useEffect(() => {
+    if (isAuthenticated && user?.company === 'lakeland-dairies') {
+      router.push(`/${user.company}/dashboard`);
+    }
+  }, [isAuthenticated, user, router]);
 
-  const handleCompanySelect = (companyId: string) => {
-    setSelectedCompany(companyId);
-    setIsDropdownOpen(false);
-  };
+  // Handle login form submission
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
 
-  const goToDashboard = () => {
-    if (selectedCompany) {
-      // Navigate to dashboard and ensure it starts at the top
-      router.push(`/${selectedCompany}/dashboard`, { scroll: true });
+    const success = login(username, password);
+    if (success) {
+      setUsername('');
+      setPassword('');
+      // Directly navigate to forecasting page
+      router.push(`/${user?.company}/dashboard`);
     } else {
-      // Show dropdown if no company is selected
-      setIsDropdownOpen(true);
+      setLoginError('Invalid username or password');
     }
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
+  const goToKildangan = () => {
+    router.push('/accuracy-demo');
+  };
+
+  // Skip rendering the authenticated welcome page - render only the login page
+  // for non-authenticated users
+  if (isAuthenticated) {
+    // Return empty fragment while redirecting
+    return <></>;
+  }
+
+  // Standard landing page with direct login form
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Navigation */}
@@ -49,7 +72,7 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section with Login */}
       <div className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="relative z-10 pb-8 bg-transparent sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
@@ -59,61 +82,67 @@ export default function Landing() {
                   <span className="block">Improving</span>
                   <span className="block text-blue-600">Dairy Production</span>
                 </h1>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 ">
+                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                   Daisy AI delivers highly accurate milk yield predictions and smart product allocation, empowering dairy co-operatives to plan production, optimise supply chains, and secure international contracts with confidence.
                 </p>
-                <div className="mt-5 sm:mt-8 flex flex-col items-center sm:items-center lg:items-start">
-                  {/* Container to ensure same width for dropdown and button row */}
-                  <div className="w-full max-w-md">
-                    {/* Dropdown */}
-                    <div className="w-full mb-3">
-                      <button
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="w-full flex items-center justify-between px-8 py-3 border border-gray-200 rounded-md shadow-sm bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 md:py-4 md:text-lg"
-                      >
-                        <span>{selectedCompany ? companies.find(c => c.id === selectedCompany)?.name : 'Select a company'}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-                      
-                      {isDropdownOpen && (
-                        <div className="absolute z-10 mt-1 w-full max-w-md rounded-md bg-white shadow-lg">
-                          <ul className="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                            {companies.map((company) => (
-                              <li
-                                key={company.id}
-                                className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50"
-                                onClick={() => handleCompanySelect(company.id)}
-                              >
-                                {company.name}
-                              </li>
-                            ))}
-                          </ul>
+                
+                {/* Login Form */}
+                <div className="mt-8 sm:mt-12 max-w-md mx-auto lg:mx-0">
+                  <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-lg font-medium text-gray-900 mb-6">Login to access your dashboard</h2>
+                    
+                    <form onSubmit={handleLogin}>
+                      {loginError && (
+                        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded-md text-sm">
+                          {loginError}
                         </div>
                       )}
-                    </div>
-
-                    {/* Buttons in a row */}
-                    <div className="w-full flex">
-                      <div className="flex-1 rounded-md shadow">
+                      
+                      <div className="mb-4">
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                          Username
+                        </label>
+                        <input
+                          type="text"
+                          id="username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="mb-6">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          id="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col space-y-3">
                         <button
-                          onClick={goToDashboard}
-                          className={`w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white ${selectedCompany ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-400'} md:py-4 md:text-lg`}
-                          disabled={!selectedCompany}
+                          type="submit"
+                          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
-                          View Demo
+                          Login
+                        </button>
+                        
+                        <button
+                          type="button"
+                          onClick={goToKildangan}
+                          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                          View Kildangan Demo
                         </button>
                       </div>
-                      <div className="flex-1 ml-3">
-                        <button
-                          onClick={() => router.push('/accuracy-demo')}
-                          className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg"
-                        >
-                          View Kildangan
-                        </button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -214,22 +243,6 @@ export default function Landing() {
             <span className="block">Ready to boost your dairy production?</span>
             <span className="block text-blue-600">Start using Daisy AI today.</span>
           </h2>
-          <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-            <div className="inline-flex rounded-md shadow">
-              <button
-                onClick={() => {
-                  if (selectedCompany) {
-                    router.push(`/${selectedCompany}/dashboard`, { scroll: true });
-                  } else {
-                    setIsDropdownOpen(true);
-                  }
-                }}
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Get started
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 

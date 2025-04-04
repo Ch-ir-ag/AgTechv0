@@ -576,8 +576,8 @@ export default function ProductAllocationRecommendations() {
                     cy="50%"
                     labelLine={false}
                     label={false}
-                    outerRadius={100}
-                    innerRadius={30}
+                    outerRadius={85}
+                    innerRadius={55}
                     fill="#8884d8"
                     dataKey="value"
                     paddingAngle={1}
@@ -627,9 +627,25 @@ export default function ProductAllocationRecommendations() {
             <h3 className="text-base font-medium text-gray-800 mb-2">Allocation by Factory</h3>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
+                <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f0f0f0" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false}
+                    interval={0}
+                    height={30}
+                    tick={{ fontSize: 12 }}
+                    tickFormatter={(value) => {
+                      // Create abbreviations for factory names
+                      if (value === 'Bailieborough') return 'Bailie';
+                      if (value === 'Ballyraghane') return 'Bally';
+                      if (value === 'Newtownards') return 'Newtn';
+                      if (value === 'Killeshandra') return 'Kille';
+                      if (value === 'Artigarvan') return 'Artig';
+                      return value;
+                    }}
+                  />
                   <YAxis tickFormatter={(value: number) => formatNumber(value)} axisLine={false} tickLine={false} />
                   <Tooltip 
                     formatter={(value: number) => formatNumber(value)} 
@@ -653,7 +669,14 @@ export default function ProductAllocationRecommendations() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={marginChartData} layout="vertical" margin={{ top: 10, right: 50, left: 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="0" horizontal={true} vertical={false} stroke="#f0f0f0" />
-                <XAxis type="number" domain={[0, 7]} axisLine={false} tickLine={false} />
+                <XAxis 
+                  type="number" 
+                  domain={[0, 6]} 
+                  ticks={[0, 1, 2, 3, 4, 5, 6]} 
+                  tickFormatter={(value) => `${value}%`}
+                  axisLine={false} 
+                  tickLine={false} 
+                />
                 <YAxis type="category" dataKey="name" width={100} axisLine={false} tickLine={false} />
                 <Tooltip 
                   formatter={(value: number) => `${value}%`} 

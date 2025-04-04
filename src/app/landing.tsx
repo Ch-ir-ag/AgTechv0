@@ -15,7 +15,7 @@ export default function Landing() {
 
   // Auto-redirect authenticated Lakeland users to forecasting
   useEffect(() => {
-    if (isAuthenticated && user?.company === 'lakeland-dairies') {
+    if (isAuthenticated && user?.company) {
       router.push(`/${user.company}/dashboard`);
     }
   }, [isAuthenticated, user, router]);

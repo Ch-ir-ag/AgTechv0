@@ -25,9 +25,12 @@ const AuthContext = createContext<AuthContextType>({
 
 // Auth provider component
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Hard-coded credentials for Lakeland Dairies
+  // Hard-coded credentials
   const LAKELAND_USERNAME = 'lakeland';
-  const LAKELAND_PASSWORD = 'dairy2023';
+  const LAKELAND_PASSWORD = 'ld2025@';
+  
+  const KERRY_USERNAME = 'kerry';
+  const KERRY_PASSWORD = 'ky2025!';
   
   const [user, setUser] = useState<User | null>(null);
 
@@ -48,6 +51,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('daisyUser', JSON.stringify(newUser));
       return true;
     }
+    
+    // Check credentials for Kerry
+    if (username === KERRY_USERNAME && password === KERRY_PASSWORD) {
+      const newUser = { company: 'kerry-dairy', username: 'kerry' };
+      setUser(newUser);
+      localStorage.setItem('daisyUser', JSON.stringify(newUser));
+      return true;
+    }
+    
     return false;
   };
 

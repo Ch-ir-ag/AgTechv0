@@ -8,7 +8,7 @@ import { useAuth } from './contexts/AuthContext';
 
 export default function Landing() {
   const router = useRouter();
-  const { user, login, logout, isAuthenticated } = useAuth();
+  const { user, login, isAuthenticated } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');

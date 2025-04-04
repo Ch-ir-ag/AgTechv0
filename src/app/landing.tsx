@@ -6,13 +6,6 @@ import Image from 'next/image';
 import Logo from './components/Logo';
 import { useAuth } from './contexts/AuthContext';
 
-// Define company interface
-interface Company {
-  id: string;
-  name: string;
-  requiresAuth?: boolean;
-}
-
 export default function Landing() {
   const router = useRouter();
   const { user, login, logout, isAuthenticated } = useAuth();
@@ -41,10 +34,6 @@ export default function Landing() {
     } else {
       setLoginError('Invalid username or password');
     }
-  };
-
-  const handleLogout = () => {
-    logout();
   };
 
   const goToKildangan = () => {

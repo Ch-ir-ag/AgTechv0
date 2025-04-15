@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from "./Navbar";
 import MilkYieldChart from "./MilkYieldChart";
@@ -16,9 +16,80 @@ interface DashboardClientProps {
   companyName: string;
 }
 
+// Define the insight type
+interface Insight {
+  id: string;
+  icon: string;
+  text: string;
+  color: string;
+}
+
 export default function DashboardClient({ companyName }: DashboardClientProps) {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
+  
+  // State for insights carousel - dynamically set based on company
+  const [insights, setInsights] = useState<Insight[]>(() => {
+    // Different insights for each cooperative
+    if (companyName.toLowerCase().includes('kerry')) {
+      return [
+        { id: '1', icon: '🔍', text: 'Milk Yield increased in Listowel processing plant due to implementation of new collection systems', color: 'blue' },
+        { id: '2', icon: '📈', text: 'Production efficiency up 9% in Kerry\'s southwestern collection region', color: 'green' },
+        { id: '3', icon: '⚠️', text: 'Potential supply disruption expected in Kerry County farms due to forecasted storms', color: 'amber' },
+        { id: '4', icon: '🌱', text: 'Kerry\'s carbon offset program reduced emissions by 6.5% across the supply chain', color: 'green' },
+        { id: '5', icon: '🥛', text: 'Kerry Gold butter production increased by 4.2% for export markets', color: 'blue' },
+      ];
+    } else { // Default to Lakeland Dairies
+      return [
+        { id: '1', icon: '🔍', text: 'Milk Yield increased in Bailieborough factory due to heavy rainfall in catchment areas', color: 'blue' },
+        { id: '2', icon: '📈', text: 'Production efficiency up 12% in Lakeland\'s northern region facilities', color: 'green' },
+        { id: '3', icon: '⚠️', text: 'Potential supply shortage expected in Q3 for Killeshandra processing unit', color: 'amber' },
+        { id: '4', icon: '🌱', text: 'Lakeland\'s sustainable practices reducing carbon footprint by 8% year over year', color: 'green' },
+        { id: '5', icon: '🧀', text: 'Lakeland\'s premium cheese program showing 15% growth in European markets', color: 'blue' },
+      ];
+    }
+  });
+  const [currentInsightIndex, setCurrentInsightIndex] = useState(0);
+  const insightSliderRef = useRef<HTMLDivElement>(null);
+  
+  // Function to dismiss an insight
+  const dismissInsight = (insightId: string) => {
+    // Filter out the dismissed insight
+    const updatedInsights = insights.filter(insight => insight.id !== insightId);
+    setInsights(updatedInsights);
+    
+    // Adjust current index if needed
+    if (currentInsightIndex >= updatedInsights.length) {
+      setCurrentInsightIndex(Math.max(0, updatedInsights.length - 1));
+    }
+  };
+  
+  // Function to navigate to previous insight
+  const goToPrevInsight = () => {
+    if (currentInsightIndex > 0) {
+      setCurrentInsightIndex(currentInsightIndex - 1);
+      scrollToInsight(currentInsightIndex - 1);
+    }
+  };
+  
+  // Function to navigate to next insight
+  const goToNextInsight = () => {
+    if (currentInsightIndex < insights.length - 1) {
+      setCurrentInsightIndex(currentInsightIndex + 1);
+      scrollToInsight(currentInsightIndex + 1);
+    }
+  };
+  
+  // Function to scroll to a specific insight
+  const scrollToInsight = (index: number) => {
+    if (insightSliderRef.current) {
+      const slideWidth = insightSliderRef.current.offsetWidth;
+      insightSliderRef.current.scrollTo({
+        left: slideWidth * index,
+        behavior: 'smooth'
+      });
+    }
+  };
   
   // Check if user is authenticated for Lakeland Dairies and redirect if not
   useEffect(() => {
@@ -84,6 +155,100 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
               Monitor your dairy production metrics and get accurate AI-powered predictions for future milk yield
               to help optimize your operations and planning with Daisy AI&apos;s advanced analytics.
             </p>
+          </div>
+
+
+          {/* Insight Bar */}
+          <div className="mb-8">
+            <section id="insights-bar" className="h-full">
+              <div className="relative bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-sm p-2 md:p-3 border border-gray-100">
+                {/* Scroll Arrows - Always visible */}
+                <button 
+                  onClick={goToPrevInsight}
+                  disabled={currentInsightIndex === 0 || insights.length === 0}
+                  className={`absolute left-1 top-1/2 -translate-y-1/2 z-10 bg-white/90 rounded-full p-1.5 shadow-md flex items-center justify-center transition-all ${
+                    currentInsightIndex === 0 || insights.length === 0 ? 'text-gray-300 cursor-not-allowed opacity-50' : 'text-gray-600 hover:bg-blue-50 hover:scale-105'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </button>
+                <button 
+                  onClick={goToNextInsight}
+                  disabled={currentInsightIndex === insights.length - 1 || insights.length === 0}
+                  className={`absolute right-1 top-1/2 -translate-y-1/2 z-10 bg-white/90 rounded-full p-1.5 shadow-md flex items-center justify-center transition-all ${
+                    currentInsightIndex === insights.length - 1 || insights.length === 0 ? 'text-gray-300 cursor-not-allowed opacity-50' : 'text-gray-600 hover:bg-blue-50 hover:scale-105'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                  </svg>
+                </button>
+                
+                {/* Scrollable Content - Modified for single insight per view */}
+                {insights.length > 0 ? (
+                  <div 
+                    ref={insightSliderRef}
+                    className="overflow-x-hidden px-6 md:px-8 scrollbar-hide snap-x snap-mandatory scroll-smooth"
+                  >
+                    <div className="flex w-full">
+                      {/* Map through insights to render each one */}
+                      {insights.map((insight, index) => (
+                        <div key={insight.id} className="w-full flex-shrink-0 snap-center py-2">
+                          <div className="mx-auto max-w-2xl">
+                            <div 
+                              className={`flex items-center justify-between bg-white rounded-xl p-4 shadow-sm group transition-all duration-300 ease-in-out hover:shadow-md`}
+                            >
+                              <div className="flex items-center flex-1 mr-2">
+                                <div className={`flex-shrink-0 w-10 h-10 rounded-full bg-${insight.color}-500 bg-opacity-15 flex items-center justify-center mr-4 ring-2 ring-${insight.color}-500 ring-opacity-30`}>
+                                  <span className={`text-${insight.color}-600 text-xl`}>{insight.icon}</span>
+                                </div>
+                                <span className="text-gray-800 font-medium">{insight.text}</span>
+                              </div>
+                              <button 
+                                onClick={() => dismissInsight(insight.id)}
+                                className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100 p-1 rounded-full"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto mb-2 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p>No new insights available</p>
+                  </div>
+                )}
+                
+                {/* Indicator dots */}
+                {insights.length > 1 && (
+                  <div className="flex justify-center mt-2 space-x-1.5">
+                    {insights.map((insight, index) => (
+                      <button 
+                        key={insight.id}
+                        onClick={() => {
+                          setCurrentInsightIndex(index);
+                          scrollToInsight(index);
+                        }}
+                        className={`h-2 w-2 rounded-full transition-all duration-300 ease-in-out ${
+                          index === currentInsightIndex ? `bg-${insights[currentInsightIndex].color}-500 scale-125` : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        aria-label={`Go to insight ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           </div>
           
           {/* Weekly Milk Yield Comparison */}
@@ -194,6 +359,8 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
               </div>
             </div>
           </div>
+
+
         </div>
       </main>
       

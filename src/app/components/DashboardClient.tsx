@@ -194,7 +194,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
                   >
                     <div className="flex w-full">
                       {/* Map through insights to render each one */}
-                      {insights.map((insight, index) => (
+                      {insights.map((insight) => (
                         <div key={insight.id} className="w-full flex-shrink-0 snap-center py-2">
                           <div className="mx-auto max-w-2xl">
                             <div 

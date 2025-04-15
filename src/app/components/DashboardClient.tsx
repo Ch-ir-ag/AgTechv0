@@ -32,17 +32,17 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
   const generateInsights = () => {
     if (companyName.toLowerCase().includes('kerry')) {
       return [
-        { id: '1', text: '10.2% increase in Listowel\'s milk production YoY', color: 'blue', viewed: false },
-        { id: '2', text: 'Production efficiency 9% above targets in southwestern region', color: 'green', viewed: false },
-        { id: '3', text: 'Kerry County showing 14% improvement in fat content quality', color: 'indigo', viewed: false },
-        { id: '4', text: 'Carbon emissions down 6.5% since implementing new sustainability measures', color: 'green', viewed: false },
+        { id: '1', text: 'Milk supply will be down 2% because of increased rainfall', color: 'blue', viewed: false },
+        { id: '2', text: 'Fat & protein is high this week compared to last week', color: 'green', viewed: false },
+        { id: '3', text: 'Next week’s milk output expected to rise due to drier conditions and improved grass growth', color: 'indigo', viewed: false },
+        { id: '4', text: 'Storm system incoming — potential 4% dip in collection volumes next week', color: 'green', viewed: false },
       ];
     } else { // Default to Lakeland Dairies
       return [
-        { id: '1', text: '12.3% increase in Bailieborough factory\'s milk production this quarter', color: 'blue', viewed: false },
-        { id: '2', text: 'Northern region facilities exceeding efficiency targets by 12%', color: 'green', viewed: false },
-        { id: '3', text: 'Protein content in Killeshandra processing unit up 8.7% YoY', color: 'indigo', viewed: false },
-        { id: '4', text: 'Carbon footprint reduced by 8% across all processing plants', color: 'green', viewed: false },
+        { id: '1', text: 'Milk supply will be down 2% because of increased rainfall', color: 'blue', viewed: false },
+        { id: '2', text: 'Fat & protein is high this week compared to last week', color: 'green', viewed: false },
+        { id: '3', text: 'Next week’s milk output expected to rise due to drier conditions and improved grass growth', color: 'indigo', viewed: false },
+        { id: '4', text: 'Storm system incoming — potential 4% dip in collection volumes next week', color: 'green', viewed: false },
       ];
     }
   };
@@ -265,64 +265,6 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
               <Chatbot companyName={companyName} />
             </section>
           </div>
-          
-          {/* Features Section */}
-          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 mb-8">
-            <h2 className="text-xl font-medium text-gray-800 mb-4 sm:mb-6">
-              {companyName} Management Insights
-            </h2>
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-start">
-                <div className="bg-blue-100 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 flex-shrink-0 mx-auto sm:mx-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <div className="text-center sm:text-left">
-                  <h3 className="text-lg font-medium text-gray-800 mb-1">
-                    Production Trends
-                  </h3>
-                  <p className="text-gray-600">
-                    Milk production is trending 5.2% higher than last month, with projected increases continuing through September. Confidence interval: ±0.8%.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row sm:items-start">
-                <div className="bg-blue-100 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 flex-shrink-0 mx-auto sm:mx-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="text-center sm:text-left">
-                  <h3 className="text-lg font-medium text-gray-800 mb-1">
-                    Seasonal Forecast
-                  </h3>
-                  <p className="text-gray-600">
-                    Based on historical patterns, expect a 4-6% decrease in production during the winter months (November-December). Confidence interval: ±1.2%.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row sm:items-start">
-                <div className="bg-blue-100 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 flex-shrink-0 mx-auto sm:mx-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                </div>
-                <div className="text-center sm:text-left">
-                  <h3 className="text-lg font-medium text-gray-800 mb-1">
-                    Feed Efficiency
-                  </h3>
-                  <p className="text-gray-600">
-                    Current feed efficiency ratio is 1.5 liters per kg, which is within the optimal range for your herd size and composition. Confidence interval: ±0.1 L/kg.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
         </div>
       </main>
       

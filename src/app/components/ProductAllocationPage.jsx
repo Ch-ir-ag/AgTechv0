@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Navbar from './Navbar';
 import ProductAllocationRecommendations from './ProductAllocationRecommendations';
 import ProductAllocationChatbot from './ProductAllocationChatbot';
+import ProductAllocationInsights from './ProductAllocationInsights';
 
 export default function ProductAllocationPage({ companyName }) {
   
@@ -59,6 +60,8 @@ export default function ProductAllocationPage({ companyName }) {
               Optimize your milk supply across product lines to maximize returns and meet contractual obligations.
             </p>
           </div>
+          
+          <ProductAllocationInsights companyName={companyName} />
           
           <div className="space-y-8">
             {/* Product Allocation Recommendations Section */}

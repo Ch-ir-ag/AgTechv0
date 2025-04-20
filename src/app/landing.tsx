@@ -5,6 +5,54 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Logo from './components/Logo';
 import { useAuth } from './contexts/AuthContext';
+import { motion } from 'framer-motion';
+
+// Animation variants
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6 }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const scaleUp = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: { 
+    scale: 1, 
+    opacity: 1,
+    transition: { duration: 0.5 }
+  }
+};
+
+const slideInLeft = {
+  hidden: { x: -60, opacity: 0 },
+  visible: { 
+    x: 0, 
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
+
+const slideInRight = {
+  hidden: { x: 60, opacity: 0 },
+  visible: { 
+    x: 0, 
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
 
 export default function Landing() {
   const router = useRouter();
@@ -13,7 +61,7 @@ export default function Landing() {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // Auto-redirect authenticated Lakeland users to forecasting
+  // Auto-redirect authenticated users to dashboard
   useEffect(() => {
     if (isAuthenticated && user?.company) {
       router.push(`/${user.company}/dashboard`);
@@ -29,66 +77,444 @@ export default function Landing() {
     if (success) {
       setUsername('');
       setPassword('');
-      // Directly navigate to forecasting page
       router.push(`/${user?.company}/dashboard`);
     } else {
       setLoginError('Invalid username or password');
     }
   };
 
-  const goToKildangan = () => {
+  const goToAccuracyDemo = () => {
     router.push('/accuracy-demo');
   };
 
-  // Skip rendering the authenticated welcome page - render only the login page
-  // for non-authenticated users
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   if (isAuthenticated) {
-    // Return empty fragment while redirecting
     return <></>;
   }
 
-  // Standard landing page with direct login form
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Navigation */}
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-indigo-50 to-white">
+      {/* Navigation - Kept as requested */}
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Logo className="text-blue-500" />
+              <Logo className="text-blue-600" />
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section with Login */}
-      <div className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 bg-transparent sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-              <div className="sm:text-center lg:text-left">
-                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                  <span className="block">Improving</span>
-                  <span className="block text-blue-600">Dairy Production</span>
-                </h1>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Daisy AI delivers highly accurate milk yield predictions and smart product allocation, empowering dairy co-operatives to plan production, optimise supply chains, and secure international contracts with confidence.
-                </p>
-                
-                {/* Login Form */}
-                <div className="mt-8 sm:mt-12 max-w-md mx-auto lg:mx-0">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-lg font-medium text-gray-900 mb-6">Login to access your dashboard</h2>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 py-16 text-white">
+        <div className="absolute inset-0 opacity-10">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </div>
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+        >
+          <div className="md:flex md:items-center md:justify-between">
+            <div className="md:w-1/2 mb-10 md:mb-0">
+              <motion.h1 
+                variants={fadeIn}
+                className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight"
+              >
+                <span className="block text-white">AI-Powered</span>
+                <span className="block text-blue-200">Milk Forecasting &</span>
+                <span className="block text-indigo-200">Product Allocation</span>
+                <span className="block text-white">for Dairy Co-Ops</span>
+              </motion.h1>
+              <motion.p 
+                variants={fadeIn}
+                className="mt-6 text-xl text-blue-100 max-w-3xl"
+              >
+                Predict with 95%+ accuracy. Save more than €10M/year. Maximise margin from every litre.
+              </motion.p>
+              <motion.div 
+                variants={fadeIn}
+                className="mt-8 flex flex-wrap gap-4"
+              >
+                <motion.a 
+                  href="mailto:contact@joindaisy.co"
+                  className="px-8 py-3 text-base font-medium rounded-md text-blue-900 bg-white hover:bg-blue-50 transition-colors md:py-4 md:text-lg shadow-lg hover:shadow-xl flex items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Contact Us
+                </motion.a>
+                <motion.button 
+                  onClick={() => scrollToSection('how-it-works')}
+                  className="px-8 py-3 text-base font-medium rounded-md text-white bg-blue-400 bg-opacity-30 hover:bg-opacity-40 backdrop-blur-sm transition-colors md:py-4 md:text-lg border border-blue-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  See How It Works
+                </motion.button>
+                <motion.button
+                  onClick={() => scrollToSection('login')}
+                  className="px-8 py-3 text-base font-medium rounded-md border border-blue-300 text-white hover:bg-blue-700 hover:bg-opacity-20 transition-colors md:py-4 md:text-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Partner Login
+                </motion.button>
+              </motion.div>
+            </div>
+            <motion.div 
+              variants={slideInRight}
+              className="md:w-1/2 md:ml-8 relative h-64 sm:h-72 md:h-96"
+            >
+              <Image
+                src="/images/COWIMAGE1.png"
+                alt="Daisy AI"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: 'cover', borderRadius: '12px' }}
+                className="shadow-2xl"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Problem Section */}
+      <div className="py-16 bg-gradient-to-r from-slate-50 to-blue-50">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div 
+            variants={fadeIn}
+            className="text-center"
+          >
+            <h2 className="text-base text-blue-700 font-semibold tracking-wide uppercase">The Problem</h2>
+            <p className="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">
+              Why Dairy Co-ops Need Better Solutions
+            </p>
+          </motion.div>
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-blue-500 transform transition-transform"
+            >
+              <div className="text-blue-600 text-3xl font-bold mb-3">10%</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Inaccurate Forecasts</h3>
+              <p className="text-slate-600">
+                Milk supply forecasts are typically 10% inaccurate—resulting in €10M/year in waste for average processors.
+              </p>
+            </motion.div>
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-indigo-500 transform transition-transform"
+            >
+              <div className="text-indigo-600 text-3xl font-bold mb-3">Excel</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Outdated Tools</h3>
+              <p className="text-slate-600">
+                Co-ops still rely on Excel and intuition for mission-critical decisions that impact millions in revenue.
+              </p>
+            </motion.div>
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-purple-500 transform transition-transform"
+            >
+              <div className="text-purple-600 text-3xl font-bold mb-3">€€€</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Lost Profits</h3>
+              <p className="text-slate-600">
+                Poor forecasts cause overproduction, labour inefficiencies, contract penalties, and missed sales opportunities.
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Solution Section */}
+      <div id="how-it-works" className="py-16 bg-gradient-to-r from-indigo-900 via-blue-800 to-indigo-900 text-white">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div 
+            variants={fadeIn}
+            className="text-center"
+          >
+            <h2 className="text-base text-indigo-200 font-semibold tracking-wide uppercase">The Solution</h2>
+            <p className="mt-2 text-3xl font-extrabold sm:text-4xl">
+              Daisy AI: Purpose-Built for Dairy Co-ops
+            </p>
+          </motion.div>
+          <div className="mt-12 grid gap-8 md:grid-cols-2">
+            <motion.div 
+              variants={slideInLeft}
+              className="bg-gradient-to-br from-blue-800 to-indigo-800 p-8 rounded-xl shadow-xl border border-indigo-600"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-white">AI-driven Predictive Analytics</h3>
+              <p className="text-indigo-100 text-lg mb-6">
+                Our specialised AI combines supply forecasting with margin-optimised product allocation, designed specifically for the unique challenges of dairy cooperatives.
+              </p>
+              <motion.ul 
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="space-y-4"
+              >
+                <motion.li 
+                  variants={fadeIn}
+                  className="flex items-start"
+                >
+                  <svg className="h-6 w-6 text-indigo-300 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-blue-100">Neural network-powered predictions with 95%+ accuracy</span>
+                </motion.li>
+                <motion.li 
+                  variants={fadeIn}
+                  className="flex items-start"
+                >
+                  <svg className="h-6 w-6 text-indigo-300 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-blue-100">Real-time inference from diverse data streams</span>
+                </motion.li>
+                <motion.li 
+                  variants={fadeIn}
+                  className="flex items-start"
+                >
+                  <svg className="h-6 w-6 text-indigo-300 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-blue-100">Forecast + allocation in a single interface</span>
+                </motion.li>
+              </motion.ul>
+            </motion.div>
+            <motion.div 
+              variants={slideInRight}
+              className="bg-gradient-to-br from-indigo-800 to-blue-800 p-8 rounded-xl shadow-xl border border-blue-600"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-white">Measurable Impact</h3>
+              <div className="space-y-6">
+                <motion.div 
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="flex items-center bg-indigo-900 bg-opacity-40 p-4 rounded-lg"
+                >
+                  <div className="text-3xl font-bold text-indigo-200 w-24">€10M</div>
+                  <div className="text-blue-100">Average annual savings potential per processor</div>
+                </motion.div>
+                <motion.div 
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="flex items-center bg-indigo-900 bg-opacity-40 p-4 rounded-lg"
+                >
+                  <div className="text-3xl font-bold text-indigo-200 w-24">15%+</div>
+                  <div className="text-blue-100">Improvement in forecast accuracy from market standard</div>
+                </motion.div>
+                <motion.div 
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="flex items-center bg-indigo-900 bg-opacity-40 p-4 rounded-lg"
+                >
+                  <div className="text-3xl font-bold text-indigo-200 w-24">20+</div>
+                  <div className="text-blue-100">Variables modeled in our advanced AI system</div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Features Section */}
+      <div className="py-16 bg-gradient-to-b from-white to-blue-50">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div 
+            variants={fadeIn}
+            className="text-center"
+          >
+            <h2 className="text-base text-blue-700 font-semibold tracking-wide uppercase">Features</h2>
+            <p className="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">
+              Powerful Tools for Dairy Excellence
+            </p>
+          </motion.div>
+          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ 
+                y: -5, 
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
+              }}
+              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 border-blue-500 transition-shadow"
+            >
+              <motion.div 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className="absolute -top-5 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-lg"
+              >
+                📈
+              </motion.div>
+              <h3 className="mt-6 text-lg font-semibold text-slate-900">95%+ Forecast Accuracy</h3>
+              <p className="mt-3 text-slate-600">
+                Precise predictions for milk volume, fat, protein, and lactose content.
+              </p>
+            </motion.div>
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ 
+                y: -5, 
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
+              }}
+              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 border-indigo-500 transition-shadow"
+            >
+              <motion.div 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="absolute -top-5 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg"
+              >
+                📦
+              </motion.div>
+              <h3 className="mt-6 text-lg font-semibold text-slate-900">Product Allocation Engine</h3>
+              <p className="mt-3 text-slate-600">
+                Real-time decisions on what to produce (butter, powder, whey, etc.) for maximum profit.
+              </p>
+            </motion.div>
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ 
+                y: -5, 
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
+              }}
+              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 border-blue-500 transition-shadow"
+            >
+              <motion.div 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                className="absolute -top-5 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-lg"
+              >
+                📊
+              </motion.div>
+              <h3 className="mt-6 text-lg font-semibold text-slate-900">Visual Dashboards</h3>
+              <p className="mt-3 text-slate-600">
+                Intuitive interfaces designed for analysts, operations managers, and executives.
+              </p>
+            </motion.div>
+            <motion.div 
+              variants={scaleUp}
+              whileHover={{ 
+                y: -5, 
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
+              }}
+              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 border-indigo-500 transition-shadow"
+            >
+              <motion.div 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="absolute -top-5 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg"
+              >
+                🌍
+              </motion.div>
+              <h3 className="mt-6 text-lg font-semibold text-slate-900">Data Integration</h3>
+              <p className="mt-3 text-slate-600">
+                Comprehensive data from internal sources and external factors like weather and market trends.
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Login Section */}
+      <div id="login" className="py-16 bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <div className="md:flex md:items-center md:justify-between">
+            <motion.div 
+              variants={slideInLeft}
+              className="md:w-1/2 mb-8 md:mb-0"
+            >
+              <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl mb-6">
+                <span className="block">Already a Daisy AI Partner?</span>
+                <span className="block text-blue-700">Login to Your Dashboard</span>
+              </h2>
+              <p className="text-lg text-slate-600 mb-6">
+                Access your personalised dairy analytics platform to view forecasts, optimise production, and make data-driven decisions.
+              </p>
+              <motion.button
+                onClick={goToAccuracyDemo}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                View Accuracy Demo
+              </motion.button>
+            </motion.div>
+            
+            {/* Login Form - Preserved but with animations */}
+            <motion.div 
+              variants={slideInRight}
+              className="md:w-2/5"
+            >
+              <motion.div 
+                whileHover={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
+                transition={{ duration: 0.3 }}
+                className="bg-white p-8 rounded-xl shadow-xl"
+              >
+                <h3 className="text-xl font-medium text-slate-900 mb-6">Partner Login</h3>
                     
                     <form onSubmit={handleLogin}>
                       {loginError && (
-                        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded-md text-sm">
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-4 p-2 bg-red-100 text-red-700 rounded-md text-sm"
+                    >
                           {loginError}
-                        </div>
+                    </motion.div>
                       )}
                       
                       <div className="mb-4">
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-1">
                           Username
                         </label>
                         <input
@@ -96,13 +522,13 @@ export default function Landing() {
                           id="username"
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                           required
                         />
                       </div>
                       
                       <div className="mb-6">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
                           Password
                         </label>
                         <input
@@ -110,140 +536,79 @@ export default function Landing() {
                           id="password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                           required
                         />
                       </div>
                       
-                      <div className="flex flex-col space-y-3">
-                        <button
+                  <div>
+                    <motion.button
                           type="submit"
-                          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                         >
                           Login
-                        </button>
-                        
-                        <button
-                          type="button"
-                          onClick={goToKildangan}
-                          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                          View Kildangan Demo
-                        </button>
-                      </div>
-                    </form>
+                    </motion.button>
                   </div>
-                </div>
-              </div>
-            </main>
+                </form>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
-        <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 relative h-56 sm:h-72 md:h-96 lg:h-full">
-          <Image
-            src="/images/COWIMAGE1.png"
-            alt="Daisy AI"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            style={{ objectFit: 'cover' }}
-          />
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div id="features" className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Features</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              A better way to manage dairy production
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              Our AI-powered platform provides comprehensive tools for dairy cooperatives to optimize their operations.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-                <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Advanced Analytics</h3>
-                  <p className="mt-2 text-base text-gray-500">
-                    Comprehensive analytics dashboard with real-time data visualization and historical comparisons.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Yield Prediction</h3>
-                  <p className="mt-2 text-base text-gray-500">
-                    AI-powered milk yield predictions with high accuracy to help plan production and logistics.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-                  </svg>
-                </div>
-                <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Supply Chain Optimization</h3>
-                  <p className="mt-2 text-base text-gray-500">
-                    Visualize and optimize your entire supply chain from farm to market with our interactive map.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                  </svg>
-                </div>
-                <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Product Allocation</h3>
-                  <p className="mt-2 text-base text-gray-500">
-                    Intelligently allocate milk resources across product lines to maximise returns based on market demand and pricing.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* CTA Section */}
-      <div className="bg-blue-50">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
-          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            <span className="block">Ready to boost your dairy production?</span>
-            <span className="block text-blue-600">Start using Daisy AI today.</span>
+      <div className="bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-800 text-white">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeIn}
+          className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between"
+        >
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <span className="block">Ready to transform your dairy cooperative?</span>
+            <span className="block text-indigo-300">Start with Daisy AI today.</span>
           </h2>
+          <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+            <div className="inline-flex rounded-md shadow-lg">
+              <motion.a
+                href="mailto:contact@joindaisy.co"
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2)" }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-900 bg-white hover:bg-blue-50 transition-colors shadow-lg"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Email Us
+              </motion.a>
+            </div>
         </div>
+        </motion.div>
       </div>
 
       {/* Footer */}
-      <footer className="bg-white">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+      <footer className="bg-gradient-to-b from-slate-50 to-white py-12">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+          className="max-w-7xl mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8"
+        >
           <div className="w-full">
-            <p className="text-center text-base text-gray-400">
-              &copy; 2025 Daisy AI. All rights reserved.
-            </p>
+            <motion.p 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-center text-base text-slate-500"
+            >
+              &copy; {new Date().getFullYear()} Daisy AI. All rights reserved.
+            </motion.p>
           </div>
-        </div>
+        </motion.div>
       </footer>
     </div>
   );

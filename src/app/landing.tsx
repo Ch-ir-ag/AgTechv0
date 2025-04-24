@@ -107,6 +107,16 @@ export default function Landing() {
             <div className="flex items-center">
               <Logo className="text-blue-600" />
             </div>
+            <div className="flex items-center">
+              <motion.button 
+                onClick={() => scrollToSection('login')}
+                className="px-4 py-2 text-base font-medium rounded-md text-blue-700 hover:text-blue-900 hover:bg-blue-50 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Partner Login
+              </motion.button>
+            </div>
           </div>
         </div>
       </nav>
@@ -325,26 +335,26 @@ export default function Landing() {
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center bg-indigo-900 bg-opacity-40 p-4 rounded-lg"
+                  className="flex items-center bg-indigo-900 p-4 rounded-lg"
                 >
-                  <div className="text-3xl font-bold text-indigo-200 w-24">€10M</div>
-                  <div className="text-blue-100">Average annual savings potential per processor</div>
+                  <div className="text-3xl font-bold text-white w-24">€10M</div>
+                  <div className="text-white">Average annual savings potential per processor</div>
                 </motion.div>
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center bg-indigo-900 bg-opacity-40 p-4 rounded-lg"
+                  className="flex items-center bg-indigo-900 p-4 rounded-lg"
                 >
-                  <div className="text-3xl font-bold text-indigo-200 w-24">15%+</div>
-                  <div className="text-blue-100">Improvement in forecast accuracy from market standard</div>
+                  <div className="text-3xl font-bold text-white w-24">15%+</div>
+                  <div className="text-white">Improvement in forecast accuracy from market standard</div>
                 </motion.div>
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center bg-indigo-900 bg-opacity-40 p-4 rounded-lg"
+                  className="flex items-center bg-indigo-900 p-4 rounded-lg"
                 >
-                  <div className="text-3xl font-bold text-indigo-200 w-24">20+</div>
-                  <div className="text-blue-100">Variables modeled in our advanced AI system</div>
+                  <div className="text-3xl font-bold text-white w-24">20+</div>
+                  <div className="text-white">Variables modeled in our advanced AI system</div>
                 </motion.div>
               </div>
             </motion.div>

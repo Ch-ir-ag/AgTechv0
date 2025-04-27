@@ -599,6 +599,83 @@ export default function Landing() {
         </motion.div>
       </div>
 
+      {/* Supporters Section */}
+      <div className="py-12 bg-white">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div 
+            variants={fadeIn}
+            className="text-center"
+          >
+            <h2 className="text-base text-blue-700 font-semibold tracking-wide uppercase">Our Supporters</h2>
+            <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl mb-10">
+              Backed by Leading Innovation Programs
+            </p>
+          </motion.div>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-16">
+            <motion.a 
+              href="https://dogpatchlabs.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              variants={scaleUp}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center"
+            >
+              <div className="h-16 md:h-20 relative">
+                <Image
+                  src="/images/dogpatch-founders-logo.png"
+                  alt="Dogpatch Labs"
+                  width={200}
+                  height={80}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            </motion.a>
+            <motion.a 
+              href="https://dogpatchlabs.com/founders" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              variants={scaleUp}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center"
+            >
+              <div className="h-16 md:h-20 relative">
+                <Image
+                  src="/images/founders-logo.png"
+                  alt="Founders"
+                  width={60}
+                  height={60}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            </motion.a>
+            <motion.a 
+              href="https://www.ndrc.ie/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              variants={scaleUp}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center"
+            >
+              <div className="h-16 md:h-20 relative">
+                <Image
+                  src="/images/ndrc-logo.png"
+                  alt="NDRC"
+                  width={130}
+                  height={80}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            </motion.a>
+          </div>
+        </motion.div>
+      </div>
+
       {/* Footer */}
       <footer className="bg-gradient-to-b from-slate-50 to-white py-12">
         <motion.div 

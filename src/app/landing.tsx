@@ -148,7 +148,7 @@ export default function Landing() {
                 <span className="block text-white">AI-Powered</span>
                 <span className="block text-blue-200">Milk Forecasting &</span>
                 <span className="block text-indigo-200">Product Allocation</span>
-                <span className="block text-white">for Dairy Co-Ops</span>
+                <span className="block text-white">for Dairy Processors</span>
               </motion.h1>
               <motion.p 
                 variants={fadeIn}

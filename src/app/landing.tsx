@@ -617,7 +617,7 @@ export default function Landing() {
               Backed by Leading Innovation Programs
             </p>
           </motion.div>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-16">
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-42">
             <motion.a 
               href="https://dogpatchlabs.com/" 
               target="_blank" 

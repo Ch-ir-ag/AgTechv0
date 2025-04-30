@@ -154,7 +154,7 @@ export default function Landing() {
                 variants={fadeIn}
                 className="mt-6 text-xl text-blue-100 max-w-3xl"
               >
-                Predict with 95%+ accuracy. Save more than €10M/year. Maximise margin from every litre.
+                Forecast with confidence. Unlock millions in savings. Maximise profit from every litre.
               </motion.p>
               <motion.div 
                 variants={fadeIn}

@@ -4,6 +4,9 @@ import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "./contexts/AuthContext";
+import { useEffect } from "react";
+import { initClarity } from "./utils/clarityAnalytics";
+import { CLARITY_PROJECT_ID } from "./config/analytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +28,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Initialize Clarity
+  useEffect(() => {
+    initClarity(CLARITY_PROJECT_ID);
+  }, []);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <Script id="reset-scroll-position">

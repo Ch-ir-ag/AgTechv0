@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Logo from './components/Logo';
 import { useAuth } from './contexts/AuthContext';
 import { motion } from 'framer-motion';
+import { trackEvent, setTag, identifyUser } from './utils/clarityAnalytics';
 
 // Animation variants
 const fadeIn = {
@@ -64,6 +65,12 @@ export default function Landing() {
   // Auto-redirect authenticated users to dashboard
   useEffect(() => {
     if (isAuthenticated && user?.company) {
+      // Track authenticated user with Clarity
+      if (user) {
+        identifyUser(user.username, undefined, undefined, user.company);
+        setTag('company', user.company);
+        // Only set custom tags that match our user type
+      }
       router.push(`/${user.company}/dashboard`);
     }
   }, [isAuthenticated, user, router]);
@@ -73,21 +80,32 @@ export default function Landing() {
     e.preventDefault();
     setLoginError('');
 
+    // Track login attempt with Clarity
+    trackEvent('login_attempt');
+
     const success = login(username, password);
     if (success) {
+      // Track successful login
+      trackEvent('login_success');
       setUsername('');
       setPassword('');
       router.push(`/${user?.company}/dashboard`);
     } else {
+      // Track failed login
+      trackEvent('login_failed');
       setLoginError('Invalid username or password');
     }
   };
 
   const goToAccuracyDemo = () => {
+    // Track accuracy demo click
+    trackEvent('accuracy_demo_click');
     router.push('/accuracy-demo');
   };
 
   const scrollToSection = (id: string) => {
+    // Track section navigation
+    trackEvent(`scroll_to_${id}`);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });

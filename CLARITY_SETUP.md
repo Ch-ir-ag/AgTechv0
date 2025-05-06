@@ -2,26 +2,24 @@
 
 This project includes Microsoft Clarity for user behavior analytics.
 
-## Setup Instructions
+## Implementation Method
 
-1. **Install the Package**
-   ```bash
-   npm install @microsoft/clarity
-   ```
+Microsoft Clarity has been integrated using two methods:
 
-2. **Configure Your Project ID**
-   
-   Navigate to `src/app/config/analytics.ts` and replace the placeholder with your actual Clarity project ID:
-   
-   ```typescript
-   export const CLARITY_PROJECT_ID = "your-actual-project-id";
-   ```
-   
-   You can find your project ID in the Microsoft Clarity dashboard under Settings > Overview.
+1. **Script Tag (Primary Method)**: The script is injected directly in the layout.tsx file using Next.js Script component
+2. **NPM Package (Secondary Method)**: The @microsoft/clarity package is available for programmatic interaction
+
+## Configuration
+
+The Clarity project ID is stored in `src/app/config/analytics.ts`:
+
+```typescript
+export const CLARITY_PROJECT_ID = "rfk8ck3fva";
+```
 
 ## Features Implemented
 
-- **Auto-initialization**: Clarity is automatically initialized when the app loads via the Root Layout component
+- **Auto-initialization**: Clarity is automatically initialized when the app loads via the Script tag
 - **User identification**: Users are identified with Clarity when they log in 
 - **Event tracking**: Various user interactions are tracked as events
 - **Custom tags**: User data like company is tracked as tags
@@ -33,13 +31,14 @@ This project includes Microsoft Clarity for user behavior analytics.
 
 ```typescript
 import { useAnalytics } from '@/app/hooks/useAnalytics';
+import { useEffect } from 'react';
 
 export default function SomePage() {
   const { trackPageView } = useAnalytics();
   
   useEffect(() => {
     trackPageView('product_page', 'product-123');
-  }, []);
+  }, [trackPageView]);
   
   // Rest of component
 }
@@ -84,6 +83,15 @@ export default function CheckoutComponent() {
   // Rest of component
 }
 ```
+
+## Troubleshooting
+
+If you encounter issues with Clarity tracking:
+
+1. Check browser console for any error messages
+2. Verify the correct project ID is set in analytics.ts
+3. Use browser developer tools to confirm the Clarity script is loaded correctly
+4. Ensure 'use client' directive is present in components using the analytics hooks
 
 ## Privacy Considerations
 

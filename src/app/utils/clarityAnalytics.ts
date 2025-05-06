@@ -1,4 +1,5 @@
 import Clarity from '@microsoft/clarity';
+import { CLARITY_PROJECT_ID } from '../config/analytics';
 
 /**
  * Initialize Microsoft Clarity analytics with the provided project ID
@@ -6,7 +7,12 @@ import Clarity from '@microsoft/clarity';
  */
 export const initClarity = (projectId: string): void => {
   if (typeof window !== 'undefined') {
-    Clarity.init(projectId);
+    try {
+      Clarity.init(projectId);
+      console.log('Microsoft Clarity initialized via API');
+    } catch (error) {
+      console.error('Error initializing Microsoft Clarity:', error);
+    }
   }
 };
 

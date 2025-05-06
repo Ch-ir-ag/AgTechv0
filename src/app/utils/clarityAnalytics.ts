@@ -1,5 +1,4 @@
 import Clarity from '@microsoft/clarity';
-import { CLARITY_PROJECT_ID } from '../config/analytics';
 
 /**
  * Initialize Microsoft Clarity analytics with the provided project ID

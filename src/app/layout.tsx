@@ -1,11 +1,12 @@
-'use client';
-
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CLARITY_PROJECT_ID } from "./config/analytics";
+
+// Import metadata from the metadata file
+export { metadata } from './metadata';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -30,7 +30,7 @@ const predefinedQAs: PredefinedQA[] = [
   },
   {
     question: "How accurate are the forecasts?",
-    answer: "Our prediction model for {{companyName}} has achieved 94.7% accuracy over the past 12 months. The weekly forecast accuracy is 96.3%, monthly is 95.6%, and yearly is 93.7%. We continuously refine our models using machine learning with actual yield data to improve accuracy over time.",
+    answer: "Our prediction model for {{companyName}} has achieved a 15%+ improvement in forecast accuracy over market standard. This improvement is consistent across weekly, monthly, and yearly predictions. We continuously refine our models using machine learning with actual yield data to improve accuracy over time.",
     keywords: ["accurate", "accuracy", "forecast", "precision"]
   },
   {

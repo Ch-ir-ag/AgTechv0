@@ -252,7 +252,7 @@ export default function Landing() {
               <div className="text-blue-600 text-3xl font-bold mb-3">10%</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Inaccurate Forecasts</h3>
               <p className="text-slate-600">
-                Milk supply forecasts are typically 10% inaccurate—resulting in €10M/year in waste for average processors.
+                Milk supply forecasts are typically 10% inaccurate—resulting in €5M/year in waste for average processors.
               </p>
             </motion.div>
             <motion.div 
@@ -322,7 +322,7 @@ export default function Landing() {
                   <svg className="h-6 w-6 text-indigo-300 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-blue-100">Neural network-powered predictions with 95%+ accuracy</span>
+                  <span className="text-blue-100">15%+ improvement in forecast accuracy from market standard</span>
                 </motion.li>
                 <motion.li 
                   variants={fadeIn}
@@ -355,7 +355,7 @@ export default function Landing() {
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="flex items-center bg-indigo-900 p-4 rounded-lg"
                 >
-                  <div className="text-3xl font-bold text-white w-24">€10M</div>
+                  <div className="text-3xl font-bold text-white w-24">€5M</div>
                   <div className="text-white">Average annual savings potential per processor</div>
                 </motion.div>
                 <motion.div 
@@ -415,7 +415,7 @@ export default function Landing() {
               >
                 📈
               </motion.div>
-              <h3 className="mt-6 text-lg font-semibold text-slate-900">95%+ Forecast Accuracy</h3>
+              <h3 className="mt-6 text-lg font-semibold text-slate-900">Accurate Forecasts </h3>
               <p className="mt-3 text-slate-600">
                 Precise predictions for milk volume, fat, protein, and lactose content.
               </p>
@@ -685,6 +685,24 @@ export default function Landing() {
                   src="/images/ndrc-logo.png"
                   alt="NDRC"
                   width={130}
+                  height={80}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            </motion.a>
+            <motion.a 
+              href="https://www.enterprise-ireland.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              variants={scaleUp}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center"
+            >
+              <div className="h-16 md:h-20 relative">
+                <Image
+                  src="/images/enterprise-ireland-logo.png"
+                  alt="Enterprise Ireland"
+                  width={160}
                   height={80}
                   style={{ objectFit: 'contain' }}
                 />

@@ -9,7 +9,6 @@ import Chatbot from "./Chatbot";
 import InteractiveSupplyChainMap from "./InteractiveSupplyChainMap";
 import { useAuth } from '../contexts/AuthContext';
 import { loadCompanyData } from '../utils/companyDataLoader';
-import { formatCompanyName } from '../data/companies';
 
 // Create a safe useLayoutEffect that falls back to useEffect for SSR
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;

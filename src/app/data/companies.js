@@ -17,6 +17,11 @@ export const companies = {
     slug: 'kerry-dairy',
     // Add more company-specific configurations here
   },
+  'dairygold': {
+    name: 'Dairygold',
+    slug: 'dairygold',
+    // Add more company-specific configurations here
+  },
   // Add more companies as they come onboard
   // 'example-company': {
   //   name: 'Example Company',

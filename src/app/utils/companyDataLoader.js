@@ -6,6 +6,7 @@
 import { isValidCompany } from '../data/companies';
 import * as lakelandDairiesData from '../data/companyData/lakeland-dairies';
 import * as kerryDairyData from '../data/companyData/kerry-dairy';
+import * as dairygoldData from '../data/companyData/dairygold';
 
 /**
  * Load company-specific data dynamically
@@ -34,6 +35,12 @@ export function loadCompanyData(companySlug) {
       return {
         companyStats: kerryDairyData.companyStats || {},
         companyInsights: kerryDairyData.companyInsights || [],
+        // Add any additional company data properties here
+      };
+    case 'dairygold':
+      return {
+        companyStats: dairygoldData.companyStats || {},
+        companyInsights: dairygoldData.companyInsights || [],
         // Add any additional company data properties here
       };
     // Add more cases as more companies are added

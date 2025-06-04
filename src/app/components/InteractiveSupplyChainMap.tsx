@@ -155,6 +155,40 @@ const kerryClickableAreas = [
   }
 ];
 
+// Define clickable areas for Dairygold (Cork-focused)
+const dairygoldClickableAreas = [
+  {
+    id: 'cork',
+    shape: 'rect' as const,
+    coords: [220, 300, 290, 360],
+    name: 'Cork'
+  },
+  {
+    id: 'kerry',
+    shape: 'rect' as const,
+    coords: [160, 280, 230, 340],
+    name: 'Kerry'
+  },
+  {
+    id: 'limerick',
+    shape: 'rect' as const,
+    coords: [220, 180, 290, 240],
+    name: 'Limerick'
+  },
+  {
+    id: 'tipperary',
+    shape: 'rect' as const,
+    coords: [240, 240, 300, 300],
+    name: 'Tipperary'
+  },
+  {
+    id: 'waterford',
+    shape: 'rect' as const,
+    coords: [290, 320, 350, 380],
+    name: 'Waterford'
+  }
+];
+
 export default function InteractiveSupplyChainMap({ companyName }: InteractiveSupplyChainMapProps) {
   // State for the selected county
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
@@ -163,7 +197,9 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
   const mapRef = useRef<HTMLDivElement>(null);
   
   // Determine which clickable areas to use based on the company name
-  const activeClickableAreas = companyName === "Kerry Dairy" ? kerryClickableAreas : clickableAreas;
+  const activeClickableAreas = companyName === "Kerry Dairy" ? kerryClickableAreas : 
+                              companyName === "Dairygold" ? dairygoldClickableAreas : 
+                              clickableAreas;
   
   // Sample county data - replace with your actual data
   const lakelandCountyData: Record<string, CountyData> = {
@@ -413,8 +449,64 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
     }
   };
 
+  // Define Dairygold-specific county data (Cork-focused)
+  const dairygoldCountyData: Record<string, CountyData> = {
+    cork: {
+      id: 'cork',
+      name: 'Cork',
+      farms: 2100,
+      avgYield: 30.5,
+      totalVolume: 1380000,
+      avgFat: 4.4,
+      avgProtein: 3.7,
+      forecastChange: 4.2
+    },
+    kerry: {
+      id: 'kerry',
+      name: 'Kerry',
+      farms: 525,
+      avgYield: 29.2,
+      totalVolume: 345000,
+      avgFat: 4.3,
+      avgProtein: 3.6,
+      forecastChange: 3.8
+    },
+    limerick: {
+      id: 'limerick',
+      name: 'Limerick',
+      farms: 420,
+      avgYield: 28.8,
+      totalVolume: 276000,
+      avgFat: 4.2,
+      avgProtein: 3.5,
+      forecastChange: 3.5
+    },
+    tipperary: {
+      id: 'tipperary',
+      name: 'Tipperary',
+      farms: 280,
+      avgYield: 28.2,
+      totalVolume: 184000,
+      avgFat: 4.1,
+      avgProtein: 3.4,
+      forecastChange: 3.2
+    },
+    waterford: {
+      id: 'waterford',
+      name: 'Waterford',
+      farms: 175,
+      avgYield: 27.8,
+      totalVolume: 115000,
+      avgFat: 4.0,
+      avgProtein: 3.3,
+      forecastChange: 2.9
+    }
+  };
+
   // Select the appropriate county data based on company name
-  const countyData = companyName === "Kerry Dairy" ? kerryCountyData : lakelandCountyData;
+  const countyData = companyName === "Kerry Dairy" ? kerryCountyData : 
+                     companyName === "Dairygold" ? dairygoldCountyData : 
+                     lakelandCountyData;
   
   // Update the map size when the component mounts or window resizes
   useEffect(() => {
@@ -703,15 +795,27 @@ export default function InteractiveSupplyChainMap({ companyName }: InteractiveSu
               <div className="space-y-3 w-full">
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Total Farms:</span>
-                  <span className="font-medium">{companyName === "Kerry Dairy" ? "1,940" : "3,200"}</span>
+                  <span className="font-medium">
+                    {companyName === "Kerry Dairy" ? "1,940" : 
+                     companyName === "Dairygold" ? "3,500" : 
+                     "3,200"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Daily Production:</span>
-                  <span className="font-medium">{companyName === "Kerry Dairy" ? "2.25M" : "5.48M"} liters</span>
+                  <span className="font-medium">
+                    {companyName === "Kerry Dairy" ? "2.25M" : 
+                     companyName === "Dairygold" ? "6.3M" : 
+                     "5.48M"} liters
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Annual Production:</span>
-                  <span className="font-medium">{companyName === "Kerry Dairy" ? "820M" : "2B"} liters</span>
+                  <span className="font-medium">
+                    {companyName === "Kerry Dairy" ? "820M" : 
+                     companyName === "Dairygold" ? "1.3B" : 
+                     "2B"} liters
+                  </span>
                 </div>
                 <p className="text-gray-500 text-sm mt-3">Select a county on the map to view detailed information about milk production and farms in that area.</p>
               </div>

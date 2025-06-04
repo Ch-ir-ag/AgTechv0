@@ -186,7 +186,7 @@ export default function ProductAllocationChart() {
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
       <div className="flex flex-col space-y-2 mb-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-800">Product Allocation Recommendations</h2>
+          <h2 className="text-lg font-medium text-gray-800">Product Allocation</h2>
           <div className="flex items-center">
             <label htmlFor="plantSelect" className="text-xs sm:text-sm text-gray-600 mr-2">
               Plant:

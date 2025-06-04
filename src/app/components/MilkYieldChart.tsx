@@ -452,11 +452,8 @@ export default function MilkYieldChart() {
       </div>
 
         <div className="text-xs text-gray-500 mt-2 bg-gray-50 p-3 rounded-md border border-gray-100">
-          <p>
-            Data represents {timeframe} {metricType === 'milk' ? 'milk production' : `${metricType} content`} {timeframe === 'yearly' ? 'per year' : timeframe === 'monthly' ? 'per month' : 'per week'}, comparing {compareYears.thisYear} with {compareYears.comparisonYear}.
-          </p>
           {timeframe === 'yearly' && metricType === 'milk' && chartData.length > 0 && (
-            <p className="mt-2 text-gray-700 font-medium">
+            <p className="text-gray-700 font-medium">
               {compareYears.thisYear} Yield: {
                 chartData[0].thisYear >= 1000000000 
                   ? `${(chartData[0].thisYear / 1000000000).toFixed(2)}B` 
@@ -464,12 +461,6 @@ export default function MilkYieldChart() {
               } liters (+{((chartData[0].thisYear - chartData[0].comparisonYear) / chartData[0].comparisonYear * 100).toFixed(1)}%)
             </p>
           )}
-          <p className="mt-2">
-            Last updated: 2025-03-15
-          </p>
-          <p className="mt-1">
-            Error bars indicate confidence interval (±3% of predicted values)
-          </p>
         </div>
       </div>
     </div>

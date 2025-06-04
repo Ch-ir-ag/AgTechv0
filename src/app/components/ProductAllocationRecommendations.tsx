@@ -203,17 +203,16 @@ const kerryDairyData = {
 const lakelandDairiesData = {
   forecast: {
     volume: 90000000,
-    region: 'Ireland',
-    timeframe: 'April 2025'
+    timeframe: 'Next 30 days'
   },
   allocations: [
-    { id: 1, product: 'SMP (Skim Milk Powder)', factory: 'Bailieborough', allocatedLitres: 27000000, percentOfTotal: 30, marginPerLitre: 0.07, marginPercent: 2.8, customerIDs: [1], productionStatus: 'In production' },
-    { id: 2, product: 'Bulk Butter', factory: 'Bailieborough', allocatedLitres: 18000000, percentOfTotal: 20, marginPerLitre: 0.11, marginPercent: 4.4, customerIDs: [3], productionStatus: 'In production' },
-    { id: 3, product: 'Packet Butter', factory: 'Bailieborough', allocatedLitres: 9000000, percentOfTotal: 10, marginPerLitre: 0.04, marginPercent: 1.6, customerIDs: [4], productionStatus: 'In production' },
-    { id: 4, product: 'WMP (Whole Milk Powder)', factory: 'Killeshandra', allocatedLitres: 12600000, percentOfTotal: 14, marginPerLitre: 0.13, marginPercent: 5.2, customerIDs: [1], productionStatus: 'In production' },
-    { id: 5, product: 'Ice-Cream', factory: 'Killeshandra', allocatedLitres: 9900000, percentOfTotal: 11, marginPerLitre: 0.06, marginPercent: 2.4, customerIDs: [2], productionStatus: 'High demand' },
-    { id: 6, product: 'Acid Cream', factory: 'Killeshandra', allocatedLitres: 7200000, percentOfTotal: 8, marginPerLitre: 0.10, marginPercent: 4.0, customerIDs: [5], productionStatus: 'In production' },
-    { id: 7, product: 'Mini Butter', factory: 'Killeshandra', allocatedLitres: 6300000, percentOfTotal: 7, marginPerLitre: 0.09, marginPercent: 3.6, customerIDs: [2], productionStatus: 'In production' },
+    { id: 1, product: 'Cheese', factory: 'Bailieborough', allocatedLitres: 19800000, percentOfTotal: 22, marginPerLitre: 0.13, marginPercent: 5.2, customerIDs: [2], productionStatus: 'In production' },
+    { id: 2, product: 'Butter', factory: 'Killeshandra', allocatedLitres: 18000000, percentOfTotal: 20, marginPerLitre: 0.11, marginPercent: 4.4, customerIDs: [1], productionStatus: 'In production' },
+    { id: 3, product: 'WMP (Whole Milk Powder)', factory: 'Bailieborough', allocatedLitres: 15300000, percentOfTotal: 17, marginPerLitre: 0.09, marginPercent: 3.6, customerIDs: [3], productionStatus: 'High demand' },
+    { id: 4, product: 'SMP (Skim Milk Powder)', factory: 'Killeshandra', allocatedLitres: 13500000, percentOfTotal: 15, marginPerLitre: 0.06, marginPercent: 2.4, customerIDs: [1], productionStatus: 'In production' },
+    { id: 5, product: 'Cream', factory: 'Bailieborough', allocatedLitres: 9900000, percentOfTotal: 11, marginPerLitre: 0.12, marginPercent: 4.8, customerIDs: [2], productionStatus: 'In production' },
+    { id: 6, product: 'UHT Milk', factory: 'Ballyraghane', allocatedLitres: 6300000, percentOfTotal: 7, marginPerLitre: 0.07, marginPercent: 2.8, customerIDs: [4], productionStatus: 'Low demand' },
+    { id: 7, product: 'Casein', factory: 'Artigarvan', allocatedLitres: 3600000, percentOfTotal: 4, marginPerLitre: 0.15, marginPercent: 6.0, customerIDs: [5], productionStatus: 'High demand' },
     { id: 8, product: 'Bulk Butter', factory: 'Ballyraghane', allocatedLitres: 5400000, percentOfTotal: 6, marginPerLitre: 0.08, marginPercent: 3.2, customerIDs: [3], productionStatus: 'In production' },
     { id: 9, product: 'Fresh Milk', factory: 'Ballyraghane', allocatedLitres: 4500000, percentOfTotal: 5, marginPerLitre: 0.05, marginPercent: 2.0, customerIDs: [3], productionStatus: 'Low demand' },
     { id: 10, product: 'Packet Butter', factory: 'Ballyraghane', allocatedLitres: 3600000, percentOfTotal: 4, marginPerLitre: 0.07, marginPercent: 2.8, customerIDs: [4], productionStatus: 'In production' },
@@ -232,30 +231,29 @@ const lakelandDairiesData = {
   plantCapacity: [
     { 
       factory: 'Bailieborough', 
-      totalCapacity: 64300000, 
-      usedCapacity: 54000000,
+      totalCapacity: 35000000, 
+      usedCapacity: 29400000,
       products: [
-        { product: 'SMP (Skim Milk Powder)', volume: 27000000 },
-        { product: 'Bulk Butter', volume: 18000000 },
-        { product: 'Packet Butter', volume: 9000000 }
+        { product: 'Cheese', volume: 19800000 },
+        { product: 'WMP (Whole Milk Powder)', volume: 15300000 },
+        { product: 'Cream', volume: 9900000 }
       ]
     },
     { 
       factory: 'Killeshandra', 
-      totalCapacity: 37000000, 
-      usedCapacity: 36000000,
+      totalCapacity: 38000000, 
+      usedCapacity: 31500000,
       products: [
-        { product: 'WMP (Whole Milk Powder)', volume: 12600000 },
-        { product: 'Ice-Cream', volume: 9900000 },
-        { product: 'Acid Cream', volume: 7200000 },
-        { product: 'Mini Butter', volume: 6300000 }
+        { product: 'Butter', volume: 18000000 },
+        { product: 'SMP (Skim Milk Powder)', volume: 13500000 }
       ]
     },
     { 
       factory: 'Ballyraghane', 
-      totalCapacity: 15000000, 
-      usedCapacity: 13500000,
+      totalCapacity: 25000000, 
+      usedCapacity: 19800000,
       products: [
+        { product: 'UHT Milk', volume: 6300000 },
         { product: 'Bulk Butter', volume: 5400000 },
         { product: 'Fresh Milk', volume: 4500000 },
         { product: 'Packet Butter', volume: 3600000 }
@@ -263,9 +261,10 @@ const lakelandDairiesData = {
     },
     { 
       factory: 'Artigarvan', 
-      totalCapacity: 10000000, 
-      usedCapacity: 5400000,
+      totalCapacity: 12500000, 
+      usedCapacity: 9000000,
       products: [
+        { product: 'Casein', volume: 3600000 },
         { product: 'WMP (Whole Milk Powder)', volume: 5400000 }
       ]
     },
@@ -281,11 +280,10 @@ const lakelandDairiesData = {
     }
   ],
   customerContracts: [
-    { id: 1, customer: 'Nestle', product: 'SMP, WMP', volume: 20000000, marginPercent: 3.0, status: 'Contract met', statusColor: 'bg-green-100 text-green-800' },
-    { id: 2, customer: 'Danone', product: 'Ice-Cream, Mini Butter', volume: 6000000, marginPercent: 3.8, status: 'Contract assigned', statusColor: 'bg-yellow-100 text-yellow-800' },
-    { id: 3, customer: 'Arla', product: 'Bulk Butter, Cream', volume: 15000000, marginPercent: 4.6, status: 'Contract in progress', statusColor: 'bg-blue-100 text-blue-800' },
-    { id: 4, customer: 'Mondelez', product: 'Packet Butter, WMP', volume: 10000000, marginPercent: 5.4, status: 'Under negotiation', statusColor: 'bg-red-100 text-red-800' },
-    { id: 5, customer: 'Unilever', product: 'UHT Milk, WPC, Acid Cream', volume: 8500000, marginPercent: 2.6, status: 'Under negotiation', statusColor: 'bg-red-100 text-red-800' },
+    { customer: 'Tesco Ireland', product: 'Butter', volume: 18000000, marginPercent: 4.4, status: 'Contract assigned', statusColor: 'bg-blue-100 text-blue-800' },
+    { customer: 'Dunnes Stores', product: 'Cheese', volume: 19800000, marginPercent: 5.2, status: 'Contract in progress', statusColor: 'bg-green-100 text-green-800' },
+    { customer: 'SuperValu', product: 'WMP (Whole Milk Powder)', volume: 15300000, marginPercent: 3.6, status: 'Contract met', statusColor: 'bg-gray-100 text-gray-800' },
+    { customer: 'Aldi Ireland', product: 'Fresh Milk', volume: 4500000, marginPercent: 2.0, status: 'Under negotiation', statusColor: 'bg-yellow-100 text-yellow-800' },
   ],
   contractFulfillment: [
     { customer: 'Nestle', fulfillmentPercent: 97, color: '#60a5fa' },
@@ -329,13 +327,92 @@ const lakelandDairiesData = {
   ]
 };
 
+// Define Dairygold-specific data (Cork-focused with their actual facilities)
+const dairygoldData = {
+  forecast: {
+    volume: 185000000, // 185M litres (matching our companyStats)
+    timeframe: 'Next 30 days'
+  },
+  allocations: [
+    { id: 1, product: 'Milk Powder', factory: 'Mitchelstown', allocatedLitres: 64750000, percentOfTotal: 35, marginPerLitre: 0.15, marginPercent: 6.0, customerIDs: [1], productionStatus: 'High demand' },
+    { id: 2, product: 'Cheese Products', factory: 'Mitchelstown', allocatedLitres: 46250000, percentOfTotal: 25, marginPerLitre: 0.18, marginPercent: 7.2, customerIDs: [2], productionStatus: 'In production' },
+    { id: 3, product: 'Butter & Spreads', factory: 'Mitchelstown', allocatedLitres: 37000000, percentOfTotal: 20, marginPerLitre: 0.14, marginPercent: 5.6, customerIDs: [3], productionStatus: 'In production' },
+    { id: 4, product: 'Liquid Milk', factory: 'Charleville', allocatedLitres: 27750000, percentOfTotal: 15, marginPerLitre: 0.08, marginPercent: 3.2, customerIDs: [4], productionStatus: 'In production' },
+    { id: 5, product: 'Nutritional Products', factory: 'Mallow', allocatedLitres: 6475000, percentOfTotal: 3.5, marginPerLitre: 0.22, marginPercent: 8.8, customerIDs: [5], productionStatus: 'High demand' },
+    { id: 6, product: 'Ingredients', factory: 'Mallow', allocatedLitres: 2775000, percentOfTotal: 1.5, marginPerLitre: 0.20, marginPercent: 8.0, customerIDs: [6], productionStatus: 'High demand' },
+    { id: 7, product: 'Quality Testing', factory: 'Kanturk', allocatedLitres: 8500000, percentOfTotal: 4.6, marginPerLitre: 0.06, marginPercent: 2.4, customerIDs: [7], productionStatus: 'In production' },
+    { id: 8, product: 'Research Products', factory: 'Moorepark', allocatedLitres: 3200000, percentOfTotal: 1.7, marginPerLitre: 0.25, marginPercent: 10.0, customerIDs: [8], productionStatus: 'High demand' },
+  ],
+  factoryUtilization: [
+    { factory: 'Mitchelstown', utilizationPercent: 92, color: '#10b981' },
+    { factory: 'Mallow', utilizationPercent: 88, color: '#3b82f6' },
+    { factory: 'Charleville', utilizationPercent: 85, color: '#8b5cf6' },
+    { factory: 'Kanturk', utilizationPercent: 78, color: '#f59e0b' },
+    { factory: 'Moorepark', utilizationPercent: 65, color: '#6b7280' },
+  ],
+  plantCapacity: [
+    { 
+      factory: 'Mitchelstown', 
+      totalCapacity: 150000000, 
+      usedCapacity: 148000000,
+      products: [
+        { product: 'Milk Powder', volume: 64750000 },
+        { product: 'Cheese Products', volume: 46250000 },
+        { product: 'Butter & Spreads', volume: 37000000 }
+      ]
+    },
+    { 
+      factory: 'Mallow', 
+      totalCapacity: 25000000, 
+      usedCapacity: 22000000,
+      products: [
+        { product: 'Nutritional Products', volume: 6475000 },
+        { product: 'Ingredients', volume: 2775000 }
+      ]
+    },
+    { 
+      factory: 'Charleville', 
+      totalCapacity: 35000000, 
+      usedCapacity: 29750000,
+      products: [
+        { product: 'Liquid Milk', volume: 27750000 }
+      ]
+    },
+    { 
+      factory: 'Kanturk', 
+      totalCapacity: 12000000, 
+      usedCapacity: 9400000,
+      products: [
+        { product: 'Quality Testing', volume: 8500000 }
+      ]
+    },
+    { 
+      factory: 'Moorepark', 
+      totalCapacity: 5000000, 
+      usedCapacity: 3250000,
+      products: [
+        { product: 'Research Products', volume: 3200000 }
+      ]
+    }
+  ],
+  customerContracts: [
+    { customer: 'Kerrygold (Ornua)', product: 'Milk Powder', volume: 45000000, marginPercent: 6.0, status: 'Contract assigned', statusColor: 'bg-blue-100 text-blue-800' },
+    { customer: 'Carbery Group', product: 'Nutritional Products', volume: 6475000, marginPercent: 8.8, status: 'Contract in progress', statusColor: 'bg-green-100 text-green-800' },
+    { customer: 'Danone', product: 'Ingredients', volume: 2775000, marginPercent: 8.0, status: 'Contract met', statusColor: 'bg-gray-100 text-gray-800' },
+    { customer: 'Muller', product: 'Cheese Products', volume: 25000000, marginPercent: 7.2, status: 'Under negotiation', statusColor: 'bg-yellow-100 text-yellow-800' },
+    { customer: 'Irish Research Council', product: 'Research Products', volume: 3200000, marginPercent: 10.0, status: 'Contract met', statusColor: 'bg-gray-100 text-gray-800' },
+  ]
+};
+
 // Main component
 export default function ProductAllocationRecommendations() {
   const { company } = useParams();
   const companySlug = typeof company === 'string' ? company : 'kerry-dairy';
   
   // Select company data based on company slug
-  const companyData = companySlug === 'lakeland-dairies' ? lakelandDairiesData : kerryDairyData;
+  const companyData = companySlug === 'lakeland-dairies' ? lakelandDairiesData : 
+                      companySlug === 'dairygold' ? dairygoldData :
+                      kerryDairyData;
   
   // Get list of all factories for the selector
   const factoryList = Array.from(new Set(companyData.allocations.map(item => item.factory)));
@@ -431,7 +508,7 @@ export default function ProductAllocationRecommendations() {
       {/* 1. Header Section */}
       <div className="p-6 border-b border-gray-100">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-          <h2 className="text-xl font-medium text-gray-800">Product Allocation Recommendations</h2>
+          <h2 className="text-xl font-medium text-gray-800">Product Allocation</h2>
           
           <div className="relative mt-4 md:mt-0">
             <div 

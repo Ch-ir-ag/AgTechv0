@@ -55,7 +55,7 @@ export default function ProductAllocationPage({ companyName }) {
       <main className="flex-1 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">{companyName} Product Allocation</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Product Allocation</h1>
             <p className="mt-2 text-gray-600">
               Optimize your milk supply across product lines to maximize returns and meet contractual obligations.
             </p>

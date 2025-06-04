@@ -32,6 +32,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const KERRY_USERNAME = 'kerry';
   const KERRY_PASSWORD = 'ky2025!';
   
+  const DAIRYGOLD_USERNAME = 'dairygold';
+  const DAIRYGOLD_PASSWORD = 'dg2025#';
+  
   const [user, setUser] = useState<User | null>(null);
 
   // Check for stored auth on mount
@@ -55,6 +58,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check credentials for Kerry
     if (username === KERRY_USERNAME && password === KERRY_PASSWORD) {
       const newUser = { company: 'kerry-dairy', username: 'kerry' };
+      setUser(newUser);
+      localStorage.setItem('daisyUser', JSON.stringify(newUser));
+      return true;
+    }
+    
+    // Check credentials for Dairygold
+    if (username === DAIRYGOLD_USERNAME && password === DAIRYGOLD_PASSWORD) {
+      const newUser = { company: 'dairygold', username: 'dairygold' };
       setUser(newUser);
       localStorage.setItem('daisyUser', JSON.stringify(newUser));
       return true;

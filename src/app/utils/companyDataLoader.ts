@@ -8,13 +8,50 @@ import * as lakelandDairiesData from '../data/companyData/lakeland-dairies';
 import * as kerryDairyData from '../data/companyData/kerry-dairy';
 import * as dairygoldData from '../data/companyData/dairygold';
 
+// Define the structure of company stats
+interface CompanyStats {
+  currentMonthlyYield?: {
+    value: string;
+    label: string;
+    confidenceInterval: string;
+  };
+  monthlyGrowthRate?: {
+    value: string;
+    label: string;
+    confidenceInterval: string;
+  };
+  projectedAnnualYield?: {
+    value: string;
+    label: string;
+    confidenceInterval: string;
+  };
+  predictionAccuracy?: {
+    value: string;
+    label: string;
+    confidenceInterval: string;
+  };
+}
+
+// Define the structure of company insights
+interface CompanyInsight {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+// Define the complete company data structure
+interface CompanyData {
+  companyStats: CompanyStats;
+  companyInsights: CompanyInsight[];
+}
+
 /**
  * Load company-specific data dynamically
  * This function will scale as more companies are added
- * @param {string} companySlug - The company slug
- * @returns {object} - The company data object containing all needed data
+ * @param companySlug - The company slug
+ * @returns The company data object containing all needed data
  */
-export function loadCompanyData(companySlug) {
+export function loadCompanyData(companySlug: string): CompanyData {
   // Validate the company exists
   if (!isValidCompany(companySlug)) {
     // Return default data if company not found
@@ -56,9 +93,9 @@ export function loadCompanyData(companySlug) {
 
 /**
  * Get default company data (fallback)
- * @returns {object} - Default data structure
+ * @returns Default data structure
  */
-function getDefaultCompanyData() {
+function getDefaultCompanyData(): CompanyData {
   // Return a minimal data structure as a fallback
   return {
     companyStats: {},

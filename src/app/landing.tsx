@@ -7,6 +7,7 @@ import Logo from './components/Logo';
 import { useAuth } from './contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { trackEvent, setTag, identifyUser } from './utils/clarityAnalytics';
+import DemoRequestModal from './components/DemoRequestModal';
 
 // Animation variants
 const fadeIn = {
@@ -61,6 +62,7 @@ export default function Landing() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   // Auto-redirect authenticated users to dashboard
   useEffect(() => {
@@ -110,6 +112,12 @@ export default function Landing() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const openDemoModal = () => {
+    // Track demo request click
+    trackEvent('demo_request_click');
+    setIsDemoModalOpen(true);
   };
 
   if (isAuthenticated) {
@@ -176,12 +184,13 @@ export default function Landing() {
               </motion.p>
               <motion.div 
                 variants={fadeIn}
-                className="mt-8 flex flex-wrap gap-4"
+                className="mt-10 flex flex-wrap justify-start gap-4"
               >
+                {/* Secondary CTAs */}
                 <motion.a 
                   href="mailto:contact@joindaisy.co"
-                  className="px-8 py-3 text-base font-medium rounded-md text-blue-900 bg-white hover:bg-blue-50 transition-colors md:py-4 md:text-lg shadow-lg hover:shadow-xl flex items-center"
-                  whileHover={{ scale: 1.05 }}
+                  className="px-6 py-4 text-base font-medium rounded-xl text-blue-900 bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center border border-white/20"
+                  whileHover={{ scale: 1.03, y: -1 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -189,21 +198,36 @@ export default function Landing() {
                   </svg>
                   Contact Us
                 </motion.a>
+
                 <motion.button 
                   onClick={() => scrollToSection('how-it-works')}
-                  className="px-8 py-3 text-base font-medium rounded-md text-white bg-blue-400 bg-opacity-30 hover:bg-opacity-40 backdrop-blur-sm transition-colors md:py-4 md:text-lg border border-blue-300"
-                  whileHover={{ scale: 1.05 }}
+                  className="px-6 py-4 text-base font-medium rounded-xl text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/30 hover:border-white/50 transition-all duration-300 flex items-center"
+                  whileHover={{ scale: 1.03, y: -1 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   See How It Works
                 </motion.button>
+
                 <motion.button
                   onClick={() => scrollToSection('login')}
-                  className="px-8 py-3 text-base font-medium rounded-md border border-blue-300 text-white hover:bg-blue-700 hover:bg-opacity-20 transition-colors md:py-4 md:text-lg"
-                  whileHover={{ scale: 1.05 }}
+                  className="px-6 py-4 text-base font-medium rounded-xl text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/30 hover:border-white/50 transition-all duration-300 flex items-center"
+                  whileHover={{ scale: 1.03, y: -1 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   Partner Login
+                </motion.button>
+
+                {/* Primary CTA - Request Demo */}
+                <motion.button
+                  onClick={openDemoModal}
+                  className="px-6 py-4 text-base font-semibold rounded-xl text-white bg-blue-400 hover:bg-blue-500 shadow-md hover:shadow-lg transition-all duration-300 flex items-center"
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  
+                  Request Demo
                 </motion.button>
               </motion.div>
             </div>
@@ -733,6 +757,12 @@ export default function Landing() {
           </div>
         </motion.div>
       </footer>
+
+      {/* Demo Request Modal */}
+      <DemoRequestModal 
+        isOpen={isDemoModalOpen} 
+        onClose={() => setIsDemoModalOpen(false)} 
+      />
     </div>
   );
 } 

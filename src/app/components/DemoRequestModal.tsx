@@ -44,7 +44,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
         console.error('Error submitting demo request:', error);
         toast.error('Failed to submit demo request. Please try again.');
       } else {
-        toast.success('Demo request submitted successfully! We\'ll be in touch soon.');
+        toast.success('Demo request submitted successfully! We&apos;ll be in touch soon.');
         setFormData({ name: '', email: '', company: '' });
         onClose();
       }
@@ -191,7 +191,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
             </form>
 
             <p className="text-xs text-gray-500 mt-4 text-center">
-              We'll be in touch shortly to arrange your personalised demo.
+              We&apos;ll be in touch shortly to arrange your personalised demo.
             </p>
           </motion.div>
         </motion.div>

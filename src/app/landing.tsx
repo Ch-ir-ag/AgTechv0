@@ -11,19 +11,7 @@ import DemoRequestModal from './components/DemoRequestModal';
 import { SimpleTextRotate } from '@/components/ui/simple-text-rotate';
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 
-// Helper to parse 'rgb(r, g, b)' or 'rgba(r, g, b, a)' string to {r, g, b}
-const parseRgbColor = (colorString: string | null): { r: number; g: number; b: number } | null => {
-  if (!colorString) return null;
-  const match = colorString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
-  if (match) {
-    return {
-      r: parseInt(match[1], 10),
-      g: parseInt(match[2], 10),
-      b: parseInt(match[3], 10),
-    };
-  }
-  return null;
-};
+
 
 // Animation variants
 const fadeIn = {
@@ -125,10 +113,7 @@ export default function Landing() {
     }
   };
 
-  const openDemoModal = () => {
-    trackEvent('demo_request_click');
-    setIsDemoModalOpen(true);
-  };
+
 
 
 
@@ -167,9 +152,9 @@ export default function Landing() {
                 <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
                   <div className="py-1">
                     <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Dairy</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Grain</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Meat</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Fish</a>
+                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Coming Soon: Grain</a>
+                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Coming Soon: Meat</a>
+                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Coming Soon: Fish</a>
                   </div>
                 </div>
               </div>
@@ -923,7 +908,7 @@ export default function Landing() {
               Backed by Leading Innovation Programs
             </p>
           </motion.div>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-42">
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 lg:gap-28">
             <motion.a 
               href="https://dogpatchlabs.com/" 
               target="_blank" 
@@ -936,7 +921,7 @@ export default function Landing() {
                 <Image
                   src="/images/dogpatch-founders-logo.png"
                   alt="Dogpatch Labs"
-                  width={200}
+                  width={160}
                   height={80}
                   style={{ objectFit: 'contain' }}
                 />
@@ -961,6 +946,24 @@ export default function Landing() {
               </div>
             </motion.a>
             <motion.a 
+              href="https://www.entrepreneurfirst.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              variants={scaleUp}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center"
+            >
+              <div className="h-16 md:h-20 relative">
+                <Image
+                  src="/images/EF.png"
+                  alt="Entrepreneur First"
+                  width={80}
+                  height={80}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            </motion.a>
+            <motion.a 
               href="https://www.ndrc.ie/" 
               target="_blank" 
               rel="noopener noreferrer"
@@ -972,7 +975,7 @@ export default function Landing() {
                 <Image
                   src="/images/ndrc-logo.png"
                   alt="NDRC"
-                  width={130}
+                  width={110}
                   height={80}
                   style={{ objectFit: 'contain' }}
                 />
@@ -990,7 +993,7 @@ export default function Landing() {
                 <Image
                   src="/images/enterprise-ireland-logo.png"
                   alt="Enterprise Ireland"
-                  width={160}
+                  width={140}
                   height={80}
                   style={{ objectFit: 'contain' }}
                 />

@@ -76,7 +76,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
       scale: 1, 
       opacity: 1, 
       y: 0,
-      transition: { type: "spring", damping: 25, stiffness: 400 }
+      transition: { type: "spring" as const, damping: 25, stiffness: 400 }
     },
     exit: { scale: 0.8, opacity: 0, y: 20 }
   };

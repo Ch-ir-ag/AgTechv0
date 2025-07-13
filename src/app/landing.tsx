@@ -506,10 +506,10 @@ export default function Landing() {
               className="bg-white p-8 rounded-xl shadow-lg border-t-4 transform transition-transform"
               style={{borderTopColor: 'var(--dark-green)'}}
             >
-              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>10%</div>
-              <h3 className="text-xl font-semibold mb-3" style={{color: 'var(--dark-green)'}}>Inaccurate Forecasts</h3>
+              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>Poor</div>
+              <h3 className="text-xl font-semibold mb-3" style={{color: 'var(--dark-green)'}}>Forecast accuracy</h3>
               <p className="text-slate-600">
-                Supply forecasts are typically 10% inaccurate—resulting in €5M/year in waste for average food processors.
+                Supply forecasts are typically inaccurate—resulting in millions in waste for average food processors.
               </p>
             </motion.div>
             <motion.div 
@@ -530,7 +530,7 @@ export default function Landing() {
               className="bg-white p-8 rounded-xl shadow-lg border-t-4 transform transition-transform"
               style={{borderTopColor: 'var(--dark-green)'}}
             >
-              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>€€€</div>
+              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>Millions</div>
               <h3 className="text-xl font-semibold mb-3" style={{color: 'var(--dark-green)'}}>Lost Profits</h3>
               <p className="text-slate-600">
                 Poor forecasts cause overproduction, labour inefficiencies, contract penalties, and missed sales opportunities.
@@ -582,7 +582,7 @@ export default function Landing() {
                   <svg className="h-6 w-6 text-white/70 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-white/90">15%+ improvement in forecast accuracy from market standard</span>
+                  <span className="text-white/90">Exceptional improvement in forecast accuracy from market standard</span>
                 </motion.li>
                 <motion.li 
                   variants={fadeIn}
@@ -591,7 +591,7 @@ export default function Landing() {
                   <svg className="h-6 w-6 text-white/70 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-white/90">Real-time inference from diverse data streams</span>
+                  <span className="text-white/90">Real-time inference from weather, market and satellite data streams</span>
                 </motion.li>
                 <motion.li 
                   variants={fadeIn}
@@ -614,29 +614,29 @@ export default function Landing() {
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center p-4 rounded-lg"
+                  className="flex items-center p-4 rounded-lg gap-4"
                   style={{backgroundColor: 'rgba(255, 255, 255, 0.15)'}}
                 >
-                  <div className="text-3xl font-bold text-white w-24">€5M</div>
+                  <div className="text-3xl font-bold text-white flex-shrink-0">Millions</div>
                   <div className="text-white">Average annual savings potential per processor</div>
                 </motion.div>
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center p-4 rounded-lg"
+                  className="flex items-center p-4 rounded-lg gap-4"
                   style={{backgroundColor: 'rgba(255, 255, 255, 0.15)'}}
                 >
-                  <div className="text-3xl font-bold text-white w-24">15%+</div>
-                  <div className="text-white">Improvement in forecast accuracy from market standard</div>
+                  <div className="text-3xl font-bold text-white flex-shrink-0">Superior</div>
+                  <div className="text-white">Forecast accuracy compared to industry standard</div>
                 </motion.div>
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center p-4 rounded-lg"
+                  className="flex items-center p-4 rounded-lg gap-4"
                   style={{backgroundColor: 'rgba(255, 255, 255, 0.15)'}}
                 >
-                  <div className="text-3xl font-bold text-white w-24">20+</div>
-                  <div className="text-white">Variables modeled in our advanced AI system</div>
+                  <div className="text-3xl font-bold text-white flex-shrink-0">20+</div>
+                  <div className="text-white">Variables modelled in our AI</div>
                 </motion.div>
               </div>
             </motion.div>
@@ -909,42 +909,6 @@ export default function Landing() {
             </p>
           </motion.div>
           <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 lg:gap-28">
-            <motion.a 
-              href="https://dogpatchlabs.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              variants={scaleUp}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center"
-            >
-              <div className="h-16 md:h-20 relative">
-                <Image
-                  src="/images/dogpatch-founders-logo.png"
-                  alt="Dogpatch Labs"
-                  width={160}
-                  height={80}
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            </motion.a>
-            <motion.a 
-              href="https://dogpatchlabs.com/founders" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              variants={scaleUp}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center"
-            >
-              <div className="h-16 md:h-20 relative">
-                <Image
-                  src="/images/founders-logo.png"
-                  alt="Founders"
-                  width={60}
-                  height={60}
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            </motion.a>
             <motion.a 
               href="https://www.entrepreneurfirst.com/" 
               target="_blank" 

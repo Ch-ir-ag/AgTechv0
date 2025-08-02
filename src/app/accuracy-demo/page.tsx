@@ -314,16 +314,16 @@ export default function AccuracyDemo() {
   }, [selectedQuestion]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f7ff]">
+    <div className="flex flex-col min-h-screen bg-[#F7F5F0]">
       <Navbar />
       
       <main className="flex-1 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                Kildangan Model <span className="text-blue-500">Accuracy Demo</span>
+            <h1 className="text-3xl font-bold text-[#1E4B3A] mb-4">
+                Kildangan Model <span className="text-[#1E4B3A]">Accuracy Demo</span>
             </h1>
-            <p className="text-gray-600 max-w-3xl mx-auto">
+            <p className="text-[#1E4B3A] max-w-3xl mx-auto">
               Visualizing the performance of our machine learning model predicting milk volume 
               using complex neural network systems.
             </p>
@@ -336,7 +336,7 @@ export default function AccuracyDemo() {
                 onClick={() => setSelectedYear('all')}
                 className={`px-4 py-2 text-sm font-medium rounded-l-md ${
                   selectedYear === 'all' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-[#1E4B3A] text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 } border border-gray-300`}
               >
@@ -346,7 +346,7 @@ export default function AccuracyDemo() {
                 onClick={() => setSelectedYear('2022')}
                 className={`px-4 py-2 text-sm font-medium ${
                   selectedYear === '2022' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-[#1E4B3A] text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 } border-t border-b border-gray-300`}
               >
@@ -356,7 +356,7 @@ export default function AccuracyDemo() {
                 onClick={() => setSelectedYear('2023')}
                 className={`px-4 py-2 text-sm font-medium ${
                   selectedYear === '2023' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-[#1E4B3A] text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 } border-t border-b border-gray-300`}
               >
@@ -366,7 +366,7 @@ export default function AccuracyDemo() {
                 onClick={() => setSelectedYear('2024')}
                 className={`px-4 py-2 text-sm font-medium rounded-r-md ${
                   selectedYear === '2024' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-[#1E4B3A] text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 } border border-gray-300`}
               >
@@ -377,7 +377,7 @@ export default function AccuracyDemo() {
           
           {/* LLM Query Interface */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
-            <h2 className="text-xl font-medium text-gray-800 mb-4">
+            <h2 className="text-xl font-medium text-[#1E4B3A] mb-4">
               Ask About Milk Yield Factors
             </h2>
             <div className="flex flex-col">
@@ -418,17 +418,17 @@ export default function AccuracyDemo() {
             
             {llmResponse && (
               <div className="mt-6 animate-fadeIn">
-                <h3 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <h3 className="text-lg font-medium text-[#1E4B3A] mb-3 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#1E4B3A] mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                   </svg>
                   Daisy AI&apos;s Analysis
                 </h3>
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200 shadow-sm">
-                  <p className="text-gray-700 leading-relaxed">{llmResponse}</p>
+                <div className="bg-gradient-to-r from-[#F7F5F0] to-[#F7F5F0] p-5 rounded-lg border border-[#1E4B3A]/20 shadow-sm">
+                  <p className="text-[#1E4B3A] leading-relaxed">{llmResponse}</p>
                   
                   <div className="mt-5 pt-4 border-t border-blue-200">
-                    <p className="text-sm font-semibold text-gray-800 mb-2">Impact on Milk Yield:</p>
+                    <p className="text-sm font-semibold text-[#1E4B3A] mb-2">Impact on Milk Yield:</p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                       <div 
                         className={`text-lg font-bold px-4 py-2 rounded-md ${
@@ -442,7 +442,7 @@ export default function AccuracyDemo() {
                           ${((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) * 100).toFixed(1)}%`
                         }
                       </div>
-                      <div className="flex items-center text-sm text-blue-700">
+                      <div className="flex items-center text-sm text-[#1E4B3A]">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                         </svg>
@@ -461,7 +461,7 @@ export default function AccuracyDemo() {
           {/* Next Week Prediction Chart */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-medium text-gray-800">
+              <h2 className="text-xl font-medium text-[#1E4B3A]">
                 {getPredictionTitle()}
               </h2>
               <div className="flex items-center space-x-2">
@@ -470,7 +470,7 @@ export default function AccuracyDemo() {
                     onClick={() => setPredictionView('weekly')}
                     className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                       predictionView === 'weekly'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-[#1E4B3A] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -480,7 +480,7 @@ export default function AccuracyDemo() {
                     onClick={() => setPredictionView('monthly')}
                     className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                       predictionView === 'monthly'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-[#1E4B3A] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -490,7 +490,7 @@ export default function AccuracyDemo() {
                     onClick={() => setPredictionView('yearly')}
                     className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md ${
                       predictionView === 'yearly'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-[#1E4B3A] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -544,7 +544,7 @@ export default function AccuracyDemo() {
                       ? ((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0 
                           ? "#4ade80" // Green for positive impact
                           : "#ef4444") // Red for negative impact
-                      : "#60a5fa"} // Default blue
+                      : "#1E4B3A"} // Default blue
                     radius={[4, 4, 0, 0]}
                     barSize={predictionView === 'yearly' ? 60 : (predictionView === 'monthly' ? 30 : 20)}
                   />
@@ -563,7 +563,7 @@ export default function AccuracyDemo() {
           {/* New time period-based visualization */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-medium text-gray-800">
+              <h2 className="text-xl font-medium text-[#1E4B3A]">
                 Milk Volume Comparison by Time Period
               </h2>
               <div className="inline-flex shadow-sm rounded-md">
@@ -571,7 +571,7 @@ export default function AccuracyDemo() {
                   onClick={() => setTimePeriod('weekly')}
                   className={`px-4 py-2 text-sm font-medium rounded-l-md ${
                     timePeriod === 'weekly' 
-                      ? 'bg-blue-600 text-white' 
+                      ? 'bg-[#1E4B3A] text-white' 
                       : 'bg-white text-gray-700 hover:bg-gray-50'
                   } border border-gray-300`}
                 >
@@ -581,7 +581,7 @@ export default function AccuracyDemo() {
                   onClick={() => setTimePeriod('monthly')}
                   className={`px-4 py-2 text-sm font-medium rounded-r-md ${
                     timePeriod === 'monthly' 
-                      ? 'bg-blue-600 text-white' 
+                      ? 'bg-[#1E4B3A] text-white' 
                       : 'bg-white text-gray-700 hover:bg-gray-50'
                   } border-t border-r border-b border-gray-300`}
                 >
@@ -630,14 +630,14 @@ export default function AccuracyDemo() {
                     yAxisId="left" 
                     dataKey="adjustedActualVolume" 
                     name="Actual Volume" 
-                    fill="rgba(72, 128, 230, 0.8)" 
+                    fill="#556B2F" 
                     barSize={timePeriod === 'weekly' ? (selectedYear === 'all' ? 6 : 10) : 20}
                   />
                   <Bar 
                     yAxisId="left" 
                     dataKey="adjustedPredictedVolume" 
                     name="Predicted Volume" 
-                    fill="rgba(255, 115, 0, 0.8)" 
+                    fill="#1E4B3A" 
                     barSize={timePeriod === 'weekly' ? (selectedYear === 'all' ? 6 : 10) : 20}
                   />
                 </ComposedChart>
@@ -655,7 +655,7 @@ export default function AccuracyDemo() {
           
           {/* Time Series Visualization */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
-            <h2 className="text-xl font-medium text-gray-800 mb-6">
+            <h2 className="text-xl font-medium text-[#1E4B3A] mb-6">
               Milk Volume Over Time: Predicted vs Actual
             </h2>
             <div className="h-[400px]">
@@ -708,8 +708,8 @@ export default function AccuracyDemo() {
                   <Line 
                     name="Actual Volume" 
                     dataKey="actualVolume" 
-                    stroke="rgba(72, 128, 230, 0.8)"
-                    dot={{ fill: "rgba(72, 128, 230, 0.8)" }}
+                    stroke="#556B2F"
+                    dot={{ fill: "#556B2F" }}
                   />
                 </ComposedChart>
               </ResponsiveContainer>
@@ -718,7 +718,7 @@ export default function AccuracyDemo() {
           
           {/* Residual Analysis - Replace with 2024 Comparison */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
-            <h2 className="text-xl font-medium text-gray-800 mb-6">
+            <h2 className="text-xl font-medium text-[#1E4B3A] mb-6">
               2024 Milk Yield: Predicted vs Actual
             </h2>
             <div className="h-[400px]">
@@ -760,84 +760,42 @@ export default function AccuracyDemo() {
                   <Bar 
                     dataKey="predictedVolume" 
                     name="Predicted Volume" 
-                    fill="#f97316" 
+                    fill="#1E4B3A" 
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar 
                     dataKey="actualVolume" 
                     name="Actual Volume" 
-                    fill="#3b82f6" 
+                    fill="#556B2F" 
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
+            <div className="mt-4 text-sm text-[#1E4B3A] bg-gray-50 p-3 rounded">
               <p>This chart compares our model&apos;s predictions with the actual milk yield for 2024, showing the accuracy of our forecasting system throughout the year.</p>
             </div>
           </div>
           
           {/* Model Performance Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'weekly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-blue-500">96.3%</p>
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'weekly' ? 'border-[#1E4B3A] ring-2 ring-[#1E4B3A]/20' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-[#1E4B3A]">96.3%</p>
               <p className="text-gray-600 text-sm">Weekly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">8-week forecast reliability</p>
             </div>
-            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'monthly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-blue-500">95.6%</p>
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'monthly' ? 'border-[#1E4B3A] ring-2 ring-[#1E4B3A]/20' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-[#1E4B3A]">95.6%</p>
               <p className="text-gray-600 text-sm">Monthly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">Medium-term forecast accuracy</p>
             </div>
-            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'yearly' ? 'border-blue-300 ring-2 ring-blue-200' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-blue-500">93.7%</p>
+            <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'yearly' ? 'border-[#1E4B3A] ring-2 ring-[#1E4B3A]/20' : 'border-gray-100'} text-center transition-all duration-200`}>
+              <p className="text-3xl font-bold text-[#1E4B3A]">93.7%</p>
               <p className="text-gray-600 text-sm">Yearly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">Annual projection confidence</p>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:space-x-6 mt-8">
-            <div className={`w-full md:w-3/4 ${predictionView === 'weekly' ? 'opacity-100' : 'opacity-50'}`}>
-              <h3 className="text-lg font-semibold mb-2">Impact on Milk Yield</h3>
-              <p className="mb-4">
-                {selectedQuestion && predefinedQuestions.find(q => q.id === selectedQuestion) && 
-                  <>
-                    The prediction shows a 
-                    <span className={`font-semibold ${
-                      ((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0) 
-                        ? 'text-green-600' 
-                        : 'text-red-600'
-                    }`}>
-                      {" "}
-                      {((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0) ? '+' : ''}
-                      {((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) * 100).toFixed(1)}%
-                    </span> change in expected milk yield.
-                  </>
-                }
-              </p>
-              <p className="text-sm text-gray-600">
-                {predictionView === 'weekly' 
-                  ? 'The chart reflects this change. Toggle to weekly view to see impact.' 
-                  : 'Switch to weekly view to see the impact on predictions.'}
-              </p>
-            </div>
-
-            <div className={`rounded-full h-2 w-full bg-gray-100 overflow-hidden mb-1 ${
-              selectedQuestion ? 'block' : 'hidden'
-            }`}>
-              <div 
-                className={`h-full ${
-                  selectedQuestion && (predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) >= 0 
-                    ? 'bg-green-500' 
-                    : 'bg-red-500'
-                }`}
-                style={{ 
-                  width: `${Math.abs(((predefinedQuestions.find(q => q.id === selectedQuestion)?.percentageChange || 0) * 100))}%`,
-                  transition: 'width 1s ease-in-out' 
-                }}
-              ></div>
-            </div>
-          </div>
         </div>
       </main>
     </div>

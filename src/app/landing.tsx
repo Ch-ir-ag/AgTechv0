@@ -260,10 +260,10 @@ export default function Landing() {
             {/* Main Content Container */}
             <div className="relative bg-white/60 backdrop-blur-sm rounded-[2rem] shadow-2xl border border-white/30 p-6 md:p-8 lg:p-10 transform transition-transform duration-300 hover:scale-[1.02]">
               {/* Decorative corner elements */}
-              <div className="absolute top-4 left-4 w-2 h-2 bg-gradient-to-br from-green-400 to-blue-400 rounded-full animate-pulse"></div>
-              <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-br from-blue-400 to-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-              <div className="absolute bottom-4 left-4 w-2 h-2 bg-gradient-to-br from-indigo-400 to-green-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-              <div className="absolute bottom-4 right-4 w-2 h-2 bg-gradient-to-br from-green-400 to-indigo-400 rounded-full animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+              <div className="absolute top-4 left-4 w-2 h-2 rounded-full" style={{ backgroundColor: '#1E4B3A' }}></div>
+              <div className="absolute top-4 right-4 w-2 h-2 rounded-full" style={{ backgroundColor: '#1E4B3A' }}></div>
+              <div className="absolute bottom-4 left-4 w-2 h-2 rounded-full" style={{ backgroundColor: '#1E4B3A' }}></div>
+              <div className="absolute bottom-4 right-4 w-2 h-2 rounded-full" style={{ backgroundColor: '#1E4B3A' }}></div>
             {/* Title Section - Enhanced */}
             <div className="text-center max-w-6xl mx-auto mb-8">
               <motion.h1 

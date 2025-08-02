@@ -44,22 +44,16 @@ export default function Navbar() {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white shadow-sm py-2'
-          : 'bg-white py-4'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <Logo className="text-blue-500" />
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1E4B3A] border-b`} style={{ borderBottomColor: '#1E4B3A' }}>
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <Logo className="text-[#F7F5F0]" />
 
         {/* Desktop Navigation - Hidden on accuracy-demo page */}
         {!isAccuracyDemo && (
           <div className="hidden md:flex space-x-6 items-center">
             <Link 
               href={`/${currentCompany}/dashboard`} 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              className="text-[#F7F5F0] hover:text-white text-sm font-medium"
               scroll={true}
               onClick={() => {
                 // Force scroll to top when clicking dashboard link
@@ -70,7 +64,7 @@ export default function Navbar() {
             </Link>
             <Link 
               href={`/${currentCompany}/product-allocation`} 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              className="text-[#F7F5F0] hover:text-white text-sm font-medium"
               scroll={true}
               onClick={() => {
                 // Force scroll to top when clicking product allocation link
@@ -84,7 +78,7 @@ export default function Navbar() {
             {isAuthenticated && (
               <button
                 onClick={handleLogout}
-                className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+                className="text-[#F7F5F0] hover:text-white text-sm font-medium"
               >
                 Logout
               </button>
@@ -96,7 +90,7 @@ export default function Navbar() {
         {!isAccuracyDemo && (
           <button
             type="button"
-            className="md:hidden text-gray-700 focus:outline-none"
+            className="md:hidden text-[#F7F5F0] focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
@@ -118,7 +112,7 @@ export default function Navbar() {
           <div className="flex flex-col space-y-4 px-4 py-6">
             <Link 
               href={`/${currentCompany}/dashboard`} 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              className="text-[#F7F5F0] hover:text-white text-sm font-medium"
               onClick={() => {
                 setIsMobileMenuOpen(false);
                 // Force scroll to top when clicking dashboard link
@@ -130,7 +124,7 @@ export default function Navbar() {
             </Link>
             <Link 
               href={`/${currentCompany}/product-allocation`} 
-              className="text-gray-700 hover:text-blue-500 text-sm font-medium"
+              className="text-[#F7F5F0] hover:text-white text-sm font-medium"
               onClick={() => {
                 setIsMobileMenuOpen(false);
                 // Force scroll to top when clicking product allocation link
@@ -148,7 +142,7 @@ export default function Navbar() {
                   setIsMobileMenuOpen(false);
                   handleLogout();
                 }}
-                className="text-gray-700 hover:text-blue-500 text-sm font-medium text-left"
+                className="text-[#F7F5F0] hover:text-white text-sm font-medium text-left"
               >
                 Logout
               </button>

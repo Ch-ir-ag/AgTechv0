@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useCallback, useState } from 'react';
+import Image from 'next/image';
 
 // Helper to parse 'rgb(r, g, b)' or 'rgba(r, g, b, a)' string to {r, g, b}
 const parseRgbColor = (colorString: string | null): { r: number; g: number; b: number } | null => {
@@ -283,10 +284,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                     <div className="bg-border rounded-[2rem] p-[0.25rem]">
                         <div className="relative h-64 sm:h-72 md:h-80 lg:h-96 rounded-[1.75rem] bg-card flex items-center justify-center overflow-hidden">
                             {imageUrl && (
-                                <img
+                                <Image
                                     src={imageUrl}
                                     alt="Preview"
-                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                                    fill
+                                    className={`object-cover transition-opacity duration-300 ${
                                         showVideo ? 'opacity-0 pointer-events-none' : 'opacity-100'
                                     }`}
                                 />

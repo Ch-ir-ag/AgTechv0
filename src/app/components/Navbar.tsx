@@ -8,7 +8,6 @@ import { companies } from '../data/companies';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -22,21 +21,6 @@ export default function Navbar() {
   const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' 
     ? urlParts[0] 
     : Object.keys(companies)[0]; // Use first company as default
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const handleLogout = () => {
     logout();

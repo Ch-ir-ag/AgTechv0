@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import Image from 'next/image';
 
 // A simple SVG Play Icon
 const PlayIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
@@ -58,10 +59,11 @@ const MediaDisplay: React.FC<MediaDisplayProps> = ({
       <div className="bg-border rounded-[2rem] p-[0.25rem]">
         <div className="relative h-64 sm:h-72 md:h-80 lg:h-96 rounded-[1.75rem] bg-card flex items-center justify-center overflow-hidden">
           {imageUrl && (
-            <img
+            <Image
               src={imageUrl}
               alt="Preview"
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+              fill
+              className={`object-cover transition-opacity duration-300 ${
                 showVideo ? 'opacity-0 pointer-events-none' : 'opacity-100'
               }`}
             />

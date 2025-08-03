@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const DemandSection = () => {
   const [filterType, setFilterType] = useState<'product' | 'customer'>('product');
@@ -400,7 +400,7 @@ const DemandSection = () => {
                   borderRadius: '8px',
                   fontSize: '12px'
                 }}
-                formatter={(value: any, name: string) => [
+                formatter={(value: number | string, name: string) => [
                   typeof value === 'number' ? value.toFixed(0) : value,
                   name === 'demand' ? 'Historical Demand' :
                   name === 'forecast' ? 'AI Forecast' :

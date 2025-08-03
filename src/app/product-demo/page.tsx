@@ -28,7 +28,7 @@ export default function ProductDemo() {
       case 'make-plan':
         return <MakePlanSection lines={demoData.productionLines} />;
       case 'supply':
-        return <SupplySection data={demoData.supply} />;
+        return <SupplySection />;
       case 'operations':
         return <OperationsSection machines={demoData.machines} />;
       case 'demand':

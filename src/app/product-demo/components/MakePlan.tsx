@@ -25,7 +25,7 @@ const MakePlanSection = ({ lines }: MakePlanSectionProps) => {
     setExpandedSubLineId(expandedSubLineId === subLineId ? null : subLineId);
   };
 
-  const getSubLineDetails = (subLineId: string, parentLine: ProductionLine) => {
+  const getSubLineDetails = (subLineId: string) => {
     // Generate detailed metrics for each subline
     const baseTemp = subLineId.includes('1A') ? 72 : subLineId.includes('1B') ? 74 : 
                     subLineId.includes('2A') ? 0 : subLineId.includes('2B') ? 0 :
@@ -258,7 +258,7 @@ const MakePlanSection = ({ lines }: MakePlanSectionProps) => {
                                   >
                                     <div className="p-4 bg-gray-50">
                                       {(() => {
-                                        const details = getSubLineDetails(subLine.id, line);
+                                        const details = getSubLineDetails(subLine.id);
                                         return (
                                           <div className="space-y-4">
                                             {/* Machine Metrics */}

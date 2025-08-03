@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const PreventiveMaintenanceSection = () => {
   const [filterType, setFilterType] = useState<'machine' | 'technician' | 'priority'>('machine');
-  const [timeFrame, setTimeFrame] = useState<'current' | 'upcoming'>('current');
+
 
   const maintenanceData = [
     {
@@ -132,18 +132,7 @@ const PreventiveMaintenanceSection = () => {
     }
   ];
 
-  const performanceComparison = {
-    beforeAI: {
-      downtimeHours: 120,
-      maintenanceCosts: 45000,
-      productionVolume: 85000
-    },
-    afterAI: {
-      downtimeHours: 84,
-      maintenanceCosts: 35000,
-      productionVolume: 97750
-    }
-  };
+
 
   const performanceMetrics = [
     {
@@ -440,7 +429,7 @@ const PreventiveMaintenanceSection = () => {
                       fontSize: '12px',
                       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                     }}
-                    formatter={(value: any, name: string, props: any) => {
+                    formatter={(value: number, name: string, props: { payload?: { metric?: string } }) => {
                       const metric = props.payload?.metric || '';
                       const formatValue = metric.includes('Costs') ? `$${value.toLocaleString()}` : value.toLocaleString();
                       return [formatValue, name];

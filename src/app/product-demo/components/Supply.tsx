@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { SupplyData } from '../types';
 
-interface SupplySectionProps {
-  data: SupplyData;
-}
+
+
 
 // Anonymized supply chain stats data
 const supplyStats = {
@@ -581,7 +579,7 @@ type MetricType = 'volume' | 'fat' | 'protein' | 'lactose';
 type TimeframeType = 'weekly' | 'monthly' | 'yearly';
 
 // Custom tooltip for charts
-const CustomTooltip = ({ active, payload, label, metricType }: any & { metricType: MetricType }) => {
+const CustomTooltip = ({ active, payload, label, metricType }: { active?: boolean; payload?: Array<{ payload: { thisYear?: number; lastYear?: number; onTime?: number } }>; label?: string; metricType: MetricType }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     
@@ -658,7 +656,7 @@ const CustomTooltip = ({ active, payload, label, metricType }: any & { metricTyp
   return null;
 };
 
-const SupplySection = ({ data }: SupplySectionProps) => {
+const SupplySection = () => {
   const [timeframe, setTimeframe] = useState<TimeframeType>('monthly');
   const [metricType, setMetricType] = useState<MetricType>('volume');
 

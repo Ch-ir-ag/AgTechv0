@@ -250,7 +250,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
           {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-blue-500">
+              <p className="text-2xl sm:text-3xl font-bold text-[#1E4B3A]">
                 {companyData.companyStats?.currentMonthlyYield?.value || '165M'}
               </p>
               <p className="text-gray-600 text-xs sm:text-sm">
@@ -261,7 +261,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
               </p>
             </div>
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-blue-500">
+              <p className="text-2xl sm:text-3xl font-bold text-[#1E4B3A]">
                 {companyData.companyStats?.monthlyGrowthRate?.value || '+5.2%'}
               </p>
               <p className="text-gray-600 text-xs sm:text-sm">
@@ -272,7 +272,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
               </p>
             </div>
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-blue-500">
+              <p className="text-2xl sm:text-3xl font-bold text-[#1E4B3A]">
                 {companyData.companyStats?.projectedAnnualYield?.value || '2.1B'}
               </p>
               <p className="text-gray-600 text-xs sm:text-sm">
@@ -283,7 +283,7 @@ export default function DashboardClient({ companyName }: DashboardClientProps) {
               </p>
             </div>
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-blue-500">
+              <p className="text-2xl sm:text-3xl font-bold text-[#1E4B3A]">
                 {companyData.companyStats?.predictionAccuracy?.value || '95.8%'}
               </p>
               <p className="text-gray-600 text-xs sm:text-sm">

@@ -87,7 +87,7 @@ const CustomTooltip = ({ active, payload, label, metricType }: TooltipProps & { 
         
         <div className="text-sm space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-blue-600">{metricType === 'milk' ? "2025 Yield:" : "2025:"}</span>
+            <span className="text-[#1E4B3A]">{metricType === 'milk' ? "2025 Yield:" : "2025:"}</span>
             <span className="font-medium">{formatNumber(data?.thisYear || 0)} {getUnit()}</span>
           </div>
           
@@ -298,7 +298,7 @@ export default function MilkYieldChart() {
             onClick={() => setMetricType('milk')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'milk'
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
             suppressHydrationWarning
@@ -309,7 +309,7 @@ export default function MilkYieldChart() {
             onClick={() => setMetricType('fat')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'fat'
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
             suppressHydrationWarning
@@ -320,7 +320,7 @@ export default function MilkYieldChart() {
             onClick={() => setMetricType('protein')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'protein'
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
             suppressHydrationWarning
@@ -331,7 +331,7 @@ export default function MilkYieldChart() {
             onClick={() => setMetricType('lactose')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               metricType === 'lactose'
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
             suppressHydrationWarning
@@ -346,7 +346,7 @@ export default function MilkYieldChart() {
             onClick={() => setTimeframe('weekly')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               timeframe === 'weekly' 
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             suppressHydrationWarning
@@ -357,7 +357,7 @@ export default function MilkYieldChart() {
             onClick={() => setTimeframe('monthly')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               timeframe === 'monthly' 
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             suppressHydrationWarning
@@ -368,7 +368,7 @@ export default function MilkYieldChart() {
             onClick={() => setTimeframe('yearly')}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
               timeframe === 'yearly' 
-                ? 'bg-blue-100 text-blue-800 shadow-sm' 
+                ? 'bg-green-100 text-[#1E4B3A] shadow-sm' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             suppressHydrationWarning
@@ -419,12 +419,12 @@ export default function MilkYieldChart() {
               />
               <defs>
                 <linearGradient id="colorThisYear" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#60a5fa" stopOpacity={0.8}/>
+                  <stop offset="5%" stopColor="#1E4B3A" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#2d6b4f" stopOpacity={0.8}/>
                 </linearGradient>
                 <linearGradient id="colorCompYear" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#93c5fd" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#bfdbfe" stopOpacity={0.8}/>
+                  <stop offset="5%" stopColor="#556B2F" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#6b8e3d" stopOpacity={0.8}/>
                 </linearGradient>
               </defs>
               <Bar
@@ -436,7 +436,7 @@ export default function MilkYieldChart() {
                 animationDuration={750}
                 animationEasing="ease-out"
               >
-                <ErrorBar dataKey="confidenceLevel" width={4} strokeWidth={2} stroke="#93c5fd" />
+                <ErrorBar dataKey="confidenceLevel" width={4} strokeWidth={2} stroke="#6b8e3d" />
             </Bar>
             <Bar
                 name={`${compareYears.comparisonYear} ${metricType}`} 

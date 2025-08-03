@@ -22,6 +22,10 @@ export const companies = {
     slug: 'dairygold',
     // Add more company-specific configurations here
   },
+  'demo-processor': {
+    name: 'Demo Processor',
+    slug: 'demo-processor',
+  },
   // Add more companies as they come onboard
   // 'example-company': {
   //   name: 'Example Company',

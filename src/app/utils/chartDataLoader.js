@@ -7,6 +7,7 @@ import { isValidCompany } from '../data/companies';
 import * as lakelandDairiesChartData from '../data/chartData/lakeland-dairies';
 import * as kerryDairyChartData from '../data/chartData/kerry-dairy';
 import * as dairygoldChartData from '../data/chartData/dairygold';
+import * as demoProcessorChartData from '../data/chartData/demo-processor';
 
 /**
  * Load company-specific chart data dynamically
@@ -43,6 +44,13 @@ export function loadChartData(companySlug) {
         fatPercentageData: dairygoldChartData.fatPercentageData || {},
         proteinPercentageData: dairygoldChartData.proteinPercentageData || {},
         lactosePercentageData: dairygoldChartData.lactosePercentageData || {},
+      };
+    case 'demo-processor':
+      return {
+        milkYieldData: demoProcessorChartData.milkYieldData || {},
+        fatPercentageData: demoProcessorChartData.fatPercentageData || {},
+        proteinPercentageData: demoProcessorChartData.proteinPercentageData || {},
+        lactosePercentageData: demoProcessorChartData.lactosePercentageData || {},
       };
     // Add more cases as more companies are added
     default:

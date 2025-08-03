@@ -13,12 +13,15 @@ export default function Navbar() {
   const router = useRouter();
   const { logout, isAuthenticated } = useAuth();
   
-  // Check if we're on the accuracy-demo page
+  // Check if we're on special demo pages
   const isAccuracyDemo = pathname === '/accuracy-demo';
+  const isProcessorForecasting = pathname === '/processor-forecasting';
+  const isProductDemo = pathname === '/product-demo';
+  const isSpecialDemoPage = isAccuracyDemo || isProcessorForecasting || isProductDemo;
   
   // Extract company from URL if it exists (e.g., /lakeland-dairies/dashboard)
   const urlParts = pathname.split('/').filter(Boolean);
-  const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' 
+  const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' && urlParts[0] !== 'processor-forecasting'
     ? urlParts[0] 
     : Object.keys(companies)[0]; // Use first company as default
 
@@ -32,8 +35,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <Logo className="text-[#F7F5F0]" />
 
-        {/* Desktop Navigation - Hidden on accuracy-demo page */}
-        {!isAccuracyDemo && (
+        {/* Desktop Navigation - Hidden on special demo pages */}
+        {!isSpecialDemoPage && (
           <div className="hidden md:flex space-x-6 items-center">
             <Link 
               href={`/${currentCompany}/dashboard`} 
@@ -70,8 +73,38 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Mobile Menu Button - Hidden on accuracy-demo page */}
-        {!isAccuracyDemo && (
+        {/* Special Demo Pages Navigation */}
+        {isSpecialDemoPage && (
+          <div className="hidden md:flex space-x-6 items-center">
+            {isAccuracyDemo && (
+              <Link 
+                href={`/processor-forecasting`} 
+                className="text-[#F7F5F0] hover:text-white text-sm font-medium"
+                scroll={true}
+                onClick={() => {
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+              >
+                Processor Forecasting
+              </Link>
+            )}
+            {isProcessorForecasting && (
+              <Link 
+                href={`/accuracy-demo`} 
+                className="text-[#F7F5F0] hover:text-white text-sm font-medium"
+                scroll={true}
+                onClick={() => {
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+              >
+                Accuracy Demo
+              </Link>
+            )}
+          </div>
+        )}
+
+        {/* Mobile Menu Button */}
+        {(isSpecialDemoPage || !isSpecialDemoPage) && (
           <button
             type="button"
             className="md:hidden text-[#F7F5F0] focus:outline-none"
@@ -90,8 +123,8 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mobile Menu - Hidden on accuracy-demo page */}
-      {!isAccuracyDemo && isMobileMenuOpen && (
+      {/* Mobile Menu - Hidden on special demo pages */}
+      {!isSpecialDemoPage && isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-sm">
           <div className="flex flex-col space-y-4 px-4 py-6">
             <Link 
@@ -130,6 +163,40 @@ export default function Navbar() {
               >
                 Logout
               </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Special Demo Pages Mobile Menu */}
+      {isSpecialDemoPage && isMobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-sm">
+          <div className="flex flex-col space-y-4 px-4 py-6">
+            {isAccuracyDemo && (
+              <Link 
+                href={`/processor-forecasting`} 
+                className="text-[#F7F5F0] hover:text-white text-sm font-medium"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+                scroll={true}
+              >
+                Processor Forecasting
+              </Link>
+            )}
+            {isProcessorForecasting && (
+              <Link 
+                href={`/accuracy-demo`} 
+                className="text-[#F7F5F0] hover:text-white text-sm font-medium"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+                scroll={true}
+              >
+                Accuracy Demo
+              </Link>
             )}
           </div>
         </div>

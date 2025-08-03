@@ -49,7 +49,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-md shadow-sm">
         <p className="font-medium text-gray-900">{label || 'Unknown'}</p>
-        <p className="text-sm text-blue-500">
+        <p className="text-sm text-[#1E4B3A]">
           Actual: {actualValue} liters
         </p>
         <p className="text-sm text-green-600">
@@ -87,9 +87,9 @@ export default function YearlyYieldChart() {
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
-            <ReferenceLine x={yearlyYieldData[currentMonth].month} stroke="#ff7300" label="Current" />
-            <Line type="monotone" dataKey="actual" stroke="#3b82f6" activeDot={{ r: 8 }} name="Actual Yield" />
-            <Line type="monotone" dataKey="predicted" stroke="#10b981" name="Predicted Yield" />
+            <ReferenceLine x={yearlyYieldData[currentMonth].month} stroke="#f97316" label="Current" />
+            <Line type="monotone" dataKey="actual" stroke="#556B2F" activeDot={{ r: 8, fill: "#556B2F" }} name="Actual Yield" />
+            <Line type="monotone" dataKey="predicted" stroke="#1E4B3A" name="Predicted Yield" />
           </LineChart>
         </ResponsiveContainer>
       </div>

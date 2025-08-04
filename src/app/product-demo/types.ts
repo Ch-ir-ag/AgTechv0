@@ -71,6 +71,9 @@ export interface Machine {
   name: string;
   status: string;
   location: string;
+  function: string;
+  energyUsage: number;
+  downtimeCost: number;
   metrics: {
     flowRate: Metric;
     vibration: Metric;
@@ -106,4 +109,32 @@ export interface Supplier {
 export interface SupplyData {
   facilities: Facility[];
   suppliers: Supplier[];
+}
+
+// Weekly Make Plan Types
+export interface ProductionRun {
+  id: string;
+  day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+  startTime: string; // e.g., "06:00"
+  endTime: string; // e.g., "14:00"
+  product: string;
+  volume: number; // in litres
+  fat: number; // percentage
+  protein: number; // percentage
+  silos: number[]; // silo numbers used
+  status: 'Planned' | 'Confirmed' | 'In Progress' | 'Completed';
+  reasoning?: string; // AI reasoning for this decision
+  notes?: string;
+}
+
+export interface WeeklyLineSchedule {
+  line: string;
+  lineId: string;
+  runs: ProductionRun[];
+}
+
+export interface WeeklyMakePlan {
+  weekNumber: number;
+  year: number;
+  schedules: WeeklyLineSchedule[];
 }

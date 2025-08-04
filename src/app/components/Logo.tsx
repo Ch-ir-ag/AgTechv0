@@ -3,15 +3,16 @@ import Link from 'next/link';
 
 interface LogoProps {
   className?: string;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'navbar' | 'large';
 }
 
 export default function Logo({ className = '', size = 'medium' }: LogoProps) {
   // Define size configurations
   const sizeConfig = {
-    small: { width: '80px', height: 'h-6' },    // ~24px height - for very compact layouts
-    medium: { width: '100px', height: 'h-8' },  // ~32px height - default for navbar
-    large: { width: '200px', height: 'h-16' }   // ~64px height - for hero sections
+    small: { width: '80px', height: 'h-6' },     // ~24px height - for very compact layouts
+    medium: { width: '100px', height: 'h-8' },   // ~32px height - default for navbar
+    navbar: { width: '140px', height: 'h-10' },  // ~40px height - perfect for navbar
+    large: { width: '200px', height: 'h-16' }    // ~64px height - for hero sections
   };
 
   const { width, height } = sizeConfig[size];

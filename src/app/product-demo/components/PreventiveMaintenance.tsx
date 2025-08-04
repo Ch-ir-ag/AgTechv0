@@ -10,9 +10,9 @@ const PreventiveMaintenanceSection = () => {
   const maintenanceData = [
     {
       id: 'm1',
-      machineName: 'Pasteurizer Unit A',
+      machineName: 'Pasteuriser Unit A',
       location: 'Plant A, Line 1',
-      maintenanceType: 'Preventive',
+      maintenanceType: 'Predictive',
       dueDate: 'August 15, 2025',
       progress: 75,
       assignedTechnician: 'John Smith',
@@ -187,7 +187,7 @@ const PreventiveMaintenanceSection = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold mb-6" style={{ color: '#1E4B3A' }}>Preventive Maintenance</h2>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: '#1E4B3A' }}>Predictive Maintenance</h2>
       
       {/* Filter Controls */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

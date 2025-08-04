@@ -129,10 +129,9 @@ const supplyPerformanceData = {
 const supplyInsights = [
   {
     id: 1,
-    title: "Volume Optimization",
+            title: "Volume Optimisation",
     value: "+8.3%",
     description: "Supply volume is trending 8.3% higher than last quarter. Consider negotiating volume-based pricing improvements with top 3 suppliers.",
-    icon: "📈",
     priority: "high"
   },
   {
@@ -140,7 +139,6 @@ const supplyInsights = [
     title: "Cost Reduction Opportunity",
     value: "€180K/year",
     description: "Consolidating purchases from Regional Farms Alliance and Valley Processing could reduce unit costs by €0.02/L.",
-    icon: "💰",
     priority: "high"
   },
   {
@@ -148,7 +146,6 @@ const supplyInsights = [
     title: "Quality Enhancement",
     value: "+2.1%",
     description: "Implementing additional quality checks with Valley Processing could improve overall quality score by 2.1 percentage points.",
-    icon: "⚡",
     priority: "medium"
   },
   {
@@ -156,15 +153,13 @@ const supplyInsights = [
     title: "Supplier Diversification",
     value: "23% Risk Reduction",
     description: "Adding 2 new regional suppliers would reduce supply chain risk by 23% and provide better price negotiation leverage.",
-    icon: "🔗",
     priority: "medium"
   },
   {
     id: 5,
-    title: "Seasonal Optimization",
+            title: "Seasonal Optimisation",
     value: "€95K Savings",
     description: "Adjusting procurement schedules based on seasonal fat/protein patterns could save €95K annually in quality premiums.",
-    icon: "🔄",
     priority: "low"
   }
 ];
@@ -176,71 +171,19 @@ const RotatingSupplyInsights = () => {
   const [viewedInsights, setViewedInsights] = useState<Set<number>>(new Set([0])); // Start with first insight viewed
   const [isVisible, setIsVisible] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
-  const iconRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const valueRef = useRef<HTMLSpanElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
 
   const animateIn = () => {
-    if (!contentRef.current || !iconRef.current || !titleRef.current || !valueRef.current || !descriptionRef.current) return;
+    if (!contentRef.current) return;
     
-    // Content fade in
+    // Simple fade in
     contentRef.current.animate([
-      { opacity: 0, transform: 'translateY(30px)' },
-      { opacity: 1, transform: 'translateY(0px)' }
+      { opacity: 0 },
+      { opacity: 1 }
     ], {
-      duration: 600,
-      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      duration: 300,
+      easing: 'ease-in-out',
       fill: 'both'
     });
-
-    // Icon scale and rotate
-    setTimeout(() => {
-      iconRef.current?.animate([
-        { transform: 'scale(0) rotate(0deg)' },
-        { transform: 'scale(1) rotate(360deg)' }
-      ], {
-        duration: 800,
-        easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-        fill: 'both'
-      });
-    }, 200);
-
-    // Title slide in
-    setTimeout(() => {
-      titleRef.current?.animate([
-        { opacity: 0, transform: 'translateX(-20px)' },
-        { opacity: 1, transform: 'translateX(0px)' }
-      ], {
-        duration: 500,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        fill: 'both'
-      });
-    }, 300);
-
-    // Value badge scale
-    setTimeout(() => {
-      valueRef.current?.animate([
-        { opacity: 0, transform: 'scale(0.8)' },
-        { opacity: 1, transform: 'scale(1)' }
-      ], {
-        duration: 400,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        fill: 'both'
-      });
-    }, 400);
-
-    // Description fade up
-    setTimeout(() => {
-      descriptionRef.current?.animate([
-        { opacity: 0, transform: 'translateY(15px)' },
-        { opacity: 1, transform: 'translateY(0px)' }
-      ], {
-        duration: 500,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        fill: 'both'
-      });
-    }, 500);
   };
 
   const animateOut = (callback: () => void) => {
@@ -249,11 +192,11 @@ const RotatingSupplyInsights = () => {
     setIsAnimating(true);
     
     const animation = contentRef.current.animate([
-      { opacity: 1, transform: 'translateY(0px)' },
-      { opacity: 0, transform: 'translateY(-20px)' }
+      { opacity: 1 },
+      { opacity: 0 }
     ], {
-      duration: 300,
-      easing: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
+      duration: 200,
+      easing: 'ease-in-out',
       fill: 'both'
     });
 
@@ -347,42 +290,26 @@ const RotatingSupplyInsights = () => {
           className={`border-l-4 ${getPriorityColor(insight.priority)} pl-6 bg-gray-50 rounded-r-lg p-4`}
           style={{ opacity: 0 }}
         >
-          <div className="flex items-start space-x-4">
-            <div 
-              ref={iconRef}
-              className="text-2xl p-2 rounded-lg"
-              style={{ backgroundColor: '#1E4B3A', color: 'white', transform: 'scale(0)' }}
+          <div className="flex items-center justify-between mb-3">
+            <h4 
+              className="font-semibold text-lg"
+              style={{ color: '#1E4B3A' }}
             >
-              {insight.icon}
-            </div>
-            
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-3">
-                <h4 
-                  ref={titleRef}
-                  className="font-semibold text-lg"
-                  style={{ color: '#1E4B3A', opacity: 0 }}
-                >
-                  {insight.title}
-                </h4>
-                <span 
-                  ref={valueRef}
-                  className="text-sm px-3 py-1 rounded-full font-semibold text-white"
-                  style={{ backgroundColor: '#1E4B3A', opacity: 0 }}
-                >
-                  {insight.value}
-                </span>
-              </div>
-              
-              <p 
-                ref={descriptionRef}
-                className="text-sm text-gray-700 leading-relaxed"
-                style={{ opacity: 0 }}
-              >
-                {insight.description}
-              </p>
-            </div>
+              {insight.title}
+            </h4>
+            <span 
+              className="text-sm px-3 py-1 rounded-full font-semibold text-white"
+              style={{ backgroundColor: '#1E4B3A' }}
+            >
+              {insight.value}
+            </span>
           </div>
+          
+          <p 
+            className="text-sm text-gray-700 leading-relaxed"
+          >
+            {insight.description}
+          </p>
         </div>
       </div>
     </div>
@@ -414,7 +341,7 @@ const AIAssistantSection = () => {
   const predefinedResponses: { [key: string]: string } = {
     'supply trends': 'Based on current data, supply volume is trending 8.3% higher than last quarter. Raw milk procurement is expected to reach 2.9M L next month.',
     'supplier performance': 'Supplier on-time delivery rate is currently at 97.3%, which exceeds our target of 95%. Quality compliance remains strong across all active suppliers.',
-    'cost optimization': 'Average procurement cost is €0.42/L, which is 3% below market rate. Consider volume-based pricing negotiations with top 3 suppliers for additional savings.',
+    'cost optimisation': 'Average procurement cost is €0.42/L, which is 3% below market rate. Consider volume-based pricing negotiations with top 3 suppliers for additional savings.',
     'quality metrics': 'Fat content averaging 4.2%, protein at 3.4%, and lactose at 4.8%. Quality scores show consistent improvement over the past 3 months.',
     'seasonal patterns': 'Seasonal analysis shows typical autumn increase in fat content expected. Production should increase by 2-3% as temperatures cool.',
     'risk assessment': 'Current risk factors include potential weather disruptions in Region A and supplier capacity constraints. Mitigation strategies are in place.',
@@ -424,7 +351,7 @@ const AIAssistantSection = () => {
   const suggestedQuestions = [
     "What are the current supply trends?",
     "How is supplier performance this month?",
-    "Any cost optimization opportunities?",
+          "Any cost optimisation opportunities?",
     "What about quality metrics?"
   ];
 
@@ -669,7 +596,7 @@ const SupplySection = () => {
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-4" style={{ color: '#1E4B3A' }}>Supply Chain Intelligence Dashboard</h2>
         <p className="text-gray-600 max-w-3xl mx-auto">
-          Monitor supply chain performance, track supplier metrics, and optimize procurement operations with real-time analytics and AI-powered insights.
+          Monitor supply chain performance, track supplier metrics, and optimise procurement operations with real-time analytics and AI-powered insights.
         </p>
       </div>
 

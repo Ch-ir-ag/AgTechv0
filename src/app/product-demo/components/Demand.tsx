@@ -6,6 +6,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 const DemandSection = () => {
   const [filterType, setFilterType] = useState<'product' | 'customer'>('product');
   const [timeFrame, setTimeFrame] = useState<'4weeks' | '6months'>('4weeks');
+  const [expandedProducts, setExpandedProducts] = useState<Set<string>>(new Set());
+  const [expandedCustomers, setExpandedCustomers] = useState<Set<string>>(new Set());
 
   const productData = [
     {
@@ -18,7 +20,15 @@ const DemandSection = () => {
       value: '$25,000',
       priority: 'High',
       customerCount: 3,
-      completionPercentage: 65
+      completionPercentage: 65,
+      profitMargin: '18%',
+      productionLine: 'Line A',
+      qualityScore: 95,
+      lastBatch: 'July 28, 2025',
+      ingredients: ['Organic Milk', 'Live Cultures', 'Natural Flavoring'],
+      packaging: '500g containers',
+      shelfLife: '21 days',
+      allergens: ['Milk']
     },
     {
       id: 'p2',
@@ -30,7 +40,15 @@ const DemandSection = () => {
       value: '$75,000',
       priority: 'Medium',
       customerCount: 2,
-      completionPercentage: 0
+      completionPercentage: 0,
+      profitMargin: '28%',
+      productionLine: 'Line B',
+      qualityScore: 92,
+      lastBatch: 'N/A - Scheduled',
+      ingredients: ['Premium Milk', 'Rennet', 'Salt', 'Cultures'],
+      packaging: '1kg blocks',
+      shelfLife: '90 days',
+      allergens: ['Milk']
     },
     {
       id: 'p3',
@@ -42,7 +60,15 @@ const DemandSection = () => {
       value: '$40,000',
       priority: 'High',
       customerCount: 4,
-      completionPercentage: 100
+      completionPercentage: 100,
+      profitMargin: '22%',
+      productionLine: 'Line C',
+      qualityScore: 98,
+      lastBatch: 'August 6, 2025',
+      ingredients: ['Skim Milk'],
+      packaging: '25kg bags',
+      shelfLife: '2 years',
+      allergens: ['Milk']
     },
     {
       id: 'p4',
@@ -54,7 +80,15 @@ const DemandSection = () => {
       value: '$18,000',
       priority: 'Medium',
       customerCount: 6,
-      completionPercentage: 80
+      completionPercentage: 80,
+      profitMargin: '15%',
+      productionLine: 'Line A',
+      qualityScore: 96,
+      lastBatch: 'August 10, 2025',
+      ingredients: ['Whole Milk'],
+      packaging: '1L cartons',
+      shelfLife: '7 days',
+      allergens: ['Milk']
     }
   ];
 
@@ -124,6 +158,26 @@ const DemandSection = () => {
     ]
   };
 
+  const toggleProductExpansion = (productId: string) => {
+    const newExpanded = new Set(expandedProducts);
+    if (newExpanded.has(productId)) {
+      newExpanded.delete(productId);
+    } else {
+      newExpanded.add(productId);
+    }
+    setExpandedProducts(newExpanded);
+  };
+
+  const toggleCustomerExpansion = (customerId: string) => {
+    const newExpanded = new Set(expandedCustomers);
+    if (newExpanded.has(customerId)) {
+      newExpanded.delete(customerId);
+    } else {
+      newExpanded.add(customerId);
+    }
+    setExpandedCustomers(newExpanded);
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold mb-6" style={{ color: '#1E4B3A' }}>Demand Management</h2>
@@ -165,25 +219,42 @@ const DemandSection = () => {
               </div>
             </div>
             
-            {productData.map((product) => (
-              <div key={product.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg">{product.name}</h4>
-                    <div className="flex items-center space-x-3 mt-1">
-                      <span className={`text-xs font-medium ${
-                        product.priority === 'High' ? 'text-red-600' : 'text-yellow-600'
-                      }`}>
-                        {product.priority} Priority
-                      </span>
-                      <span className="text-gray-500 text-sm">{product.customerCount} customers</span>
+            {productData.map((product) => {
+              const isExpanded = expandedProducts.has(product.id);
+              return (
+                <div key={product.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                  <div 
+                    className="flex justify-between items-start mb-4 cursor-pointer"
+                    onClick={() => toggleProductExpansion(product.id)}
+                  >
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-semibold text-gray-900 text-lg">{product.name}</h4>
+                        <svg 
+                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`} 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                      <div className="flex items-center space-x-3 mt-1">
+                        <span className={`text-xs font-medium ${
+                          product.priority === 'High' ? 'text-red-600' : 'text-yellow-600'
+                        }`}>
+                          {product.priority} Priority
+                        </span>
+                        <span className="text-gray-500 text-sm">{product.customerCount} customers</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>{product.value}</span>
+                      <div className="text-xs text-gray-600 mt-1">{product.quantity}</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>{product.value}</span>
-                    <div className="text-xs text-gray-600 mt-1">{product.quantity}</div>
-                  </div>
-                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
                   <div>
@@ -210,6 +281,61 @@ const DemandSection = () => {
                   </div>
                 </div>
 
+                {/* Expanded Details */}
+                {isExpanded && (
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                      <div>
+                        <span className="text-gray-600 text-sm">Profit Margin:</span>
+                        <div className="mt-1 text-lg font-bold text-green-600">{product.profitMargin}</div>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 text-sm">Production Line:</span>
+                        <div className="mt-1 font-medium text-gray-900">{product.productionLine}</div>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 text-sm">Quality Score:</span>
+                        <div className="mt-1 text-lg font-bold" style={{ color: '#1E4B3A' }}>{product.qualityScore}%</div>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 text-sm">Last Batch:</span>
+                        <div className="mt-1 font-medium text-gray-900">{product.lastBatch}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-3">Product Details</h5>
+                        <div className="space-y-2">
+                          <div>
+                            <span className="text-gray-600 text-sm">Packaging:</span>
+                            <div className="mt-1 text-sm text-gray-900">{product.packaging}</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-600 text-sm">Shelf Life:</span>
+                            <div className="mt-1 text-sm text-gray-900">{product.shelfLife}</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-600 text-sm">Allergens:</span>
+                            <div className="mt-1 text-sm text-gray-900">{product.allergens.join(', ')}</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-3">Ingredients</h5>
+                        <div className="space-y-1">
+                          {product.ingredients.map((ingredient, index) => (
+                            <div key={index} className="bg-gray-50 px-3 py-2 rounded-md text-sm text-gray-700">
+                              {ingredient}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Progress Bar */}
                 <div>
                   <div className="flex justify-between text-sm mb-1">
@@ -227,8 +353,9 @@ const DemandSection = () => {
                     ></div>
                   </div>
                 </div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -246,12 +373,28 @@ const DemandSection = () => {
               const budgetUsedAmount = parseInt(customer.budgetUsed.replace(/[$,]/g, ''));
               const totalBudget = parseInt(customer.budget.replace(/[$,]/g, ''));
               const budgetUsedPercentage = (budgetUsedAmount / totalBudget) * 100;
+              const isExpanded = expandedCustomers.has(customer.id);
               
               return (
                 <div key={customer.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-4">
+                  <div 
+                    className="flex justify-between items-start mb-4 cursor-pointer"
+                    onClick={() => toggleCustomerExpansion(customer.id)}
+                  >
                     <div>
-                      <h4 className="font-semibold text-gray-900 text-lg">{customer.name}</h4>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-semibold text-gray-900 text-lg">{customer.name}</h4>
+                        <svg 
+                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`} 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
                       <div className="flex items-center space-x-3 mt-1">
                         <span className={`text-xs font-medium ${
                           customer.tier === 'Enterprise' ? 'text-purple-600' : 'text-blue-600'
@@ -285,59 +428,103 @@ const DemandSection = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Always visible summary */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                     <div>
-                      <h5 className="font-medium text-gray-700 mb-3 flex items-center">
-                        <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
-                        Current Orders ({customer.currentOrders.length})
-                      </h5>
-                      <div className="space-y-2">
-                        {customer.currentOrders.map((order, index) => (
-                          <div key={index} className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <div className="font-medium text-gray-900">{order.product}</div>
-                                <div className="text-sm text-gray-600">{order.quantity}</div>
-                              </div>
-                              <div className="text-right">
-                                <div className="font-semibold text-blue-600">{order.value}</div>
-                                <div className={`text-xs font-medium mt-1 ${
-                                  order.status === 'completed' ? 'text-green-600' :
-                                  order.status === 'in_progress' ? 'text-blue-600' :
-                                  'text-gray-600'
-                                }`}>
-                                  {order.status.replace('_', ' ')}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                      <span className="text-gray-600 text-sm">Current Orders:</span>
+                      <div className="mt-1 text-xl font-bold text-blue-600">{customer.currentOrders.length}</div>
                     </div>
-                    
                     <div>
-                      <h5 className="font-medium text-gray-700 mb-3 flex items-center">
-                        <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
-                        Upcoming Orders ({customer.upcomingOrders.length})
-                      </h5>
-                      <div className="space-y-2">
-                        {customer.upcomingOrders.map((order, index) => (
-                          <div key={index} className="bg-green-50 border border-green-200 p-3 rounded-lg">
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <div className="font-medium text-gray-900">{order.product}</div>
-                                <div className="text-sm text-gray-600">{order.quantity}</div>
-                              </div>
-                              <div className="text-right">
-                                <div className="font-semibold text-green-600">{order.value}</div>
-                                <div className="text-xs text-gray-600 mt-1">{order.date}</div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                      <span className="text-gray-600 text-sm">Upcoming Orders:</span>
+                      <div className="mt-1 text-xl font-bold text-green-600">{customer.upcomingOrders.length}</div>
                     </div>
                   </div>
+
+                  {/* Expanded Details */}
+                  {isExpanded && (
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div>
+                          <h5 className="font-medium text-gray-700 mb-3 flex items-center">
+                            <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
+                            Current Orders ({customer.currentOrders.length})
+                          </h5>
+                          <div className="space-y-2">
+                            {customer.currentOrders.map((order, index) => (
+                              <div key={index} className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <div className="font-medium text-gray-900">{order.product}</div>
+                                    <div className="text-sm text-gray-600">{order.quantity}</div>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-semibold text-blue-600">{order.value}</div>
+                                    <div className={`text-xs font-medium mt-1 ${
+                                      order.status === 'completed' ? 'text-green-600' :
+                                      order.status === 'in_progress' ? 'text-blue-600' :
+                                      'text-gray-600'
+                                    }`}>
+                                      {order.status.replace('_', ' ')}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h5 className="font-medium text-gray-700 mb-3 flex items-center">
+                            <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                            Upcoming Orders ({customer.upcomingOrders.length})
+                          </h5>
+                          <div className="space-y-2">
+                            {customer.upcomingOrders.map((order, index) => (
+                              <div key={index} className="bg-green-50 border border-green-200 p-3 rounded-lg">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <div className="font-medium text-gray-900">{order.product}</div>
+                                    <div className="text-sm text-gray-600">{order.quantity}</div>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-semibold text-green-600">{order.value}</div>
+                                    <div className="text-xs text-gray-600 mt-1">{order.date}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Additional customer metrics in expanded view */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <span className="text-gray-600 text-sm">Total Orders Value:</span>
+                          <div className="mt-1 text-lg font-bold" style={{ color: '#1E4B3A' }}>
+                            ${[...customer.currentOrders, ...customer.upcomingOrders]
+                              .reduce((sum, order) => sum + parseInt(order.value.replace(/[$,]/g, '')), 0)
+                              .toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <span className="text-gray-600 text-sm">Average Order Value:</span>
+                          <div className="mt-1 text-lg font-bold text-blue-600">
+                            ${Math.round([...customer.currentOrders, ...customer.upcomingOrders]
+                              .reduce((sum, order) => sum + parseInt(order.value.replace(/[$,]/g, '')), 0) / 
+                              [...customer.currentOrders, ...customer.upcomingOrders].length
+                            ).toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <span className="text-gray-600 text-sm">Remaining Budget:</span>
+                          <div className="mt-1 text-lg font-bold text-green-600">
+                            ${(totalBudget - budgetUsedAmount).toLocaleString()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Machine } from '../types';
@@ -52,8 +52,49 @@ const groupMachinesByLocation = (machines: Machine[]) => {
 const OperationsSection = ({ machines }: OperationsSectionProps) => {
   const [expandedLocationId, setExpandedLocationId] = useState<string | null>(null);
   const [expandedMachineId, setExpandedMachineId] = useState<string | null>(null);
+  const [liveMetrics, setLiveMetrics] = useState<{ [key: string]: { flowRate: number; vibration: number; temperature: number } }>({});
   
   const machineGroups = groupMachinesByLocation(machines);
+
+  // Initialize live metrics
+  useEffect(() => {
+    const initialMetrics: { [key: string]: { flowRate: number; vibration: number; temperature: number } } = {};
+    machines.forEach(machine => {
+      initialMetrics[machine.id] = {
+        flowRate: machine.metrics.flowRate.value,
+        vibration: machine.metrics.vibration.value,
+        temperature: machine.metrics.temperature.value
+      };
+    });
+    setLiveMetrics(initialMetrics);
+  }, [machines]);
+
+  // Update live metrics every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveMetrics(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(machineId => {
+          const machine = machines.find(m => m.id === machineId);
+          if (machine && machine.status === 'running') {
+            // Add small random variations to make metrics live
+            const flowVariation = (Math.random() - 0.5) * 2; // ±1 variation
+            const vibrationVariation = (Math.random() - 0.5) * 0.4; // ±0.2 variation
+            const tempVariation = (Math.random() - 0.5) * 0.3; // ±0.15 variation for temperature
+            
+            updated[machineId] = {
+              flowRate: Math.max(0, machine.metrics.flowRate.value + flowVariation),
+              vibration: Math.max(0, machine.metrics.vibration.value + vibrationVariation),
+              temperature: machine.metrics.temperature.value + tempVariation // Temperature can vary more
+            };
+          }
+        });
+        return updated;
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [machines]);
 
   const toggleLocationExpansion = (locationId: string) => {
     setExpandedLocationId(expandedLocationId === locationId ? null : locationId);
@@ -124,16 +165,16 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <h3 className="text-lg font-semibold text-gray-900">{location}</h3>
-              <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                     <span className="text-sm font-medium text-gray-600">{getLocationStatus(locationMachines)}</span>
-              </div>
-            </div>
-            
+                  </div>
+                </div>
+                
                 <div className="flex items-center space-x-4">
                   <div className="text-right">
                     <div className="text-sm text-gray-500">Average OEE</div>
                     <div className="text-lg font-semibold" style={{ color: '#1E4B3A' }}>{getLocationOee(locationMachines)}%</div>
-                </div>
+                  </div>
                   <motion.div
                     animate={{ rotate: expandedLocationId === location ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -207,7 +248,7 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                         </div>
                         <div className="text-xs text-gray-600">Anomalies</div>
                       </motion.div>
-              </div>
+                    </div>
 
                     {/* Machines Section */}
                     <motion.div
@@ -239,11 +280,6 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                     <div className={`w-2 h-2 rounded-full ${getStatusColor(machine.status)}`}></div>
                                     <span className="text-sm text-gray-600 capitalize">{machine.status}</span>
                                   </div>
-                                  {hasAnomalies(machine) && (
-                                    <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
-                                      🚨 Alert
-                                    </span>
-                                  )}
                                 </div>
                                 <div className="flex items-center space-x-3">
                                   <div className="text-sm text-gray-600">
@@ -278,20 +314,52 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                   <div className="p-4 bg-gray-50">
                                     {(() => {
                                       const historicalData = generateHistoricalData(machine);
+                                      const currentMetrics = liveMetrics[machine.id] || {
+                                        flowRate: machine.metrics.flowRate.value,
+                                        vibration: machine.metrics.vibration.value,
+                                        temperature: machine.metrics.temperature.value
+                                      };
                                       
                                       return (
                                         <div className="space-y-6">
-                                          {/* Real-time Metrics */}
+                                          {/* Machine Details */}
                                           <motion.div
                                             initial={{ y: 15, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
                                             transition={{ delay: 0.1 }}
                                           >
+                                            <h5 className="font-semibold mb-3 text-sm" style={{ color: '#1E4B3A' }}>Machine Information</h5>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                              <div className="bg-white rounded-lg p-4 border">
+                                                <h6 className="font-semibold mb-2 text-sm" style={{ color: '#1E4B3A' }}>Function</h6>
+                                                <p className="text-sm text-gray-700">{machine.function}</p>
+                                              </div>
+                                              <div className="bg-white rounded-lg p-4 border">
+                                                <h6 className="font-semibold mb-2 text-sm" style={{ color: '#1E4B3A' }}>Location</h6>
+                                                <p className="text-sm text-gray-700">{machine.location}</p>
+                                              </div>
+                                              <div className="bg-white rounded-lg p-4 border">
+                                                <h6 className="font-semibold mb-2 text-sm" style={{ color: '#1E4B3A' }}>Energy Usage</h6>
+                                                <p className="text-sm text-gray-700">{machine.energyUsage} kWh</p>
+                                              </div>
+                                              <div className="bg-white rounded-lg p-4 border">
+                                                <h6 className="font-semibold mb-2 text-sm" style={{ color: '#1E4B3A' }}>Historical Downtime Cost</h6>
+                                                <p className="text-sm text-gray-700">€{machine.downtimeCost.toLocaleString()}</p>
+                                              </div>
+                                            </div>
+                                          </motion.div>
+
+                                          {/* Real-time Metrics */}
+                                          <motion.div
+                                            initial={{ y: 15, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{ delay: 0.2 }}
+                                          >
                                             <h5 className="font-semibold mb-3 text-sm" style={{ color: '#1E4B3A' }}>Real-time Metrics</h5>
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                               <div className="text-center p-3 bg-white rounded-lg border">
                                                 <div className="text-lg font-bold" style={{ color: '#1E4B3A' }}>
-                                                  {machine.metrics.flowRate.value} {machine.metrics.flowRate.unit}
+                                                  {currentMetrics.flowRate.toFixed(1)} {machine.metrics.flowRate.unit}
                                                 </div>
                                                 <div className="text-xs text-gray-600">Flow Rate</div>
                                                 <div className={`text-xs mt-1 ${getMetricStatusColor(machine.metrics.flowRate.status)}`}>
@@ -300,7 +368,7 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                               </div>
                                               <div className="text-center p-3 bg-white rounded-lg border">
                                                 <div className="text-lg font-bold" style={{ color: '#1E4B3A' }}>
-                                                  {machine.metrics.vibration.value} {machine.metrics.vibration.unit}
+                                                  {currentMetrics.vibration.toFixed(2)} {machine.metrics.vibration.unit}
                                                 </div>
                                                 <div className="text-xs text-gray-600">Vibration</div>
                                                 <div className={`text-xs mt-1 ${getMetricStatusColor(machine.metrics.vibration.status)}`}>
@@ -309,28 +377,28 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                               </div>
                                               <div className="text-center p-3 bg-white rounded-lg border">
                                                 <div className="text-lg font-bold" style={{ color: '#1E4B3A' }}>
-                                                  {machine.metrics.temperature.value} {machine.metrics.temperature.unit}
+                                                  {currentMetrics.temperature.toFixed(1)} {machine.metrics.temperature.unit}
                                                 </div>
                                                 <div className="text-xs text-gray-600">Temperature</div>
                                                 <div className={`text-xs mt-1 ${getMetricStatusColor(machine.metrics.temperature.status)}`}>
                                                   {machine.metrics.temperature.status}
-              </div>
-            </div>
-          </div>
+                                                </div>
+                                              </div>
+                                            </div>
                                           </motion.div>
 
                                           {/* Historical Charts */}
                                           <motion.div
                                             initial={{ y: 15, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.2 }}
+                                            transition={{ delay: 0.3 }}
                                           >
                                             <h5 className="font-semibold mb-3 text-sm" style={{ color: '#1E4B3A' }}>24-Hour Historical Trends</h5>
                                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                               
                                               {/* Flow Rate Chart */}
                                               <div className="bg-white p-4 rounded-lg border">
-                                                <h6 className="text-xs font-medium text-gray-700 mb-2">Flow Rate (L/min)</h6>
+                                                <h6 className="text-xs font-medium text-gray-700 mb-2">Flow Rate ({machine.metrics.flowRate.unit})</h6>
                                                 <ResponsiveContainer width="100%" height={120}>
                                                   <LineChart data={historicalData}>
                                                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -346,11 +414,11 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                                     />
                                                   </LineChart>
                                                 </ResponsiveContainer>
-      </div>
+                                              </div>
 
                                               {/* Vibration Chart */}
                                               <div className="bg-white p-4 rounded-lg border">
-                                                <h6 className="text-xs font-medium text-gray-700 mb-2">Vibration (Hz)</h6>
+                                                <h6 className="text-xs font-medium text-gray-700 mb-2">Vibration ({machine.metrics.vibration.unit})</h6>
                                                 <ResponsiveContainer width="100%" height={120}>
                                                   <LineChart data={historicalData}>
                                                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -367,11 +435,11 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                                     />
                                                   </LineChart>
                                                 </ResponsiveContainer>
-            </div>
-            
+                                              </div>
+                                              
                                               {/* Temperature Chart */}
                                               <div className="bg-white p-4 rounded-lg border">
-                                                <h6 className="text-xs font-medium text-gray-700 mb-2">Temperature (°C)</h6>
+                                                <h6 className="text-xs font-medium text-gray-700 mb-2">Temperature ({machine.metrics.temperature.unit})</h6>
                                                 <ResponsiveContainer width="100%" height={120}>
                                                   <LineChart data={historicalData}>
                                                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -387,15 +455,15 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                                     />
                                                   </LineChart>
                                                 </ResponsiveContainer>
-                    </div>
-                  </div>
+                                              </div>
+                                            </div>
                                           </motion.div>
 
                                           {/* Machine Information & OEE */}
                                           <motion.div
                                             initial={{ y: 15, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.3 }}
+                                            transition={{ delay: 0.4 }}
                                             className="grid grid-cols-1 md:grid-cols-2 gap-4"
                                           >
                                             <div className="bg-white rounded-lg p-4 border">
@@ -404,55 +472,52 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                                 <div className="text-center p-3 bg-green-50 rounded-lg">
                                                   <div className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>{machine.oee}%</div>
                                                   <div className="text-xs text-gray-600">Overall Equipment Effectiveness (OEE)</div>
-                    </div>
+                                                </div>
                                                 <div className="text-sm space-y-1">
                                                   <div className="flex justify-between">
                                                     <span className="text-gray-600">Status:</span>
                                                     <span className={`font-medium ${machine.status === 'running' ? 'text-green-600' : machine.status === 'warning' ? 'text-yellow-600' : machine.status === 'maintenance' ? 'text-orange-600' : 'text-red-600'}`}>
                                                       {machine.status}
-                      </span>
-                    </div>
+                                                    </span>
+                                                  </div>
                                                   <div className="flex justify-between">
                                                     <span className="text-gray-600">Location:</span>
                                                     <span className="font-medium">{machine.location}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
 
                                             <div className="bg-white rounded-lg p-4 border">
                                               <h6 className="font-semibold mb-3 text-sm" style={{ color: '#1E4B3A' }}>Maintenance Schedule</h6>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
+                                              <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between">
                                                   <span className="text-gray-600">Last Service:</span>
                                                   <span className="font-medium">{machine.lastMaintenance}</span>
-                      </div>
-                      <div className="flex justify-between">
+                                                </div>
+                                                <div className="flex justify-between">
                                                   <span className="text-gray-600">Next Service:</span>
                                                   <span className="font-medium">{machine.nextMaintenance}</span>
-                      </div>
-                      <div className="flex justify-between">
+                                                </div>
+                                                <div className="flex justify-between">
                                                   <span className="text-gray-600">Health Score:</span>
-                                                                                                    <span className={`font-medium ${machine.status === 'warning' ? 'text-yellow-600' : machine.oee > 80 ? 'text-green-600' : machine.oee > 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                                  <span className={`font-medium ${machine.status === 'warning' ? 'text-yellow-600' : machine.oee > 80 ? 'text-green-600' : machine.oee > 60 ? 'text-yellow-600' : 'text-red-600'}`}>
                                                     {machine.status === 'warning' ? 'Monitoring' : machine.oee > 80 ? 'Excellent' : machine.oee > 60 ? 'Good' : 'Needs Attention'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            </div>
                                           </motion.div>
 
-                  {/* Anomaly Detection */}
+                                          {/* Anomaly Detection */}
                                           <motion.div
                                             initial={{ y: 15, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.4 }}
+                                            transition={{ delay: 0.5 }}
                                           >
                                             <h5 className="font-semibold mb-3 text-sm" style={{ color: '#1E4B3A' }}>Anomaly Detection</h5>
                                             <div className={`p-4 rounded-lg border-l-4 ${hasAnomalies(machine) ? 'bg-red-50 border-red-500' : 'bg-green-50 border-green-500'}`}>
                                               <div className="flex items-start space-x-2">
-                                                <span className="text-lg">
-                                                  {hasAnomalies(machine) ? '🚨' : '✅'}
-                                                </span>
                                                 <div>
                                                   <h6 className={`font-medium mb-1 ${hasAnomalies(machine) ? 'text-red-900' : 'text-green-900'}`}>
                                                     {hasAnomalies(machine) ? 'Anomalies Detected' : 'All Systems Normal'}
@@ -461,7 +526,7 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                                     {hasAnomalies(machine) ? (
                                                       <div className="space-y-1">
                                                         {machine.metrics.vibration.status === 'warning' && (
-                                                          <div>• Vibration levels elevated above normal range (Current: {machine.metrics.vibration.value} Hz, Threshold: 10 Hz)</div>
+                                                          <div>• Vibration levels elevated above normal range (Current: {currentMetrics.vibration.toFixed(2)} Hz, Threshold: 10 Hz)</div>
                                                         )}
                                                         {machine.metrics.temperature.status === 'warning' && (
                                                           <div>• Temperature variance detected</div>
@@ -471,25 +536,25 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                                     ) : (
                                                       "All monitored parameters are operating within normal ranges. No anomalies detected in the last 24 hours."
                                                     )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
                                           </motion.div>
                                         </div>
                                       );
                                     })()}
-            </div>
+                                  </div>
                                 </motion.div>
                               )}
                             </AnimatePresence>
                           </motion.div>
                         ))}
-          </div>
+                      </div>
                     </motion.div>
-        </div>
+                  </div>
                 </motion.div>
-      )}
+              )}
             </AnimatePresence>
           </div>
         ))}

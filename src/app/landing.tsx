@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Logo from './components/Logo';
 import { useAuth } from './contexts/AuthContext';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { trackEvent, setTag, identifyUser } from './utils/clarityAnalytics';
 import DemoRequestModal from './components/DemoRequestModal';
 import { SimpleTextRotate } from '@/components/ui/simple-text-rotate';
@@ -58,6 +58,38 @@ const slideInRight = {
     opacity: 1,
     transition: { duration: 0.6 }
   }
+};
+
+// Animated Counter Component
+const AnimatedCounter = ({ target, suffix = "", prefix = "", duration = 2 }: { target: number; suffix?: string; prefix?: string; duration?: number }) => {
+  const [count, setCount] = React.useState(0);
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+
+  React.useEffect(() => {
+    if (isInView) {
+      const startTime = Date.now();
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / (duration * 1000), 1);
+        const currentCount = Math.floor(progress * target);
+        
+        setCount(currentCount);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    }
+  }, [isInView, target, duration]);
+
+  return (
+    <span ref={ref} className="text-3xl font-bold text-white flex-shrink-0">
+      {prefix}{count}{suffix}
+    </span>
+  );
 };
 
 export default function Landing() {
@@ -133,17 +165,17 @@ export default function Landing() {
       }}>
         
         {/* Navigation Bar */}
-        <nav className="relative z-20 px-4 sm:px-6 lg:px-8 py-3 border-b" style={{ backgroundColor: '#1E4B3A', borderBottomColor: '#1E4B3A' }}>
+        <nav className="relative z-20 px-4 sm:px-6 lg:px-8 py-4 border-b" style={{ backgroundColor: '#1E4B3A', borderBottomColor: '#1E4B3A' }}>
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             {/* Left side - Logo */}
             <div className="flex items-center">
-              <Logo size="large" />
+              <Logo size="navbar" />
             </div>
             
             {/* Middle - Industries Dropdown and Partner Login */}
-            <div className="flex items-center ml-8 gap-4">
+            <div className="flex items-center gap-6">
               <div className="relative group">
-                <button className="flex items-center px-4 py-2 font-medium transition-colors hover:text-white" style={{ color: '#F7F5F0' }}>
+                <button className="flex items-center px-4 py-2 text-base font-medium transition-colors hover:text-white" style={{ color: '#F7F5F0' }}>
                   Industries
                   <svg className="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -151,10 +183,16 @@ export default function Landing() {
                 </button>
                 <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
                   <div className="py-1">
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Dairy</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Coming Soon: Grain</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Coming Soon: Meat</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors" style={{color: '#1E4B3A'}}>Coming Soon: Fish</a>
+                    <button 
+                      onClick={() => scrollToSection('features')}
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors" 
+                      style={{color: '#1E4B3A'}}
+                    >
+                      Dairy
+                    </button>
+                    <div className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed" style={{color: '#9CA3AF'}}>Coming Soon: Grain</div>
+                    <div className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed" style={{color: '#9CA3AF'}}>Coming Soon: Meat</div>
+                    <div className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed" style={{color: '#9CA3AF'}}>Coming Soon: Fish</div>
                   </div>
                 </div>
               </div>
@@ -162,7 +200,7 @@ export default function Landing() {
               {/* Partner Login */}
               <motion.button 
                 onClick={() => scrollToSection('login')}
-                className="px-4 py-2 text-base font-medium rounded-md transition-colors hover:text-white"
+                className="px-4 py-2 text-base font-medium transition-colors hover:text-white"
                 style={{ color: '#F7F5F0' }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
@@ -174,28 +212,26 @@ export default function Landing() {
             {/* Right side - Action buttons */}
             <div className="flex items-center gap-4">
               {/* See How It Works */}
-              <InteractiveHoverButton 
+              <motion.button 
                 onClick={() => scrollToSection('how-it-works')}
-                className="text-base font-medium border border-[#F7F5F0] hover:bg-white/10"
-                style={{ 
-                  color: '#F7F5F0',
-                  backgroundColor: 'transparent'
-                }}
+                className="px-4 py-2 text-base font-medium transition-colors hover:text-white"
+                style={{ color: '#F7F5F0' }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
               >
                 See How It Works
-              </InteractiveHoverButton>
+              </motion.button>
               
               {/* Contact Us */}
-              <InteractiveHoverButton 
-                onClick={() => window.open('mailto:contact@joindaisy.co', '_self')}
-                className="text-base font-medium border border-[#F7F5F0] hover:bg-white/10"
-                style={{ 
-                  color: '#F7F5F0',
-                  backgroundColor: 'transparent'
-                }}
+              <motion.button 
+                onClick={() => window.open('https://www.linkedin.com/company/join-daisy', '_blank')}
+                className="px-4 py-2 text-base font-medium transition-colors hover:text-white"
+                style={{ color: '#F7F5F0' }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
               >
                 Contact Us
-              </InteractiveHoverButton>
+              </motion.button>
             </div>
           </div>
         </nav>
@@ -455,7 +491,7 @@ export default function Landing() {
                     style={{ backgroundColor: '#1E4B3A' }}
                   >
                     <span className="relative z-10">
-                      Forecast in{" "}
+                      Forecast {" "}
                       <SimpleTextRotate 
                         texts={[
                           "Dairy",
@@ -609,7 +645,7 @@ export default function Landing() {
               className="p-8 rounded-xl shadow-xl border border-white/20"
               style={{backgroundColor: 'rgba(255, 255, 255, 0.1)'}}
             >
-              <h3 className="text-2xl font-bold mb-4 text-white">Measurable Impact</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white text-center">Impact so far</h3>
               <div className="space-y-6">
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
@@ -617,8 +653,8 @@ export default function Landing() {
                   className="flex items-center p-4 rounded-lg gap-4"
                   style={{backgroundColor: 'rgba(255, 255, 255, 0.15)'}}
                 >
-                  <div className="text-3xl font-bold text-white flex-shrink-0">Millions</div>
-                  <div className="text-white">Average annual savings potential per processor</div>
+                  <AnimatedCounter target={2} prefix="€" suffix="M" />
+                  <div className="text-white">Saved so far for our partners</div>
                 </motion.div>
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
@@ -626,8 +662,8 @@ export default function Landing() {
                   className="flex items-center p-4 rounded-lg gap-4"
                   style={{backgroundColor: 'rgba(255, 255, 255, 0.15)'}}
                 >
-                  <div className="text-3xl font-bold text-white flex-shrink-0">Superior</div>
-                  <div className="text-white">Forecast accuracy compared to industry standard</div>
+                  <AnimatedCounter target={80} suffix="%" />
+                  <div className="text-white">Reduction in forecast error</div>
                 </motion.div>
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
@@ -635,7 +671,7 @@ export default function Landing() {
                   className="flex items-center p-4 rounded-lg gap-4"
                   style={{backgroundColor: 'rgba(255, 255, 255, 0.15)'}}
                 >
-                  <div className="text-3xl font-bold text-white flex-shrink-0">20+</div>
+                  <AnimatedCounter target={40} suffix="+" />
                   <div className="text-white">Variables modelled in our AI</div>
                 </motion.div>
               </div>
@@ -645,7 +681,7 @@ export default function Landing() {
       </div>
 
       {/* Features Section */}
-      <div className="py-16 bg-white">
+      <div id="features" className="py-16 bg-white">
         <motion.div 
           initial="hidden"
           whileInView="visible"
@@ -662,97 +698,41 @@ export default function Landing() {
               Powerful Tools for Food Processing Excellence
             </p>
           </motion.div>
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
             <motion.div 
               variants={scaleUp}
-              whileHover={{ 
-                y: -5, 
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
-              }}
-              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 transition-shadow"
-              style={{borderBottomColor: 'var(--dark-green)'}}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white p-8 rounded-xl shadow-lg border-t-4 transform transition-transform"
+              style={{borderTopColor: 'var(--dark-green)'}}
             >
-              <motion.div 
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                className="absolute -top-5 left-6 w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg"
-                style={{backgroundColor: 'var(--dark-green)'}}
-              >
-                📈
-              </motion.div>
-              <h3 className="mt-6 text-lg font-semibold" style={{color: 'var(--dark-green)'}}>Accurate Forecasts </h3>
-              <p className="mt-3 text-slate-600">
+              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>Accurate</div>
+              <h3 className="text-xl font-semibold mb-3" style={{color: 'var(--dark-green)'}}>Forecasts</h3>
+              <p className="text-slate-600">
                 Precise predictions for supply volume, quality metrics, and composition across all food categories.
               </p>
             </motion.div>
             <motion.div 
               variants={scaleUp}
-              whileHover={{ 
-                y: -5, 
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
-              }}
-              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 transition-shadow"
-              style={{borderBottomColor: 'var(--dark-green)'}}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white p-8 rounded-xl shadow-lg border-t-4 transform transition-transform"
+              style={{borderTopColor: 'var(--dark-green)'}}
             >
-              <motion.div 
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                className="absolute -top-5 left-6 w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg"
-                style={{backgroundColor: 'var(--dark-green)'}}
-              >
-                📦
-              </motion.div>
-              <h3 className="mt-6 text-lg font-semibold" style={{color: 'var(--dark-green)'}}>Product Allocation Engine</h3>
-              <p className="mt-3 text-slate-600">
+              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>Product</div>
+              <h3 className="text-xl font-semibold mb-3" style={{color: 'var(--dark-green)'}}>Allocation Engine</h3>
+              <p className="text-slate-600">
                 Real-time decisions on what to produce (butter, powder, whey, etc.) for maximum profit.
               </p>
             </motion.div>
             <motion.div 
               variants={scaleUp}
-              whileHover={{ 
-                y: -5, 
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
-              }}
-              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 transition-shadow"
-              style={{borderBottomColor: 'var(--dark-green)'}}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white p-8 rounded-xl shadow-lg border-t-4 transform transition-transform"
+              style={{borderTopColor: 'var(--dark-green)'}}
             >
-              <motion.div 
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.7, duration: 0.5 }}
-                className="absolute -top-5 left-6 w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg"
-                style={{backgroundColor: 'var(--dark-green)'}}
-              >
-                📊
-              </motion.div>
-              <h3 className="mt-6 text-lg font-semibold" style={{color: 'var(--dark-green)'}}>Visual Dashboards</h3>
-              <p className="mt-3 text-slate-600">
+              <div className="text-3xl font-bold mb-3" style={{color: 'var(--dark-green)'}}>Visual</div>
+              <h3 className="text-xl font-semibold mb-3" style={{color: 'var(--dark-green)'}}>Dashboards</h3>
+              <p className="text-slate-600">
                 Intuitive interfaces designed for analysts, operations managers, and executives.
-              </p>
-            </motion.div>
-            <motion.div 
-              variants={scaleUp}
-              whileHover={{ 
-                y: -5, 
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
-              }}
-              className="relative p-8 bg-white rounded-xl shadow-lg border-b-4 transition-shadow"
-              style={{borderBottomColor: 'var(--dark-green)'}}
-            >
-              <motion.div 
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-                className="absolute -top-5 left-6 w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg"
-                style={{backgroundColor: 'var(--dark-green)'}}
-              >
-                🌍
-              </motion.div>
-              <h3 className="mt-6 text-lg font-semibold" style={{color: 'var(--dark-green)'}}>Data Integration</h3>
-              <p className="mt-3 text-slate-600">
-                Comprehensive data from internal sources and external factors like weather and market trends.
               </p>
             </motion.div>
           </div>
@@ -872,18 +852,20 @@ export default function Landing() {
             <span className="block">Ready to transform your food processing operation?</span>
             <span className="block text-white/80">Start with Daisy AI today.</span>
           </h2>
-          <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                      <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
             <div className="inline-flex rounded-md shadow-lg">
               <motion.a
-                href="mailto:contact@joindaisy.co"
+                href="https://www.linkedin.com/company/join-daisy"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2)" }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 transition-colors shadow-lg"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                 </svg>
-                Email Us
+                Connect on LinkedIn
               </motion.a>
             </div>
         </div>

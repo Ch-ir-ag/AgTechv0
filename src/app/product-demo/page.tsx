@@ -5,6 +5,8 @@ import Navbar from '../components/Navbar';
 import './styles.css';
 import MakePlanSection from './components/MakePlan';
 import SupplySection from './components/Supply';
+import StandardizationSection from './components/Standardization';
+import ProductAllocationSection from './components/ProductAllocation';
 import OperationsSection from './components/Operations';
 import DemandSection from './components/Demand';
 import MaintenanceSection from './components/PreventiveMaintenance';
@@ -14,9 +16,11 @@ import { demoData } from './data';
 const navigationSections = [
   { id: 'make-plan', label: 'Make Plan' },
   { id: 'supply', label: 'Supply' },
+  { id: 'standardization', label: 'Standardisation' },
+  { id: 'product-allocation', label: 'Product Allocation' },
   { id: 'operations', label: 'Operations' },
   { id: 'demand', label: 'Demand' },
-  { id: 'maintenance', label: 'Preventive Maintenance' }
+  { id: 'maintenance', label: 'Predictive Maintenance' }
 ];
 
 // Main Product Demo Component
@@ -26,9 +30,13 @@ export default function ProductDemo() {
   const renderSection = () => {
     switch (activeSection) {
       case 'make-plan':
-        return <MakePlanSection lines={demoData.productionLines} />;
+        return <MakePlanSection weeklyPlan={demoData.weeklyMakePlan} />;
       case 'supply':
         return <SupplySection />;
+      case 'standardization':
+        return <StandardizationSection />;
+      case 'product-allocation':
+        return <ProductAllocationSection />;
       case 'operations':
         return <OperationsSection machines={demoData.machines} />;
       case 'demand':
@@ -36,7 +44,7 @@ export default function ProductDemo() {
       case 'maintenance':
         return <MaintenanceSection />;
       default:
-        return <MakePlanSection lines={demoData.productionLines} />;
+        return <MakePlanSection weeklyPlan={demoData.weeklyMakePlan} />;
     }
   };
 

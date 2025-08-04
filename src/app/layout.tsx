@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import "./globals.css";
@@ -8,14 +8,10 @@ import { CLARITY_PROJECT_ID } from "./config/analytics";
 // Import metadata from the metadata file
 export { metadata } from './metadata';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const gilroy = Inter({
+  variable: "--font-gilroy",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -55,7 +51,7 @@ export default function RootLayout({
         `}
       </Script>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${gilroy.variable} antialiased`}
       >
         <Toaster position="top-right" />
         <AuthProvider>

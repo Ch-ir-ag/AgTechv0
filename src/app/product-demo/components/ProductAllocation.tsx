@@ -84,7 +84,7 @@ const suggestedQuestions = [
 
 const ProductAllocationSection = () => {
   const [activeLineId, setActiveLineId] = useState<string | null>(null);
-  const [optimisationGoal] = useState<'revenue'>('revenue');
+
   const [messages, setMessages] = useState<AssistantMessage[]>([
     {
       id: 1,

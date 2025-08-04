@@ -9,7 +9,6 @@ import { motion, useInView } from 'framer-motion';
 import { trackEvent, setTag, identifyUser } from './utils/clarityAnalytics';
 import DemoRequestModal from './components/DemoRequestModal';
 import { SimpleTextRotate } from '@/components/ui/simple-text-rotate';
-import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 
 
 

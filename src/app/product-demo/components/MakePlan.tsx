@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WeeklyMakePlan, ProductionRun } from '../types';
 import { demoData } from '../data';
@@ -14,8 +14,6 @@ const defaultWeeklyPlan: WeeklyMakePlan = demoData.weeklyMakePlan;
 
 const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProps) => {
   const [selectedWeek, setSelectedWeek] = useState(weeklyPlan.weekNumber);
-  const [selectedRun, setSelectedRun] = useState<ProductionRun | null>(null);
-  const [showModal, setShowModal] = useState(false);
   const [filterBy, setFilterBy] = useState<'all' | 'product' | 'underutilised' | 'margin'>('all');
   const [draggedRun, setDraggedRun] = useState<ProductionRun | null>(null);
   const [expandedLines, setExpandedLines] = useState<Set<string>>(new Set()); // Track which lines are expanded
@@ -52,34 +50,12 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
     }
   };
 
-  // Status badge color
-  const getStatusBadgeColor = (status: string): string => {
-    switch (status) {
-      case 'Planned': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'Confirmed': return 'bg-green-100 text-green-700 border-green-200';
-      case 'In Progress': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'Completed': return 'bg-gray-100 text-gray-600 border-gray-200';
-      default: return 'bg-gray-100 text-gray-600 border-gray-200';
-    }
-  };
 
-  // Calculate run width based on duration
-  const calculateRunWidth = (startTime: string, endTime: string): number => {
-    const start = parseInt(startTime.split(':')[0]);
-    const end = parseInt(endTime.split(':')[0]);
-    let duration = end - start;
-    if (duration <= 0) duration += 24; // Handle overnight runs
-    return Math.max(duration * 8, 60); // Minimum 60px width
-  };
 
-  // Handle run click to show modal
-  const handleRunClick = (run: ProductionRun) => {
-    setSelectedRun(run);
-    setShowModal(true);
-  };
+
 
   // Handle drag start
-  const handleDragStart = (e: any, run: ProductionRun) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, run: ProductionRun) => {
     setDraggedRun(run);
     if (e.dataTransfer) {
       e.dataTransfer.effectAllowed = 'move';
@@ -172,7 +148,7 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
             <label className="text-sm font-medium text-gray-700">Filter:</label>
             <select 
               value={filterBy}
-              onChange={(e) => setFilterBy(e.target.value as any)}
+              onChange={(e) => setFilterBy(e.target.value as 'all' | 'product' | 'underutilised' | 'margin')}
               className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Lines</option>
@@ -298,7 +274,7 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
                                     }}
                                     whileTap={{ scale: 0.98 }}
                                     draggable
-                                    onDragStart={(e: any) => handleDragStart(e, run)}
+                                    onDragStart={(e: unknown) => handleDragStart(e as React.DragEvent<HTMLDivElement>, run)}
                                     className={`
                                       relative rounded-md border p-2 transition-all duration-200
                                       ${colors.bg} ${colors.accent}
@@ -348,140 +324,7 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
         ))}
       </div>
 
-      {/* Production Run Details Modal */}
-      <AnimatePresence>
-        {showModal && selectedRun && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-            onClick={() => setShowModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-6">
-                {/* Modal Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold" style={{ color: '#1E4B3A' }}>
-                    Production Run Details
-                  </h3>
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="text-gray-400 hover:text-gray-600 text-2xl"
-                  >
-                    ×
-                  </button>
-                </div>
 
-                {/* Modal Content */}
-                <div className="space-y-6">
-                  {/* Basic Information */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Product</label>
-                        <div className="text-lg font-semibold text-gray-900">{selectedRun.product}</div>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Schedule</label>
-                        <div className="text-lg font-semibold text-gray-900">
-                          {selectedRun.day}, {selectedRun.startTime}–{selectedRun.endTime}
-                        </div>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Status</label>
-                        <div className={`inline-block px-2 py-1 rounded text-sm font-medium ${getStatusBadgeColor(selectedRun.status)}`}>
-                          {selectedRun.status}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {selectedRun.volume > 0 && (
-                        <>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Volume</label>
-                            <div className="text-lg font-semibold text-gray-900">{selectedRun.volume.toLocaleString()} L</div>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <label className="text-sm font-medium text-gray-500">Fat Content</label>
-                              <div className="text-lg font-semibold text-gray-900">{selectedRun.fat}%</div>
-                            </div>
-                            <div>
-                              <label className="text-sm font-medium text-gray-500">Protein Content</label>
-                              <div className="text-lg font-semibold text-gray-900">{selectedRun.protein}%</div>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Silo Information */}
-                  {selectedRun.silos.length > 0 && (
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">Silo Inputs</label>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {selectedRun.silos.map(silo => (
-                          <span 
-                            key={silo}
-                            className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
-                          >
-                            Silo {silo}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* AI Reasoning */}
-                  {selectedRun.reasoning && (
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">AI Reasoning</label>
-                      <div className="mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                        <div className="text-sm text-blue-800">{selectedRun.reasoning}</div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Notes */}
-                  {selectedRun.notes && (
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">Notes</label>
-                      <div className="mt-2 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <div className="text-sm text-yellow-800">{selectedRun.notes}</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Modal Actions */}
-                <div className="mt-8 flex justify-end space-x-3">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
-                    style={{ backgroundColor: '#1E4B3A' }}
-                  >
-                    Edit Run
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Summary Stats */}
       <motion.div 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import SupplyChainMap from './SupplyChainMap';
 
 
 
@@ -170,6 +171,7 @@ const RotatingSupplyInsights = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [viewedInsights, setViewedInsights] = useState<Set<number>>(new Set([0])); // Start with first insight viewed
   const [isVisible, setIsVisible] = useState(true);
+  const [isHiding, setIsHiding] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const animateIn = () => {
@@ -219,10 +221,11 @@ const RotatingSupplyInsights = () => {
       
       // Check if all insights have been viewed
       if (newViewedInsights.size === supplyInsights.length) {
-        // Hide section after a brief delay to let the user see the final insight
+        // Hide section smoothly after a brief delay
         setTimeout(() => {
-          setIsVisible(false);
-        }, 3000);
+          setIsHiding(true);
+          setTimeout(() => setIsVisible(false), 300); // Allow time for fade-out animation
+        }, 1000);
       }
     });
   };
@@ -233,19 +236,14 @@ const RotatingSupplyInsights = () => {
 
   const insight = supplyInsights[currentInsight];
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'border-l-red-400';
-      case 'medium': return 'border-l-yellow-400';
-      case 'low': return 'border-l-green-400';
-      default: return 'border-l-gray-400';
-    }
-  };
+  // Removed priority color function as color bar is no longer used
 
   if (!isVisible) return null;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+    <div 
+      className={`bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden transition-opacity duration-300 ${isHiding ? 'opacity-0' : 'opacity-100'}`}
+    >
       {/* Header */}
       <div className="p-6 border-b border-gray-100" style={{ backgroundColor: '#f8faf9' }}>
         <div className="flex items-center justify-between">
@@ -287,7 +285,7 @@ const RotatingSupplyInsights = () => {
       >
         <div 
           ref={contentRef}
-          className={`border-l-4 ${getPriorityColor(insight.priority)} pl-6 bg-gray-50 rounded-r-lg p-4`}
+          className="bg-gray-50 rounded-lg p-4"
           style={{ opacity: 0 }}
         >
           <div className="flex items-center justify-between mb-3">
@@ -694,7 +692,10 @@ const SupplySection = () => {
         </div>
       </div>
 
-
+      {/* Supply Chain Regional Map */}
+      <div className="mb-8">
+        <SupplyChainMap />
+      </div>
 
       {/* AI Supply Chain Insights */}
       <RotatingSupplyInsights />

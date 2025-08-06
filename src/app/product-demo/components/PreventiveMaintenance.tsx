@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { getStatusColor, getPriorityColor } from '../utils/colorScheme';
 
 const PreventiveMaintenanceSection = () => {
   const [filterType, setFilterType] = useState<'machine' | 'technician' | 'priority'>('machine');
@@ -158,31 +159,16 @@ const PreventiveMaintenanceSection = () => {
     }
   ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'text-green-600';
-      case 'in_progress': return 'text-blue-600';
-      case 'scheduled': return 'text-gray-600';
-      default: return 'text-gray-600';
-    }
+  const getMaintenanceStatusColor = (status: string) => {
+    return getStatusColor(status).text;
   };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'High': return 'text-red-600';
-      case 'Medium': return 'text-yellow-600';
-      case 'Low': return 'text-green-600';
-      default: return 'text-gray-600';
-    }
+  const getMaintenancePriorityColor = (priority: string) => {
+    return getPriorityColor(priority).text;
   };
 
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'High': return 'text-red-600';
-      case 'Medium': return 'text-yellow-600';
-      case 'Low': return 'text-green-600';
-      default: return 'text-gray-600';
-    }
+    return getPriorityColor(severity).text;
   };
 
   return (
@@ -243,7 +229,7 @@ const PreventiveMaintenanceSection = () => {
                   <div>
                     <h4 className="font-semibold text-gray-900 text-lg">{maintenance.machineName}</h4>
                     <div className="flex items-center space-x-3 mt-1">
-                      <span className={`text-xs font-medium ${getPriorityColor(maintenance.priority)}`}>
+                                              <span className={`text-xs font-medium ${getMaintenancePriorityColor(maintenance.priority)}`}>
                         {maintenance.priority} Priority
                       </span>
                       <span className="text-gray-500 text-sm">{maintenance.location}</span>
@@ -262,7 +248,7 @@ const PreventiveMaintenanceSection = () => {
                   </div>
                   <div>
                     <span className="text-gray-600 text-sm">Status:</span>
-                    <div className={`mt-1 text-sm font-medium ${getStatusColor(maintenance.status)}`}>
+                                            <div className={`mt-1 text-sm font-medium ${getMaintenanceStatusColor(maintenance.status)}`}>
                       {maintenance.status.replace('_', ' ').charAt(0).toUpperCase() + maintenance.status.replace('_', ' ').slice(1)}
                     </div>
                   </div>

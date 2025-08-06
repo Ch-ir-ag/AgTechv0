@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Machine } from '../types';
+import { getStatusColor } from '../utils/colorScheme';
 
 interface OperationsSectionProps {
   machines: Machine[];
@@ -109,24 +110,16 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
     setExpandedMachineId(expandedMachineId === machineId ? null : machineId);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'running': return 'bg-green-500';
-      case 'warning': return 'bg-yellow-500';
-      case 'maintenance': return 'bg-orange-500';
-      case 'offline': return 'bg-red-500';
-      default: return 'bg-gray-500';
-    }
+  const getMachineStatusColor = (status: string) => {
+    const statusColor = getStatusColor(status);
+    return statusColor.dot;
   };
 
   const getMetricStatusColor = (status: string) => {
-    switch (status) {
-      case 'normal': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      case 'offline': return 'text-gray-600';
-      default: return 'text-gray-600';
-    }
+    // Map 'normal' to 'active' for consistency
+    const mappedStatus = status === 'normal' ? 'active' : status;
+    const statusColor = getStatusColor(mappedStatus);
+    return statusColor.text;
   };
 
   const getLocationStatus = (machines: Machine[]) => {
@@ -277,7 +270,7 @@ const OperationsSection = ({ machines }: OperationsSectionProps) => {
                                 <div className="flex items-center space-x-3">
                                   <span className="font-medium text-gray-900">{machine.name}</span>
                                   <div className="flex items-center space-x-2">
-                                    <div className={`w-2 h-2 rounded-full ${getStatusColor(machine.status)}`}></div>
+                                    <div className={`w-2 h-2 rounded-full ${getMachineStatusColor(machine.status)}`}></div>
                                     <span className="text-sm text-gray-600 capitalize">{machine.status}</span>
                                   </div>
                                 </div>

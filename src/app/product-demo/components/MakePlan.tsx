@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WeeklyMakePlan, ProductionRun } from '../types';
 import { demoData } from '../data';
+import { getStatusColor } from '../utils/colorScheme';
 
 interface MakePlanSectionProps {
   weeklyPlan?: WeeklyMakePlan;
@@ -20,34 +21,10 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   
-  // Ultra-muted, professional palette - almost monochromatic
-  const getProductColor = (product: string): { bg: string, text: string, accent: string } => {
-    const productColors: { [key: string]: { bg: string, text: string, accent: string } } = {
-      'Skim Milk': { bg: 'bg-white', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Whole Milk': { bg: 'bg-gray-25', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Cream': { bg: 'bg-white', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Greek Yogurt Base': { bg: 'bg-gray-25', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Buttermilk': { bg: 'bg-white', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Milk Powder': { bg: 'bg-gray-25', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Cheese Base': { bg: 'bg-white', text: 'text-gray-700', accent: 'border-gray-200' },
-      'Bottled Milk Packaging': { bg: 'bg-gray-25', text: 'text-gray-600', accent: 'border-gray-200' },
-      'Yogurt Cup Packaging': { bg: 'bg-white', text: 'text-gray-600', accent: 'border-gray-200' },
-      'Cream Packaging': { bg: 'bg-gray-25', text: 'text-gray-600', accent: 'border-gray-200' },
-      'Mixed Packaging': { bg: 'bg-white', text: 'text-gray-600', accent: 'border-gray-200' },
-      'CIP Cleaning': { bg: 'bg-gray-100', text: 'text-gray-500', accent: 'border-gray-300' }
-    };
-    return productColors[product] || { bg: 'bg-white', text: 'text-gray-700', accent: 'border-gray-200' };
-  };
-
-  // Status indicator for elegant design
+  // Using consistent color scheme for products and status
   const getStatusIndicator = (status: string): { dot: string, bg: string } => {
-    switch (status) {
-      case 'Planned': return { dot: 'bg-blue-400', bg: 'bg-blue-25' };
-      case 'Confirmed': return { dot: 'bg-green-400', bg: 'bg-green-25' };
-      case 'In Progress': return { dot: 'bg-yellow-400', bg: 'bg-yellow-25' };
-      case 'Completed': return { dot: 'bg-gray-400', bg: 'bg-gray-25' };
-      default: return { dot: 'bg-gray-400', bg: 'bg-white' };
-    }
+    const statusColor = getStatusColor(status);
+    return { dot: statusColor.dot, bg: statusColor.bg };
   };
 
 
@@ -184,11 +161,13 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
               className="p-4 cursor-pointer flex items-center justify-between hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center space-x-4">
-                <div>
+                <div className="relative">
                   <div className="font-semibold text-gray-900">{schedule.line}</div>
                   <div className="text-sm text-gray-500">
                     {schedule.runs.length} runs scheduled
                   </div>
+                  
+
                 </div>
                 <div className="flex items-center space-x-1">
                   {schedule.runs.slice(0, 4).map((run, idx) => {
@@ -254,7 +233,6 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
                           >
                             <div className="space-y-2">
                               {dayRuns.map((run, runIndex) => {
-                                const colors = getProductColor(run.product);
                                 const statusIndicator = getStatusIndicator(run.status);
                                 
                                 return (
@@ -275,16 +253,12 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
                                     whileTap={{ scale: 0.98 }}
                                     draggable
                                     onDragStart={(e: unknown) => handleDragStart(e as React.DragEvent<HTMLDivElement>, run)}
-                                    className={`
-                                      relative rounded-md border p-2 transition-all duration-200
-                                      ${colors.bg} ${colors.accent}
-                                    `}
+                                    className="relative rounded-md border border-gray-200 bg-white p-2 transition-all duration-200 hover:border-gray-300"
                                   >
-                                    {/* Status Dot */}
-                                    <div className={`absolute top-1 right-1 w-1.5 h-1.5 rounded-full ${statusIndicator.dot}`}></div>
+
                                     
                                     {/* Product Name */}
-                                    <div className={`text-xs font-medium truncate pr-3 ${colors.text}`}>
+                                    <div className="text-xs font-medium truncate pr-3 text-gray-700">
                                       {run.product}
                                     </div>
                                     

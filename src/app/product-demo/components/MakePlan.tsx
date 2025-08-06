@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WeeklyMakePlan, ProductionRun } from '../types';
 import { demoData } from '../data';
-import { getStatusColor } from '../utils/colorScheme';
 
 interface MakePlanSectionProps {
   weeklyPlan?: WeeklyMakePlan;
@@ -21,11 +20,7 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   
-  // Using consistent color scheme for products and status
-  const getStatusIndicator = (status: string): { dot: string, bg: string } => {
-    const statusColor = getStatusColor(status);
-    return { dot: statusColor.dot, bg: statusColor.bg };
-  };
+
 
 
 
@@ -169,17 +164,7 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
                   
 
                 </div>
-                <div className="flex items-center space-x-1">
-                  {schedule.runs.slice(0, 4).map((run, idx) => {
-                    const statusIndicator = getStatusIndicator(run.status);
-                    return (
-                      <div key={idx} className={`w-2 h-2 rounded-full ${statusIndicator.dot}`}></div>
-                    );
-                  })}
-                  {schedule.runs.length > 4 && (
-                    <div className="text-xs text-gray-400 ml-1">+{schedule.runs.length - 4}</div>
-                  )}
-                </div>
+
               </div>
               <motion.div
                 animate={{ rotate: expandedLines.has(schedule.lineId) ? 180 : 0 }}
@@ -233,8 +218,6 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
                           >
                             <div className="space-y-2">
                               {dayRuns.map((run, runIndex) => {
-                                const statusIndicator = getStatusIndicator(run.status);
-                                
                                 return (
                                   <motion.div
                                     key={run.id}

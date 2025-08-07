@@ -141,11 +141,7 @@ const StandardizationSection = () => {
     }, 1000);
   };
 
-  const getEfficiencyColor = (efficiency: number) => {
-    if (efficiency >= 95) return 'text-green-600';
-    if (efficiency >= 90) return 'text-yellow-600';
-    return 'text-red-600';
-  };
+
 
   const getActiveLineSilos = (line: { currentSilos: string[]; recommendedSilos: string[] }) => {
     return viewMode === 'current' ? line.currentSilos : line.recommendedSilos;

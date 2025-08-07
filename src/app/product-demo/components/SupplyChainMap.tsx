@@ -13,7 +13,7 @@ interface RegionData {
   totalVolume: number;
   avgFat: number;
   avgProtein: number;
-  forecastChange: number; // Percentage change for next month
+  forecastChange: number; // Percentage change for next 
 }
 
 // Single clickable area for Wisconsin (coordinates to be chosen by user)

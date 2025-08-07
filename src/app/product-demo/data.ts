@@ -872,6 +872,18 @@ export const demoData = {
             reasoning: 'Scheduled bulk order for Whole Foods'
           },
           {
+            id: 'run1-mon-3',
+            day: 'Monday',
+            startTime: '22:00',
+            endTime: '24:00',
+            product: 'Line Changeover',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
             id: 'run1-tue-1',
             day: 'Tuesday',
             startTime: '06:00',
@@ -886,6 +898,18 @@ export const demoData = {
           {
             id: 'run1-tue-2',
             day: 'Tuesday',
+            startTime: '12:00',
+            endTime: '13:00',
+            product: 'Line Setup',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
+            id: 'run1-tue-3',
+            day: 'Tuesday',
             startTime: '14:00',
             endTime: '22:00',
             product: 'Cream',
@@ -895,6 +919,18 @@ export const demoData = {
             silos: [1, 6],
             status: 'Planned',
             reasoning: 'Premium product with higher margins'
+          },
+          {
+            id: 'run1-tue-4',
+            day: 'Tuesday',
+            startTime: '22:00',
+            endTime: '24:00',
+            product: 'Night Cleaning',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
           },
           {
             id: 'run1-wed-1',
@@ -910,6 +946,18 @@ export const demoData = {
             reasoning: 'Peak demand day'
           },
           {
+            id: 'run1-wed-2',
+            day: 'Wednesday',
+            startTime: '16:00',
+            endTime: '24:00',
+            product: 'Whole Milk',
+            volume: 18000,
+            fat: 3.6,
+            protein: 3.4,
+            silos: [1, 2],
+            status: 'Planned'
+          },
+          {
             id: 'run1-thu-1',
             day: 'Thursday',
             startTime: '06:00',
@@ -919,6 +967,30 @@ export const demoData = {
             fat: 3.6,
             protein: 3.4,
             silos: [1, 2],
+            status: 'Planned'
+          },
+          {
+            id: 'run1-thu-2',
+            day: 'Thursday',
+            startTime: '14:00',
+            endTime: '18:00',
+            product: 'Line Maintenance',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
+            id: 'run1-thu-3',
+            day: 'Thursday',
+            startTime: '18:00',
+            endTime: '24:00',
+            product: 'Low Fat Milk',
+            volume: 16000,
+            fat: 1.5,
+            protein: 3.3,
+            silos: [3, 5],
             status: 'Planned'
           },
           {
@@ -933,6 +1005,42 @@ export const demoData = {
             silos: [3, 4, 5, 7, 8],
             status: 'Planned',
             reasoning: 'End of week high volume production'
+          },
+          {
+            id: 'run1-fri-2',
+            day: 'Friday',
+            startTime: '18:00',
+            endTime: '24:00',
+            product: 'Weekend Prep',
+            volume: 8000,
+            fat: 2.0,
+            protein: 3.2,
+            silos: [2, 4],
+            status: 'Planned'
+          },
+          {
+            id: 'run1-sat-1',
+            day: 'Saturday',
+            startTime: '08:00',
+            endTime: '16:00',
+            product: 'Whole Milk',
+            volume: 15000,
+            fat: 3.6,
+            protein: 3.4,
+            silos: [1, 2],
+            status: 'Planned'
+          },
+          {
+            id: 'run1-sun-1',
+            day: 'Sunday',
+            startTime: '10:00',
+            endTime: '14:00',
+            product: 'Deep Cleaning',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
           }
         ]
       },
@@ -954,6 +1062,18 @@ export const demoData = {
             reasoning: 'High protein demand from fitness market'
           },
           {
+            id: 'run2-mon-2',
+            day: 'Monday',
+            startTime: '15:00',
+            endTime: '23:00',
+            product: 'Skim Milk',
+            volume: 20000,
+            fat: 0.1,
+            protein: 3.2,
+            silos: [3, 4, 5],
+            status: 'Completed'
+          },
+          {
             id: 'run2-tue-1',
             day: 'Tuesday',
             startTime: '06:00',
@@ -965,6 +1085,18 @@ export const demoData = {
             silos: [3, 4],
             status: 'Confirmed',
             reasoning: 'Bulk order from bakery customers'
+          },
+          {
+            id: 'run2-tue-2',
+            day: 'Tuesday',
+            startTime: '18:00',
+            endTime: '24:00',
+            product: 'Line Sanitization',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
           },
           {
             id: 'run2-wed-1',
@@ -1014,6 +1146,42 @@ export const demoData = {
             protein: 3.1,
             silos: [3, 4],
             status: 'Planned'
+          },
+          {
+            id: 'run2-fri-2',
+            day: 'Friday',
+            startTime: '14:00',
+            endTime: '22:00',
+            product: 'Greek Yogurt Base',
+            volume: 16000,
+            fat: 2.0,
+            protein: 8.5,
+            silos: [2, 5],
+            status: 'Planned'
+          },
+          {
+            id: 'run2-sat-1',
+            day: 'Saturday',
+            startTime: '08:00',
+            endTime: '16:00',
+            product: 'Premium Cream',
+            volume: 12000,
+            fat: 35.0,
+            protein: 2.1,
+            silos: [1, 6],
+            status: 'Planned'
+          },
+          {
+            id: 'run2-sun-1',
+            day: 'Sunday',
+            startTime: '10:00',
+            endTime: '16:00',
+            product: 'Weekly Maintenance',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
           }
         ]
       },
@@ -1021,6 +1189,30 @@ export const demoData = {
         line: 'Line 3',
         lineId: 'line3',
         runs: [
+          {
+            id: 'run3-mon-1',
+            day: 'Monday',
+            startTime: '06:00',
+            endTime: '12:00',
+            product: 'Preventive Maintenance',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
+            id: 'run3-mon-2',
+            day: 'Monday',
+            startTime: '12:00',
+            endTime: '18:00',
+            product: 'Equipment Testing',
+            volume: 5000,
+            fat: 2.0,
+            protein: 3.5,
+            silos: [2, 3],
+            status: 'Planned'
+          },
           {
             id: 'run3-tue-1',
             day: 'Tuesday',
@@ -1034,6 +1226,18 @@ export const demoData = {
             status: 'Planned',
             reasoning: 'Export order preparation',
             notes: 'Line maintenance completed Monday'
+          },
+          {
+            id: 'run3-tue-2',
+            day: 'Tuesday',
+            startTime: '16:00',
+            endTime: '24:00',
+            product: 'Night Production',
+            volume: 8000,
+            fat: 2.5,
+            protein: 3.8,
+            silos: [1, 4],
+            status: 'Planned'
           },
           {
             id: 'run3-wed-1',
@@ -1097,6 +1301,30 @@ export const demoData = {
             silos: [5, 6],
             status: 'Planned',
             reasoning: 'Weekend shift for export deadlines'
+          },
+          {
+            id: 'run3-sat-2',
+            day: 'Saturday',
+            startTime: '16:00',
+            endTime: '20:00',
+            product: 'Line Inspection',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
+            id: 'run3-sun-1',
+            day: 'Sunday',
+            startTime: '09:00',
+            endTime: '15:00',
+            product: 'Deep Clean & Sanitize',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
           }
         ]
       },
@@ -1178,6 +1406,42 @@ export const demoData = {
             silos: [],
             status: 'Planned',
             reasoning: 'End of week packaging rush for weekend demand'
+          },
+          {
+            id: 'run4-fri-2',
+            day: 'Friday',
+            startTime: '20:00',
+            endTime: '24:00',
+            product: 'Line Changeover',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
+            id: 'run4-sat-1',
+            day: 'Saturday',
+            startTime: '08:00',
+            endTime: '18:00',
+            product: 'Weekend Packaging',
+            volume: 40000,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
+          },
+          {
+            id: 'run4-sun-1',
+            day: 'Sunday',
+            startTime: '12:00',
+            endTime: '16:00',
+            product: 'Packaging Maintenance',
+            volume: 0,
+            fat: 0,
+            protein: 0,
+            silos: [],
+            status: 'Planned'
           }
         ]
       },

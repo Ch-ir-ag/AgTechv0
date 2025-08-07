@@ -7,22 +7,12 @@ import SupplyChainMap from './SupplyChainMap';
 
 
 
-// Anonymized supply chain stats data
+// Kerry Group scale supply chain stats data
 const supplyStats = {
   monthlyProcurement: {
-    value: '2.8M L',
+    value: '105M L',
     label: 'Monthly Raw Milk Procurement',
-    confidenceInterval: 'Next month forecast: 2.9M L'
-  },
-  onTimeDelivery: {
-    value: '97.3%',
-    label: 'Supplier On-Time Delivery Rate',
-    confidenceInterval: 'Target: >95%'
-  },
-  avgProcurementCost: {
-    value: '€0.42/L',
-    label: 'Average Procurement Cost',
-    confidenceInterval: '3% below market rate'
+    confidenceInterval: 'Next month forecast: 108M L'
   }
 };
 
@@ -30,10 +20,10 @@ const supplyStats = {
 const supplyPerformanceData = {
   weekly: {
     volume: [
-      { period: 'Week 1', thisYear: 720000, lastYear: 680000, onTime: 96.2 },
-      { period: 'Week 2', thisYear: 750000, lastYear: 710000, onTime: 97.1 },
-      { period: 'Week 3', thisYear: 680000, lastYear: 650000, onTime: 95.8 },
-      { period: 'Week 4', thisYear: 780000, lastYear: 740000, onTime: 98.3 }
+      { period: 'Week 1', thisYear: 25200000, lastYear: 23800000, onTime: 96.2 },
+      { period: 'Week 2', thisYear: 26250000, lastYear: 24850000, onTime: 97.1 },
+      { period: 'Week 3', thisYear: 23800000, lastYear: 22750000, onTime: 95.8 },
+      { period: 'Week 4', thisYear: 27300000, lastYear: 25900000, onTime: 98.3 }
     ],
     fat: [
       { period: 'Week 1', thisYear: 3.95, lastYear: 3.72, onTime: 96.2 },
@@ -56,12 +46,12 @@ const supplyPerformanceData = {
   },
   monthly: {
     volume: [
-      { period: 'Jan', thisYear: 2650000, lastYear: 2580000, onTime: 96.2 },
-      { period: 'Feb', thisYear: 2720000, lastYear: 2640000, onTime: 97.1 },
-      { period: 'Mar', thisYear: 2580000, lastYear: 2520000, onTime: 95.8 },
-      { period: 'Apr', thisYear: 2780000, lastYear: 2710000, onTime: 98.3 },
-      { period: 'May', thisYear: 2890000, lastYear: 2820000, onTime: 97.9 },
-      { period: 'Jun', thisYear: 2840000, lastYear: 2770000, onTime: 98.1 }
+      { period: 'Jan', thisYear: 102550000, lastYear: 99800000, onTime: 96.2 },
+      { period: 'Feb', thisYear: 105200000, lastYear: 102100000, onTime: 97.1 },
+      { period: 'Mar', thisYear: 99800000, lastYear: 97500000, onTime: 95.8 },
+      { period: 'Apr', thisYear: 107600000, lastYear: 104750000, onTime: 98.3 },
+      { period: 'May', thisYear: 111850000, lastYear: 109100000, onTime: 97.9 },
+      { period: 'Jun', thisYear: 109900000, lastYear: 107200000, onTime: 98.1 }
     ],
     fat: [
       { period: 'Jan', thisYear: 4.35, lastYear: 4.18, onTime: 96.2 },
@@ -90,12 +80,12 @@ const supplyPerformanceData = {
   },
   yearly: {
     volume: [
-      { period: '2020', thisYear: 28500000, lastYear: 27200000, onTime: 94.8 },
-      { period: '2021', thisYear: 29200000, lastYear: 28500000, onTime: 95.2 },
-      { period: '2022', thisYear: 30100000, lastYear: 29200000, onTime: 96.1 },
-      { period: '2023', thisYear: 31200000, lastYear: 30100000, onTime: 96.8 },
-      { period: '2024', thisYear: 32400000, lastYear: 31200000, onTime: 97.3 },
-      { period: '2025', thisYear: 33600000, lastYear: 32400000, onTime: 97.8 }
+      { period: '2020', thisYear: 1140000000, lastYear: 1088000000, onTime: 94.8 },
+      { period: '2021', thisYear: 1168000000, lastYear: 1140000000, onTime: 95.2 },
+      { period: '2022', thisYear: 1204000000, lastYear: 1168000000, onTime: 96.1 },
+      { period: '2023', thisYear: 1248000000, lastYear: 1204000000, onTime: 96.8 },
+      { period: '2024', thisYear: 1296000000, lastYear: 1248000000, onTime: 97.3 },
+      { period: '2025', thisYear: 1344000000, lastYear: 1296000000, onTime: 97.8 }
     ],
     fat: [
       { period: '2020', thisYear: 3.82, lastYear: 3.95, onTime: 94.8 },
@@ -599,14 +589,12 @@ const SupplySection = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
-        {Object.entries(supplyStats).map(([key, stat]) => (
-          <div key={key} className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-            <p className="text-2xl sm:text-3xl font-bold" style={{ color: '#1E4B3A' }}>{stat.value}</p>
-            <p className="text-gray-600 text-xs sm:text-sm">{stat.label}</p>
-            <p className="text-xs text-gray-500 mt-1">{stat.confidenceInterval}</p>
-          </div>
-        ))}
+      <div className="flex justify-center mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center max-w-md">
+          <p className="text-3xl font-bold" style={{ color: '#1E4B3A' }}>{supplyStats.monthlyProcurement.value}</p>
+          <p className="text-gray-600 text-sm mt-2">{supplyStats.monthlyProcurement.label}</p>
+          <p className="text-xs text-gray-500 mt-1">{supplyStats.monthlyProcurement.confidenceInterval}</p>
+        </div>
       </div>
 
       {/* Supply Performance Chart */}

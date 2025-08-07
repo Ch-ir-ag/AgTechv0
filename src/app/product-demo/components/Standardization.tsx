@@ -66,12 +66,9 @@ const productionLines = [
   }
 ];
 
-// Overall performance metrics
+// Overall performance metrics - Kerry Group scale
 const performanceMetrics = {
-  overallEfficiency: 91.5,
-  totalCostSavings: 15200,
-  avgDeviationReduction: 32,
-  totalVolumeOptimised: 357000
+  totalCostSavings: 6200000
 };
 
 // AI Assistant messages and responses
@@ -157,30 +154,18 @@ const StandardizationSection = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="mb-4">
-                     <h2 className="text-xl font-bold" style={{ color: '#1E4B3A' }}>Raw Milk Standardisation</h2>
-           <p className="text-gray-600">Optimise silo-to-line allocation for maximum efficiency</p>
-        </div>
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold mb-4" style={{ color: '#1E4B3A' }}>Raw Milk Standardisation</h2>
+        <p className="text-gray-600 max-w-3xl mx-auto">
+          Optimise silo-to-line allocation for maximum efficiency with real-time analytics and AI-powered insights.
+        </p>
+      </div>
 
-        {/* Performance Overview Cards */}
-        <div className="grid grid-cols-4 gap-4">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>{performanceMetrics.overallEfficiency}%</div>
-            <div className="text-sm text-gray-600">Overall Efficiency</div>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>€{performanceMetrics.totalCostSavings.toLocaleString()}</div>
-            <div className="text-sm text-gray-600">Monthly Savings Potential</div>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>{performanceMetrics.avgDeviationReduction}%</div>
-            <div className="text-sm text-gray-600">Spec Deviation Reduction</div>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-                         <div className="text-2xl font-bold" style={{ color: '#1E4B3A' }}>{(performanceMetrics.totalVolumeOptimised / 1000).toFixed(0)}K L</div>
-                         <div className="text-sm text-gray-600">Volume Optimised</div>
-          </div>
+      {/* Stats Section */}
+      <div className="flex justify-center mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center max-w-md">
+          <p className="text-3xl font-bold" style={{ color: '#1E4B3A' }}>€{performanceMetrics.totalCostSavings.toLocaleString()}</p>
+          <p className="text-gray-600 text-sm mt-2">Monthly Savings Potential</p>
         </div>
       </div>
 
@@ -229,8 +214,7 @@ const StandardizationSection = () => {
                       <div>
                         <h4 className="font-medium" style={{ color: '#1E4B3A' }}>{line.name}</h4>
                         <p className="text-sm text-gray-600">
-                          Connected Silos: {activeSilos.join(', ')} | 
-                          Efficiency: <span className={getEfficiencyColor(line.efficiency)}>{line.efficiency}%</span>
+                          Connected Silos: {activeSilos.join(', ')}
                         </p>
                       </div>
                     </div>
@@ -304,13 +288,7 @@ const StandardizationSection = () => {
                         </div>
 
                         {/* Performance Metrics */}
-                        <div className="grid grid-cols-3 gap-4">
-                          <div className="bg-white rounded p-3">
-                            <div className="text-lg font-semibold" style={{ color: line.efficiency >= 95 ? '#059669' : line.efficiency >= 90 ? '#D97706' : '#DC2626' }}>
-                              {line.efficiency}%
-                            </div>
-                            <div className="text-xs text-gray-600">Efficiency</div>
-                          </div>
+                        <div className="grid grid-cols-2 gap-4">
                           <div className="bg-white rounded p-3">
                             <div className="text-lg font-semibold">€{line.costPerUnit}</div>
                             <div className="text-xs text-gray-600">Cost per Unit</div>

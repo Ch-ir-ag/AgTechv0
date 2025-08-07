@@ -305,7 +305,7 @@ const MakePlanSection = ({ weeklyPlan = defaultWeeklyPlan }: MakePlanSectionProp
           },
           { 
             label: 'Utilisation', 
-            value: '87%'
+            value: '92%'
           }
         ].map((stat, index) => (
           <motion.div

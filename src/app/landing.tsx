@@ -307,10 +307,10 @@ export default function Landing() {
                 style={{ color: '#1E4B3A' }}
               >
                 <span className="block">
-                  The Decision Making{" "}
+                  The{" "}
                   <span className="relative inline-block px-3 py-1 mx-2 rounded-lg border-2 border-[#1E4B3A] bg-gradient-to-r from-[#1E4B3A]/10 to-[#1E4B3A]/20 shadow-lg transform hover:scale-105 transition-all duration-300">
                     <span className="relative z-10 font-bold bg-gradient-to-r from-[#1E4B3A] to-[#2A6B4F] bg-clip-text text-transparent">
-                      Engine
+                      Autopilot
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                   </span>

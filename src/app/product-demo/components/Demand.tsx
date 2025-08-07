@@ -16,8 +16,8 @@ const DemandSection = () => {
       contractStatus: 'active',
       productionStatus: 'in_progress',
       deliveryDate: 'August 15, 2025',
-      quantity: '5,000 units',
-      value: '$25,000',
+      quantity: '485,000 units',
+      value: '$2,425,000',
       priority: 'High',
       customerCount: 3,
       completionPercentage: 65,
@@ -36,8 +36,8 @@ const DemandSection = () => {
       contractStatus: 'pending',
       productionStatus: 'scheduled',
       deliveryDate: 'August 22, 2025',
-      quantity: '2,500 units',
-      value: '$75,000',
+      quantity: '125,000 units',
+      value: '$3,750,000',
       priority: 'Medium',
       customerCount: 2,
       completionPercentage: 0,
@@ -119,7 +119,7 @@ const DemandSection = () => {
       ],
       upcomingOrders: [
         { product: 'Greek Yogurt Cups', quantity: '12,000 units', value: '$48,000', date: 'August 20, 2025' },
-        { product: 'Cheese Sticks', quantity: '8,000 units', value: '$24,000', date: 'September 5, 2025' }
+        { product: 'Cheese Sticks', quantity: '950,000 units', value: '$3,800,000', date: 'September 5, 2025' }
       ],
       satisfaction: 88,
       tier: 'Enterprise'
@@ -632,8 +632,8 @@ const DemandSection = () => {
             </div>
             <div className="text-xs text-green-700">
               {timeFrame === '4weeks' 
-                ? '+8.2% demand increase expected over next 4 weeks' 
-                : '+12.5% demand growth projected for next 6 months'}
+                ? '+6.8% demand increase expected over next 4 weeks across global markets' 
+                : '+14.2% demand growth projected for next 6 months (1.36B consumers served)'}
             </div>
           </div>
           
@@ -643,8 +643,8 @@ const DemandSection = () => {
             </div>
             <div className="text-xs text-blue-700">
               {timeFrame === '4weeks' 
-                ? 'AI forecast accuracy: 94.2% (last 4 weeks)' 
-                : 'AI forecast accuracy: 91.8% (last 6 months)'}
+                ? 'AI forecast accuracy: 96.8% across 124 facilities (last 4 weeks)' 
+                : 'AI forecast accuracy: 94.5% with 21,000+ employees validation (last 6 months)'}
             </div>
           </div>
           
@@ -654,8 +654,8 @@ const DemandSection = () => {
             </div>
             <div className="text-xs text-purple-700">
               {timeFrame === '4weeks' 
-                ? 'Highest demand expected: Week 4 (97 units)' 
-                : 'Peak season anticipated: October (+94 units)'}
+                ? 'Highest demand expected: Week 4 (€285M global revenue)' 
+                : 'Peak season anticipated: December (+€420M across all markets)'}
             </div>
           </div>
         </div>

@@ -4,8 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Define the county data structure
-interface CountyData {
+// Define the region data structure for Wisconsin
+interface RegionData {
   id: string;
   name: string;
   farms: number;
@@ -16,288 +16,32 @@ interface CountyData {
   forecastChange: number; // Percentage change for next month
 }
 
-// Define the clickable area coordinates types directly in the array
+// Single clickable area for Wisconsin (coordinates to be chosen by user)
 const clickableAreas = [
   {
-    id: 'antrim',
+    id: 'wisconsin-region',
     shape: 'rect' as const,
-    coords: [321, 68, 351, 128],
+    coords: [200, 150, 300, 200], // These coordinates will be adjusted by the user
     name: 'Region A'
-  },
-  {
-    id: 'down',
-    shape: 'rect' as const,
-    coords: [322, 191, 365, 244],
-    name: 'Region B'
-  },
-  {
-    id: 'armagh',
-    shape: 'rect' as const,
-    coords: [276, 203, 310, 243],
-    name: 'Region C'
-  },
-  {
-    id: 'tyrone',
-    shape: 'rect' as const,
-    coords: [218, 136, 268, 186],
-    name: 'Region D'
-  },
-  {
-    id: 'derry',
-    shape: 'rect' as const,
-    coords: [242, 58, 292, 108],
-    name: 'Region E'
-  },
-  {
-    id: 'fermanagh',
-    shape: 'rect' as const,
-    coords: [187, 198, 236, 239],
-    name: 'Region F'
-  },
-  {
-    id: 'monaghan',
-    shape: 'rect' as const,
-    coords: [252, 228, 278, 263],
-    name: 'Region G'
-  },
-  {
-    id: 'cavan',
-    shape: 'rect' as const,
-    coords: [222, 274, 257, 316],
-    name: 'Region H'
-  },
-  {
-    id: 'louth',
-    shape: 'rect' as const,
-    coords: [299, 288, 328, 327],
-    name: 'Region I'
-  },
-  {
-    id: 'meath',
-    shape: 'rect' as const,
-    coords: [269, 342, 308, 384],
-    name: 'Region J'
-  },
-  {
-    id: 'dublin',
-    shape: 'rect' as const,
-    coords: [320, 374, 357, 418],
-    name: 'Region K'
-  },
-  {
-    id: 'kildare',
-    shape: 'rect' as const,
-    coords: [262, 422, 302, 458],
-    name: 'Region L'
-  },
-  {
-    id: 'offaly',
-    shape: 'rect' as const,
-    coords: [200, 424, 239, 456],
-    name: 'Region M'
-  },
-  {
-    id: 'westmeath',
-    shape: 'rect' as const,
-    coords: [206, 364, 258, 397],
-    name: 'Region N'
-  },
-  {
-    id: 'longford',
-    shape: 'rect' as const,
-    coords: [182, 324, 228, 354],
-    name: 'Region O'
-  },
-  {
-    id: 'leitrim',
-    shape: 'rect' as const,
-    coords: [172, 272, 209, 302],
-    name: 'Region P'
-  },
-  {
-    id: 'donegal',
-    shape: 'rect' as const,
-    coords: [158, 86, 206, 122],
-    name: 'Region Q'
   }
 ];
 
-// Sample county data with anonymized regions
-const countyData: Record<string, CountyData> = {
-  antrim: {
-    id: 'antrim',
-    name: 'Region A',
-    farms: 304,
+// Wisconsin region data
+const regionData: { [key: string]: RegionData } = {
+  'wisconsin-region': {
+    id: 'wisconsin-region',
+    name: 'Wisconsin Dairy Region',
+    farms: 1250,
     avgYield: 28.5,
-    totalVolume: 356000,
-    avgFat: 4.2,
-    avgProtein: 3.5,
-    forecastChange: 2.8
-  },
-  down: {
-    id: 'down',
-    name: 'Region B',
-    farms: 336,
-    avgYield: 27.8,
-    totalVolume: 384000,
-    avgFat: 4.1,
-    avgProtein: 3.4,
-    forecastChange: 3.1
-  },
-  armagh: {
-    id: 'armagh',
-    name: 'Region C',
-    farms: 272,
-    avgYield: 27.2,
-    totalVolume: 304000,
-    avgFat: 4.0,
-    avgProtein: 3.3,
-    forecastChange: 2.5
-  },
-  tyrone: {
-    id: 'tyrone',
-    name: 'Region D',
-    farms: 360,
-    avgYield: 28.0,
-    totalVolume: 414000,
-    avgFat: 4.3,
-    avgProtein: 3.5,
-    forecastChange: 3.4
-  },
-  derry: {
-    id: 'derry',
-    name: 'Region E',
-    farms: 312,
-    avgYield: 27.6,
-    totalVolume: 354000,
-    avgFat: 4.2,
-    avgProtein: 3.4,
-    forecastChange: 2.9
-  },
-  fermanagh: {
-    id: 'fermanagh',
-    name: 'Region F',
-    farms: 256,
-    avgYield: 26.8,
-    totalVolume: 282000,
-    avgFat: 4.1,
-    avgProtein: 3.3,
-    forecastChange: 2.2
-  },
-  monaghan: {
-    id: 'monaghan',
-    name: 'Region G',
-    farms: 304,
-    avgYield: 27.4,
-    totalVolume: 342000,
-    avgFat: 4.0,
-    avgProtein: 3.4,
-    forecastChange: 2.7
-  },
-  cavan: {
-    id: 'cavan',
-    name: 'Region H',
-    farms: 288,
-    avgYield: 26.9,
-    totalVolume: 318000,
-    avgFat: 3.9,
-    avgProtein: 3.3,
-    forecastChange: 2.4
-  },
-  louth: {
-    id: 'louth',
-    name: 'Region I',
-    farms: 176,
-    avgYield: 27.1,
-    totalVolume: 196000,
-    avgFat: 4.1,
-    avgProtein: 3.4,
-    forecastChange: 2.6
-  },
-  meath: {
-    id: 'meath',
-    name: 'Region J',
-    farms: 264,
-    avgYield: 28.2,
-    totalVolume: 306000,
-    avgFat: 4.2,
-    avgProtein: 3.5,
-    forecastChange: 3.0
-  },
-  dublin: {
-    id: 'dublin',
-    name: 'Region K',
-    farms: 48,
-    avgYield: 26.5,
-    totalVolume: 52000,
+    totalVolume: 850000,
     avgFat: 3.8,
     avgProtein: 3.2,
-    forecastChange: 1.8
-  },
-  kildare: {
-    id: 'kildare',
-    name: 'Region L',
-    farms: 192,
-    avgYield: 27.8,
-    totalVolume: 220000,
-    avgFat: 4.0,
-    avgProtein: 3.4,
-    forecastChange: 2.8
-  },
-  offaly: {
-    id: 'offaly',
-    name: 'Region M',
-    farms: 224,
-    avgYield: 27.5,
-    totalVolume: 254000,
-    avgFat: 4.1,
-    avgProtein: 3.4,
-    forecastChange: 2.9
-  },
-  westmeath: {
-    id: 'westmeath',
-    name: 'Region N',
-    farms: 208,
-    avgYield: 27.3,
-    totalVolume: 234000,
-    avgFat: 4.0,
-    avgProtein: 3.3,
-    forecastChange: 2.7
-  },
-  longford: {
-    id: 'longford',
-    name: 'Region O',
-    farms: 168,
-    avgYield: 26.7,
-    totalVolume: 184000,
-    avgFat: 3.9,
-    avgProtein: 3.3,
-    forecastChange: 2.3
-  },
-  leitrim: {
-    id: 'leitrim',
-    name: 'Region P',
-    farms: 144,
-    avgYield: 26.2,
-    totalVolume: 155000,
-    avgFat: 3.8,
-    avgProtein: 3.2,
-    forecastChange: 2.1
-  },
-  donegal: {
-    id: 'donegal',
-    name: 'Region Q',
-    farms: 280,
-    avgYield: 26.9,
-    totalVolume: 310000,
-    avgFat: 3.9,
-    avgProtein: 3.3,
-    forecastChange: 2.5
+    forecastChange: 4.2
   }
 };
 
 export default function SupplyChainMap() {
-  const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [showForecast, setShowForecast] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -305,7 +49,6 @@ export default function SupplyChainMap() {
   // Handle map load and resize
   useEffect(() => {
     const updateMapSize = () => {
-      // Force re-render to update overlay positions
       setMapLoaded(true);
     };
     
@@ -316,9 +59,9 @@ export default function SupplyChainMap() {
     return () => window.removeEventListener('resize', updateMapSize);
   }, []);
   
-  // Handle county click
-  const handleCountyClick = (countyId: string) => {
-    setSelectedCounty(countyId);
+  // Handle region click
+  const handleRegionClick = (regionId: string) => {
+    setSelectedRegion(regionId);
     setShowForecast(true);
   };
   
@@ -331,7 +74,6 @@ export default function SupplyChainMap() {
   const renderOverlays = () => {
     return clickableAreas.map((area) => {
       if (area.shape === 'rect') {
-        // For rectangular areas
         const [x1, y1, x2, y2] = area.coords;
         const left = (x1 / 500) * 100;
         const top = (y1 / 500) * 100;
@@ -339,9 +81,9 @@ export default function SupplyChainMap() {
         return (
           <div
             key={area.id}
-            onClick={() => handleCountyClick(area.id)}
+            onClick={() => handleRegionClick(area.id)}
             className={`absolute cursor-pointer transition-all duration-300 group ${
-              selectedCounty === area.id 
+              selectedRegion === area.id 
                 ? 'bg-blue-500 bg-opacity-30 border-2 border-blue-500' 
                 : 'bg-transparent border-0 hover:border-0'
             }`}
@@ -355,7 +97,7 @@ export default function SupplyChainMap() {
           >
             <div className="w-full h-full flex items-center justify-center">
               <span className={`text-xs font-medium px-2 py-1 rounded transition-all duration-200 shadow-sm ${
-                selectedCounty === area.id 
+                selectedRegion === area.id 
                   ? 'bg-white text-blue-500 opacity-100' 
                   : 'bg-white bg-opacity-70 text-blue-500 opacity-0 group-hover:opacity-100'
               }`}>
@@ -370,8 +112,8 @@ export default function SupplyChainMap() {
     });
   };
   
-  // Generate forecast data for the selected county
-  const generateForecastData = (county: CountyData) => {
+  // Generate forecast data for the selected region
+  const generateForecastData = (region: RegionData) => {
     const currentMonth = new Date().getMonth();
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -383,8 +125,8 @@ export default function SupplyChainMap() {
     const getMonthNextName = () => getMonthName(1);
     const getMonthAfterNextName = () => getMonthName(2);
     
-    const baseVolume = county.totalVolume;
-    const forecastMultiplier = 1 + (county.forecastChange / 100);
+    const baseVolume = region.totalVolume;
+    const forecastMultiplier = 1 + (region.forecastChange / 100);
     const nextMonthVolume = Math.round(baseVolume * forecastMultiplier);
     const followingMonthVolume = Math.round(baseVolume * forecastMultiplier * 1.02);
     
@@ -406,24 +148,22 @@ export default function SupplyChainMap() {
         Supply Chain Regional Map
       </h2>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* Map Container */}
         <div 
           ref={mapRef}
-          className="lg:col-span-2 border border-gray-200 rounded-lg p-4 bg-blue-50 relative h-[400px]"
+          className="border border-gray-200 rounded-lg relative h-[400px] flex items-center justify-center flex-shrink-0"
         >
-          <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded text-xs text-gray-500 z-10">
-            Click on a region for details
-          </div>
+
           
           {/* Map Image */}
-          <div className="relative w-full h-full">
+          <div className="relative h-full aspect-[4/3]">
             {mapLoaded && (
               <Image
-                src="/images/ireland_map.jpg"
-                alt="Supply chain collection areas"
+                src="/images/wisconsin.jpg"
+                alt="Wisconsin supply chain collection areas"
                 fill
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'cover' }}
                 priority
                 onLoad={() => setMapLoaded(true)}
               />
@@ -433,16 +173,14 @@ export default function SupplyChainMap() {
             {mapLoaded && renderOverlays()}
           </div>
           
-          <div className="absolute bottom-2 left-2 text-xs text-gray-500 z-10">
-            Regional collection areas
-          </div>
+
 
           {/* Forecast Popup */}
-          {selectedCounty && showForecast && (
+          {selectedRegion && showForecast && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-4 z-20 border-2 border-blue-500 min-w-[350px]">
               <div className="flex justify-between items-center mb-3">
                 <h4 className="font-medium text-gray-800">
-                  {countyData[selectedCounty].name} Forecast
+                  {regionData[selectedRegion].name} Forecast
                 </h4>
                 <button 
                   onClick={() => setShowForecast(false)}
@@ -456,7 +194,7 @@ export default function SupplyChainMap() {
               
               <div className="h-32 mb-3">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={generateForecastData(countyData[selectedCounty])}>
+                  <BarChart data={generateForecastData(regionData[selectedRegion])}>
                     <XAxis 
                       dataKey="month" 
                       axisLine={false}
@@ -489,7 +227,7 @@ export default function SupplyChainMap() {
               
               <div className="flex justify-between mt-2">
                 <span className="text-gray-600 text-sm">Projected Change (Next Month):</span>
-                <span className="font-medium text-green-600">+{countyData[selectedCounty].forecastChange.toFixed(1)}%</span>
+                <span className="font-medium text-green-600">+{regionData[selectedRegion].forecastChange.toFixed(1)}%</span>
               </div>
               
               <p className="text-xs text-gray-500">
@@ -500,42 +238,42 @@ export default function SupplyChainMap() {
         </div>
         
         {/* Region Details Panel */}
-        <div className="border border-gray-200 rounded-lg p-4">
-          {selectedCounty ? (
+        <div className="border border-gray-200 rounded-lg p-4 flex-1 min-w-[300px]">
+          {selectedRegion ? (
             <>
               <h3 className="font-medium text-gray-800 mb-3">
-                {countyData[selectedCounty].name} Details
+                {regionData[selectedRegion].name} Details
               </h3>
               
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Number of Farms:</span>
-                  <span className="font-medium">{countyData[selectedCounty].farms}</span>
+                  <span className="font-medium">{regionData[selectedRegion].farms}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Average Yield (L/cow/day):</span>
-                  <span className="font-medium">{countyData[selectedCounty].avgYield}</span>
+                  <span className="font-medium">{regionData[selectedRegion].avgYield}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Daily Volume (L):</span>
-                  <span className="font-medium">{countyData[selectedCounty].totalVolume.toLocaleString()}</span>
+                  <span className="font-medium">{regionData[selectedRegion].totalVolume.toLocaleString()}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Annual Volume (M liters):</span>
-                  <span className="font-medium">{((countyData[selectedCounty].totalVolume * 365) / 1000000).toFixed(1)}</span>
+                  <span className="font-medium">{((regionData[selectedRegion].totalVolume * 365) / 1000000).toFixed(1)}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Average Fat (%):</span>
-                  <span className="font-medium">{countyData[selectedCounty].avgFat}</span>
+                  <span className="font-medium">{regionData[selectedRegion].avgFat}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Average Protein (%):</span>
-                  <span className="font-medium">{countyData[selectedCounty].avgProtein}</span>
+                  <span className="font-medium">{regionData[selectedRegion].avgProtein}</span>
                 </div>
 
                 <button
@@ -557,15 +295,15 @@ export default function SupplyChainMap() {
               <div className="space-y-3 w-full">
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Total Farms:</span>
-                  <span className="font-medium">3,200</span>
+                  <span className="font-medium">1,250</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Daily Production:</span>
-                  <span className="font-medium">5.48M liters</span>
+                  <span className="font-medium">850K liters</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 text-sm">Annual Production:</span>
-                  <span className="font-medium">2B liters</span>
+                  <span className="font-medium">310M liters</span>
                 </div>
                 <p className="text-gray-500 text-sm mt-3">Select a region on the map to view detailed information about milk production and farms in that area.</p>
               </div>

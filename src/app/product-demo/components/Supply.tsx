@@ -8,15 +8,16 @@ import SupplyChainMap from './SupplyChainMap';
 
 
 // Kerry Group scale supply chain stats data
-const supplyStats = {
-  monthlyProcurement: {
-    value: '105M L',
-    label: 'Monthly Raw Milk Procurement',
-    confidenceInterval: 'Next month forecast: 108M L'
-  }
-};
+// const supplyStats = {
+//   monthlyProcurement: {
+//     value: '105M L',
+//     label: 'Monthly Raw Milk Procurement',
+//     confidenceInterval: 'Next month forecast: 108M L'
+//   }
+// };
 
 // Supply chain performance data by timeframe and metric
+/* 
 const supplyPerformanceData = {
   weekly: {
     volume: [
@@ -113,6 +114,7 @@ const supplyPerformanceData = {
     ]
   }
 };
+*/
 
 
 
@@ -496,9 +498,10 @@ const AIAssistantSection = () => {
 
 // Define metric type
 type MetricType = 'volume' | 'fat' | 'protein' | 'lactose';
-type TimeframeType = 'weekly' | 'monthly' | 'yearly';
+// type TimeframeType = 'weekly' | 'monthly' | 'yearly';
 
 // Custom tooltip for charts
+/*
 const CustomTooltip = ({ active, payload, label, metricType }: { active?: boolean; payload?: Array<{ payload: { thisYear?: number; lastYear?: number; onTime?: number } }>; label?: string; metricType: MetricType }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
@@ -575,6 +578,7 @@ const CustomTooltip = ({ active, payload, label, metricType }: { active?: boolea
   }
   return null;
 };
+*/
 
 const SupplySection = () => {
   const [selectedSupplyQuestion, setSelectedSupplyQuestion] = useState<number | null>(null);

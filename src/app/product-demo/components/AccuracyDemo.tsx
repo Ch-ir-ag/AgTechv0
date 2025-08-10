@@ -135,11 +135,11 @@ const predefinedQuestions = [
 
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
-  const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly'>('monthly');
+  const [timePeriod] = useState<'weekly' | 'monthly'>('monthly');
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const [llmResponse, setLlmResponse] = useState('');
   const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
-  const [predictionView] = useState<'weekly'>('weekly');
+  // const [predictionView] = useState<'weekly'>('weekly');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   
@@ -207,7 +207,7 @@ export default function AccuracyDemo() {
     }
   };
   
-  const timeAdjustedData = getTimeAdjustedData();
+  // const timeAdjustedData = getTimeAdjustedData();
 
   // Handle question selection (toggle on/off)
   const handleQuestionSelect = (questionId: number) => {

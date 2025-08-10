@@ -135,7 +135,7 @@ const predefinedQuestions = [
 
 export default function AccuracyDemo() {
   const [selectedYear, setSelectedYear] = useState('all');
-  const [timePeriod] = useState<'weekly' | 'monthly'>('monthly');
+  // const [timePeriod] = useState<'weekly' | 'monthly'>('monthly');
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const [llmResponse, setLlmResponse] = useState('');
   const [weeklyPredictions, setWeeklyPredictions] = useState(defaultPredictions);
@@ -162,7 +162,7 @@ export default function AccuracyDemo() {
     : timeSeriesData.filter(item => item.year.toString() === selectedYear);
   
   // Process data for the time-period specific view
-  const getTimeAdjustedData = () => {
+  /* const getTimeAdjustedData = () => {
     if (timePeriod === 'weekly') {
       // Split monthly data into weekly (divide by 4)
       return filteredTimeSeriesData.flatMap((item, monthIndex) => {
@@ -205,7 +205,7 @@ export default function AccuracyDemo() {
         adjustedPredictedVolume: Math.round(item.predictedVolume)
       }));
     }
-  };
+  }; */
   
   // const timeAdjustedData = getTimeAdjustedData();
 

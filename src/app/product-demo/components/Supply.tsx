@@ -497,7 +497,7 @@ const AIAssistantSection = () => {
 };
 
 // Define metric type
-type MetricType = 'volume' | 'fat' | 'protein' | 'lactose';
+// type MetricType = 'volume' | 'fat' | 'protein' | 'lactose';
 // type TimeframeType = 'weekly' | 'monthly' | 'yearly';
 
 // Custom tooltip for charts

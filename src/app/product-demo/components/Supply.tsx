@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 import SupplyChainMap from './SupplyChainMap';
 
 
@@ -116,42 +116,47 @@ const supplyPerformanceData = {
 
 
 
-// Rotating Supply Chain Insights Data with subtle, consistent theming
+// Milk Supply Intake Forecasting Insights
 const supplyInsights = [
   {
     id: 1,
-            title: "Volume Optimisation",
-    value: "+8.3%",
-    description: "Supply volume is trending 8.3% higher than last quarter. Consider negotiating volume-based pricing improvements with top 3 suppliers.",
-    priority: "high"
+    title: "Seasonal Peak Forecasting",
+    value: "+12.5%",
+    description: "How would an early spring grass growth surge impact milk supply intake volumes in Irish dairy regions?",
+    answer: "Early spring growth accelerates cow milk production, increasing daily intake volumes by 12-15% compared to normal seasonal patterns, requiring additional storage capacity.",
+    percentageChange: 0.125
   },
   {
     id: 2,
-    title: "Cost Reduction Opportunity",
-    value: "€180K/year",
-    description: "Consolidating purchases from Regional Farms Alliance and Valley Processing could reduce unit costs by €0.02/L.",
-    priority: "high"
+    title: "Weather Impact Assessment",
+    value: "-8.2%",
+    description: "What effect would a prolonged dry summer period have on regional milk supply intake forecasts?",
+    answer: "Extended dry conditions reduce pasture quality and cow comfort, leading to decreased milk production and lower supply intake volumes across affected regions.",
+    percentageChange: -0.082
   },
   {
     id: 3,
-    title: "Quality Enhancement",
-    value: "+2.1%",
-    description: "Implementing additional quality checks with Valley Processing could improve overall quality score by 2.1 percentage points.",
-    priority: "medium"
+    title: "Farm Expansion Analysis",
+    value: "+18.7%",
+    description: "How would new dairy farm developments in the Cork region affect milk supply intake projections?",
+    answer: "Planned farm expansions in Cork are expected to increase regional milk supply intake by 18-20%, requiring upgraded collection routes and processing capacity.",
+    percentageChange: 0.187
   },
   {
     id: 4,
-    title: "Supplier Diversification",
-    value: "23% Risk Reduction",
-    description: "Adding 2 new regional suppliers would reduce supply chain risk by 23% and provide better price negotiation leverage.",
-    priority: "medium"
+    title: "Feed Quality Impact",
+    value: "+6.9%",
+    description: "What impact would premium feed supplementation have on milk supply intake quality and volume?",
+    answer: "Premium feed programs improve cow health and milk production efficiency, resulting in higher quality milk with increased fat and protein content.",
+    percentageChange: 0.069
   },
   {
     id: 5,
-            title: "Seasonal Optimisation",
-    value: "€95K Savings",
-    description: "Adjusting procurement schedules based on seasonal fat/protein patterns could save €95K annually in quality premiums.",
-    priority: "low"
+    title: "Collection Route Optimisation",
+    value: "+4.3%",
+    description: "How would optimised collection schedules affect milk supply intake freshness and volume efficiency?",
+    answer: "Optimised collection routes reduce transport time and maintain milk freshness, allowing for increased intake volumes while preserving quality standards.",
+    percentageChange: 0.043
   }
 ];
 
@@ -572,11 +577,79 @@ const CustomTooltip = ({ active, payload, label, metricType }: { active?: boolea
 };
 
 const SupplySection = () => {
-  const [timeframe, setTimeframe] = useState<TimeframeType>('monthly');
-  const [metricType, setMetricType] = useState<MetricType>('volume');
+  const [selectedSupplyQuestion, setSelectedSupplyQuestion] = useState<number | null>(null);
+  const [supplyResponse, setSupplyResponse] = useState('');
+  const [currentSupplyQuestionIndex, setCurrentSupplyQuestionIndex] = useState(0);
+  const [isSupplyTransitioning, setIsSupplyTransitioning] = useState(false);
+  const [supplyPredictions, setSupplyPredictions] = useState([
+    { period: 'Aug 10-16', predictedVolume: 85500 },
+    { period: 'Aug 17-23', predictedVolume: 88200 },
+    { period: 'Aug 24-30', predictedVolume: 90800 },
+    { period: 'Aug 31-Sep 6', predictedVolume: 93500 },
+    { period: 'Sep 7-13', predictedVolume: 95200 },
+    { period: 'Sep 14-20', predictedVolume: 97800 },
+    { period: 'Sep 21-27', predictedVolume: 99400 },
+    { period: 'Sep 28-Oct 4', predictedVolume: 96700 }
+  ]);
 
-  // Get current chart data based on selected filters
-  const chartData = supplyPerformanceData[timeframe][metricType];
+  // Default supply prediction data
+  const defaultSupplyPredictions = [
+    { period: 'Aug 10-16', predictedVolume: 85500 },
+    { period: 'Aug 17-23', predictedVolume: 88200 },
+    { period: 'Aug 24-30', predictedVolume: 90800 },
+    { period: 'Aug 31-Sep 6', predictedVolume: 93500 },
+    { period: 'Sep 7-13', predictedVolume: 95200 },
+    { period: 'Sep 14-20', predictedVolume: 97800 },
+    { period: 'Sep 21-27', predictedVolume: 99400 },
+    { period: 'Sep 28-Oct 4', predictedVolume: 96700 }
+  ];
+
+  // Handle supply question selection (toggle on/off)
+  const handleSupplyQuestionSelect = (questionId: number) => {
+    const selectedQ = supplyInsights.find(q => q.id === questionId);
+    if (!selectedQ) return;
+    
+    // Toggle selection - if already selected, deselect
+    if (selectedSupplyQuestion === questionId) {
+      setSelectedSupplyQuestion(null);
+      setSupplyResponse('');
+      setSupplyPredictions(defaultSupplyPredictions);
+      return;
+    }
+    
+    setSelectedSupplyQuestion(questionId);
+    setSupplyResponse(selectedQ.answer);
+    
+    // Update predictions based on the percentage change
+    const adjustedPredictions = defaultSupplyPredictions.map(item => ({
+      ...item,
+      predictedVolume: Math.round(item.predictedVolume * (1 + selectedQ.percentageChange))
+    }));
+    
+    setSupplyPredictions(adjustedPredictions);
+  };
+
+  // Get the appropriate data for supply predictions
+  const getSupplyPredictionData = () => {
+    return supplyPredictions;
+  };
+
+  // Handle rotating questions
+  React.useEffect(() => {
+    if (selectedSupplyQuestion) return; // Don't rotate when a question is selected
+    
+    const rotationInterval = setInterval(() => {
+      setIsSupplyTransitioning(true);
+      setTimeout(() => {
+        setCurrentSupplyQuestionIndex((prevIndex) => 
+          prevIndex === supplyInsights.length - 1 ? 0 : prevIndex + 1
+        );
+        setIsSupplyTransitioning(false);
+      }, 400); // Match this with the CSS transition duration
+    }, 4000); // Rotate every 4 seconds
+    
+    return () => clearInterval(rotationInterval);
+  }, [selectedSupplyQuestion]);
 
   return (
     <div className="space-y-6">
@@ -588,92 +661,134 @@ const SupplySection = () => {
         </p>
       </div>
 
-      {/* Stats Section */}
-      <div className="flex justify-center mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center max-w-md">
-          <p className="text-3xl font-bold" style={{ color: '#1E4B3A' }}>{supplyStats.monthlyProcurement.value}</p>
-          <p className="text-gray-600 text-sm mt-2">{supplyStats.monthlyProcurement.label}</p>
-          <p className="text-xs text-gray-500 mt-1">{supplyStats.monthlyProcurement.confidenceInterval}</p>
-        </div>
-      </div>
-
-      {/* Supply Performance Chart */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h3 className="text-lg font-semibold mb-4 sm:mb-0" style={{ color: '#1E4B3A' }}>
-            Supply Chain Performance Trends
-          </h3>
-          
-          {/* Controls */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Metric Type Selector */}
+      {/* Ask About Milk Supply Intake Factors */}
+      <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
+        <h2 className="text-xl font-medium text-[#1E4B3A] mb-4">
+          Ask About Milk Supply Intake Factors
+        </h2>
             <div className="flex flex-col">
-              <label className="text-xs text-gray-600 mb-1">Metric</label>
-              <select 
-                value={metricType} 
-                onChange={(e) => setMetricType(e.target.value as MetricType)}
-                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="volume">Volume (L)</option>
-                <option value="fat">Fat %</option>
-                <option value="protein">Protein %</option>
-                <option value="lactose">Lactose %</option>
-              </select>
-            </div>
-            
-            {/* Timeframe Selector */}
-            <div className="flex flex-col">
-              <label className="text-xs text-gray-600 mb-1">Timeframe</label>
-              <div className="flex bg-gray-100 rounded-md p-1">
-                {(['weekly', 'monthly', 'yearly'] as TimeframeType[]).map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => setTimeframe(period)}
-                    className={`px-3 py-1 text-sm rounded transition-colors ${
-                      timeframe === period
-                        ? 'bg-white shadow-sm font-medium'
-                        : 'text-gray-600 hover:text-gray-800'
+          <div className="relative h-[76px] flex items-center">
+            <div className="w-full bg-gradient-to-r from-blue-50 to-transparent p-0.5 rounded-lg">
+              <div className="question-container w-full min-h-[74px] flex items-center">
+                {supplyInsights.map((insight, index) => (
+                  <div
+                    key={insight.id}
+                    onClick={() => handleSupplyQuestionSelect(insight.id)}
+                    className={`absolute w-full py-3 px-4 rounded-md cursor-pointer transition-all duration-300 ${
+                      selectedSupplyQuestion === insight.id
+                        ? 'border-blue-300 bg-blue-50 shadow-sm question-card-selected opacity-100'
+                        : index === currentSupplyQuestionIndex 
+                          ? `${isSupplyTransitioning ? 'opacity-0 blur-sm transform -translate-y-2' : 'opacity-100'}`
+                          : 'opacity-0 pointer-events-none'
                     }`}
                   >
-                    {period.charAt(0).toUpperCase() + period.slice(1)}
-                  </button>
+                    <p className="text-sm text-gray-800 leading-snug">{insight.description}</p>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="h-80">
+        {/* Compact Insight Dropdown */}
+        {supplyResponse && (
+          <div className="mt-4 relative overflow-hidden">
+            <div 
+              className="bg-[#F7F5F0] rounded-lg border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 ease-out transform"
+              style={{
+                animation: 'slideDown 0.5s ease-out',
+                transformOrigin: 'top'
+              }}
+            >
+              <div className="p-4">
+                <p className="text-sm text-gray-700 leading-relaxed mb-3">{supplyResponse}</p>
+                
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-600">Impact on Supply Intake:</span>
+                  <span 
+                    className={`text-sm font-bold ${
+                      selectedSupplyQuestion && supplyInsights.find(q => q.id === selectedSupplyQuestion)?.value.includes('+') 
+                        ? 'text-green-700' 
+                        : 'text-red-700'
+                    }`}
+                  >
+                    {selectedSupplyQuestion && supplyInsights.find(q => q.id === selectedSupplyQuestion)?.value}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Supply Prediction Chart */}
+      <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-medium text-[#1E4B3A]">
+            {selectedSupplyQuestion ? (
+              `Milk Supply Intake Prediction - Next 8 Weeks (Impact: ${supplyInsights.find(q => q.id === selectedSupplyQuestion)?.value})`
+            ) : (
+              'Milk Supply Intake Prediction - Next 8 Weeks'
+            )}
+          </h2>
+          <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md bg-[#1E4B3A] text-white">
+                Weekly
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ left: 20, right: 20, top: 5, bottom: 5 }}>
+            <BarChart
+              data={getSupplyPredictionData()}
+              margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="period" />
+              <XAxis 
+                dataKey="period" 
+                tick={{ fill: '#6b7280' }} 
+                axisLine={{ stroke: '#d1d5db' }}
+                height={60}
+                interval={0}
+                angle={-45}
+                textAnchor="end"
+              />
               <YAxis 
                 tickFormatter={(value) => {
-                  if (metricType === 'volume') {
-                    if (value >= 1000000000) return `${(value / 1000000000).toFixed(1)}B`;
-                    if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
-                    if (value >= 1000) return `${(value / 1000).toFixed(0)}K`;
-                    return value.toString();
-                  } else {
-                    return `${value.toFixed(1)}%`;
-                  }
+                  if (value >= 1000000) return `${Math.round(value / 1000000)}M`;
+                  if (value >= 1000) return `${Math.round(value / 1000)}K`;
+                  return Math.round(value).toString();
                 }}
-                width={60}
+                tick={{ fill: '#6b7280' }} 
+                axisLine={{ stroke: '#d1d5db' }}
+                domain={[0, 120000]}
+                ticks={[0, 15000, 30000, 45000, 60000, 75000, 90000, 105000, 120000]}
+              >
+                <Label 
+                  value="Volume (Litres)" 
+                  angle={-90} 
+                  position="insideLeft"
+                  style={{ textAnchor: 'middle' }}
+                />
+              </YAxis>
+              <Tooltip 
+                formatter={(value) => [`${Number(value).toLocaleString()} L`, 'Predicted Volume']}
+                contentStyle={{ backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
+                labelFormatter={(value) => `${value}`}
               />
-              <Tooltip content={<CustomTooltip metricType={metricType} />} />
-              <Legend />
-              <Bar 
-                dataKey="thisYear" 
-                fill="#1E4B3A" 
-                name={`2025 ${metricType === 'volume' ? 'Volume' : metricType.charAt(0).toUpperCase() + metricType.slice(1)}`}
-                radius={[2, 2, 0, 0]}
-              />
-              <Bar 
-                dataKey="lastYear" 
-                fill="#94A3B8" 
-                name={`2024 ${metricType === 'volume' ? 'Volume' : metricType.charAt(0).toUpperCase() + metricType.slice(1)}`}
-                radius={[2, 2, 0, 0]}
+              <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                            <Bar 
+                dataKey="predictedVolume" 
+                name="Predicted Volume" 
+                fill={selectedSupplyQuestion 
+                  ? ((supplyInsights.find(q => q.id === selectedSupplyQuestion)?.percentageChange || 0) >= 0 
+                      ? "#4ade80" // Green for positive impact
+                      : "#ef4444") // Red for negative impact
+                  : "#1E4B3A"} // Default colour
+                radius={[4, 4, 0, 0]}
+                barSize={20}
               />
             </BarChart>
           </ResponsiveContainer>

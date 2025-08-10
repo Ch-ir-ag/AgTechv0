@@ -131,9 +131,9 @@ export default function Landing() {
     }
   };
 
-  const goToAccuracyDemo = () => {
-    trackEvent('accuracy_demo_click');
-    router.push('/accuracy-demo');
+  const goToProductDemo = () => {
+    trackEvent('product_demo_click');
+    router.push('/product-demo');
   };
 
   const scrollToSection = (id: string) => {
@@ -212,7 +212,7 @@ export default function Landing() {
             <div className="flex items-center gap-4">
               {/* See How It Works */}
               <motion.button 
-                onClick={() => scrollToSection('how-it-works')}
+                onClick={goToProductDemo}
                 className="px-4 py-2 text-base font-medium transition-colors hover:text-white"
                 style={{ color: '#F7F5F0' }}
                 whileHover={{ scale: 1.05 }}
@@ -485,7 +485,7 @@ export default function Landing() {
                   className="relative inline-block"
                 >
                   <button
-                    onClick={goToAccuracyDemo}
+                    onClick={goToProductDemo}
                     className="relative px-10 py-4 text-xl md:text-2xl font-semibold rounded-xl text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
                     style={{ backgroundColor: '#1E4B3A' }}
                   >
@@ -760,13 +760,13 @@ export default function Landing() {
                 Access your personalised dairy analytics platform to view forecasts, optimise production, and make data-driven decisions.
               </p>
               <motion.button
-                onClick={goToAccuracyDemo}
+                onClick={goToProductDemo}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-lg text-white transition-colors"
                 style={{backgroundColor: 'var(--dark-green)'}}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                View Accuracy Demo
+                View Product Demo
               </motion.button>
             </motion.div>
             

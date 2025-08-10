@@ -10,6 +10,7 @@ import StandardizationSection from './components/Standardization';
 import ProductAllocationSection from './components/ProductAllocation';
 import OperationsSection from './components/Operations';
 import DemandSection from './components/Demand';
+import AccuracyDemo from './components/AccuracyDemo';
 import { demoData } from './data';
 
 // Navigation sections
@@ -25,7 +26,8 @@ const navigationSections = [
   { id: 'yield-recovery', label: 'Yield Recovery Trade Off', clickable: false },
   { id: 'rework-downgrade', label: 'Rework vs Downgrade', clickable: false },
   { id: 'separator', label: '', clickable: false }, // Visual separator
-  { id: 'demand', label: 'Demand', clickable: true }
+  { id: 'demand', label: 'Demand', clickable: true },
+  { id: 'accuracy', label: 'Accuracy Demo', clickable: true }
 ];
 
 // Main Product Demo Component
@@ -46,6 +48,8 @@ export default function ProductDemo() {
         return <OperationsSection machines={demoData.machines} />;
       case 'demand':
         return <DemandSection />;
+      case 'accuracy':
+        return <AccuracyDemo />;
       default:
         return <SupplySection />;
     }
@@ -61,7 +65,7 @@ export default function ProductDemo() {
           <div className="w-64 bg-white shadow-sm border-r border-gray-200" style={{ minHeight: 'calc(100vh - 80px)' }}>
             <div className="p-6">
               <h1 className="text-xl font-bold mb-2" style={{ color: '#1E4B3A' }}>Daisy AI Demo</h1>
-              <p className="text-sm mb-6" style={{ color: '#1E4B3A', opacity: 0.7 }}>Food Processing Intelligence</p>
+              <p className="text-sm mb-6" style={{ color: '#1E4B3A', opacity: 0.7 }}>Autopilot for Food Processors</p>
               
               <nav className="space-y-2">
                 {navigationSections.map((section) => {

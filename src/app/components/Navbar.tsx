@@ -82,7 +82,7 @@ export default function Navbar() {
                 className="text-[#F7F5F0] hover:text-white text-sm font-medium"
                 scroll={true}
                 onClick={() => {
-                  setTimeout(() => window.scrollTo(0, 0), 0);
+                  setTimeout(() => window.scrollTo(0, 0), 0);  
                 }}
               >
                 Processor Forecasting
@@ -100,38 +100,40 @@ export default function Navbar() {
                 Accuracy Demo
               </Link>
             )}
+          </div>
+        )}
+
+        {/* Integrations Status - Always positioned on the right for special demo pages */}
+        {isSpecialDemoPage && (
+          <div className="relative group">
+            <div className="px-3 py-1.5 border border-white rounded-md text-white text-sm font-medium cursor-pointer">
+              <span>Integrations - Active</span>
+            </div>
             
-            {/* Integrations Status - Show on all special demo pages */}
-            <div className="relative group">
-              <div className="px-3 py-1.5 border border-gray-400 rounded-md text-gray-400 text-sm font-medium cursor-pointer">
-                <span>Integrations - Active</span>
-              </div>
-              
-              {/* Tooltip */}
-              <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
-                <div className="py-2 px-3">
-                  <div className="text-sm text-gray-700 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span>SAP</span>
-                      <span className="flex items-center space-x-1">
-                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                        <span className="text-xs text-green-600">Active</span>
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>MES</span>
-                      <span className="flex items-center space-x-1">
-                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                        <span className="text-xs text-green-600">Active</span>
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>SCADA</span>
-                      <span className="flex items-center space-x-1">
-                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                        <span className="text-xs text-green-600">Active</span>
-                      </span>
-                    </div>
+            {/* Tooltip */}
+            <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+              <div className="py-2 px-3">
+                <div className="text-sm text-gray-700 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span>SAP</span>
+                    <span className="flex items-center space-x-1">
+                      <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                      <span className="text-xs text-green-600">Active</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>MES</span>
+                    <span className="flex items-center space-x-1">
+                      <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                      <span className="text-xs text-green-600">Active</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>SCADA</span>
+                    <span className="flex items-center space-x-1">
+                      <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                      <span className="text-xs text-green-600">Active</span>
+                    </span>
                   </div>
                 </div>
               </div>

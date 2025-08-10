@@ -780,7 +780,7 @@ export default function AccuracyDemo() {
           {/* Model Performance Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className={`bg-white p-6 rounded-lg shadow-sm border ${predictionView === 'weekly' ? 'border-[#1E4B3A] ring-2 ring-[#1E4B3A]/20' : 'border-gray-100'} text-center transition-all duration-200`}>
-              <p className="text-3xl font-bold text-[#1E4B3A]">96.3%</p>
+              <p className="text-3xl font-bold text-[#1E4B3A]">98.2%</p>
               <p className="text-gray-600 text-sm">Weekly Accuracy</p>
               <p className="text-xs text-gray-500 mt-1">8-week forecast reliability</p>
             </div>

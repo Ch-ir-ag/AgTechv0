@@ -73,7 +73,7 @@ const SensitivityAnalysis = () => {
         riskLevel: riskExposureImpact > 25 ? 'High' : riskExposureImpact > 15 ? 'Medium' : 'Low',
       }
     ];
-  }, [priceChange, timeHorizon]);
+  }, [priceChange, timeHorizon, baseScenario.butterPrice, baseScenario.farmgatePassThrough, baseScenario.farmgatePricePerKg, baseScenario.marginPerTonne, baseScenario.riskExposure, baseScenario.weeklyVolume]);
 
   // Generate scenario analysis data
   const scenarioData = useMemo(() => {
@@ -91,7 +91,7 @@ const SensitivityAnalysis = () => {
       });
     }
     return scenarios;
-  }, []);
+  }, [baseScenario.butterPrice, baseScenario.farmgatePassThrough, baseScenario.marginPerTonne]);
 
   const formatCurrency = (value: number, type: string) => {
     if (type === 'Farmer Payments') return `€${value.toFixed(3)}/kg`;
@@ -110,7 +110,7 @@ const SensitivityAnalysis = () => {
           Sensitivity Analysis
         </h2>
         <p className="text-gray-600 mb-2">
-          Analysis: If butter price shifts by €{priceChange}/tonne, what's the impact on margins, farmer payments, and risk exposure?
+          Analysis: If butter price shifts by €{priceChange}/tonne, what&apos;s the impact on margins, farmer payments, and risk exposure?
         </p>
         <p className="text-xs text-gray-500 mb-6"></p>
 
@@ -224,7 +224,7 @@ const SensitivityAnalysis = () => {
                   tickFormatter={(value) => `${value}%`}
                 />
                 <Tooltip 
-                  formatter={(value, name) => [`${Number(value).toFixed(1)}%`, 'Impact']}
+                  formatter={(value) => [`${Number(value).toFixed(1)}%`, 'Impact']}
                   contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
                 />
                 <Bar 
@@ -256,10 +256,10 @@ const SensitivityAnalysis = () => {
                   tickFormatter={(value) => `${value}%`}
                 />
                 <Tooltip 
-                  formatter={(value, name) => [
+                  formatter={(value, _name) => [
                     `${Number(value).toFixed(1)}%`, 
-                    name === 'marginImpact' ? 'Margin Impact' : 
-                    name === 'farmerImpact' ? 'Farmer Payment Impact' : 'Net Impact'
+                    _name === 'marginImpact' ? 'Margin Impact' : 
+                    _name === 'farmerImpact' ? 'Farmer Payment Impact' : 'Net Impact'
                   ]}
                   labelFormatter={(value) => `Price Change: €${value}/tonne`}
                   contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}

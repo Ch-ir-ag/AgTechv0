@@ -3,13 +3,10 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   AreaChart,
   Area,
@@ -244,7 +241,7 @@ const TippingPointDetection = () => {
                   tickFormatter={(value) => `€${value.toLocaleString()}`}
                 />
                 <Tooltip 
-                  formatter={(value, name) => [`€${Number(value).toLocaleString()}`, 'Price per tonne']}
+                  formatter={(value) => [`€${Number(value).toLocaleString()}`, 'Price per tonne']}
                   labelFormatter={(value) => `Week ${value}`}
                   contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
                 />

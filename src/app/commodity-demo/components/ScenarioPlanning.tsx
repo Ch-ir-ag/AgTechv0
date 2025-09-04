@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import {
   LineChart,
   Line,
@@ -11,8 +10,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  AreaChart,
-  Area,
   BarChart,
   Bar,
 } from 'recharts';
@@ -72,7 +69,7 @@ const ScenarioPlanning = () => {
     
     for (let week = 1; week <= 12; week++) {
       regions.forEach(region => {
-        let basePrice = 2450; // Base SMP price €/tonne
+        const basePrice = 2450; // Base SMP price €/tonne
         let priceDelta = 0;
         let volumeFlow = 0;
         
@@ -190,9 +187,9 @@ const ScenarioPlanning = () => {
       acc[item.region].scenarioPrice += item.scenarioPrice;
       acc[item.region].count++;
       return acc;
-    }, {} as any);
+    }, {} as Record<string, { region: string; basePrice: number; scenarioPrice: number; count: number }>);
     
-    return Object.values(avgByRegion).map((item: any) => ({
+    return Object.values(avgByRegion).map((item) => ({
       region: item.region,
       basePrice: item.basePrice / item.count,
       scenarioPrice: item.scenarioPrice / item.count,

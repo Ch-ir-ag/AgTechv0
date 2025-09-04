@@ -17,11 +17,12 @@ export default function Navbar() {
   const isAccuracyDemo = pathname === '/accuracy-demo';
   const isProcessorForecasting = pathname === '/processor-forecasting';
   const isProductDemo = pathname === '/product-demo';
-  const isSpecialDemoPage = isAccuracyDemo || isProcessorForecasting || isProductDemo;
+  const isCommodityDemo = pathname === '/commodity-demo';
+  const isSpecialDemoPage = isAccuracyDemo || isProcessorForecasting || isProductDemo || isCommodityDemo;
   
   // Extract company from URL if it exists (e.g., /lakeland-dairies/dashboard)
   const urlParts = pathname.split('/').filter(Boolean);
-  const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' && urlParts[0] !== 'processor-forecasting'
+  const currentCompany = urlParts.length > 0 && urlParts[0] !== 'dashboard' && urlParts[0] !== 'accuracy-demo' && urlParts[0] !== 'processor-forecasting' && urlParts[0] !== 'commodity-demo'
     ? urlParts[0] 
     : Object.keys(companies)[0]; // Use first company as default
 

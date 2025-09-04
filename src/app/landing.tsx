@@ -908,42 +908,9 @@ export default function Landing() {
                 />
               </div>
             </motion.a>
-            <motion.a 
-              href="https://www.ndrc.ie/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              variants={scaleUp}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center"
-            >
-              <div className="h-16 md:h-20 relative">
-                <Image
-                  src="/images/ndrc-logo.png"
-                  alt="NDRC"
-                  width={110}
-                  height={80}
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            </motion.a>
-            <motion.a 
-              href="https://www.enterprise-ireland.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              variants={scaleUp}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center"
-            >
-              <div className="h-16 md:h-20 relative">
-                <Image
-                  src="/images/enterprise-ireland-logo.png"
-                  alt="Enterprise Ireland"
-                  width={140}
-                  height={80}
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            </motion.a>
+
+
+     
           </div>
         </motion.div>
       </div>

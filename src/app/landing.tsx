@@ -131,10 +131,6 @@ export default function Landing() {
     }
   };
 
-  const goToProductDemo = () => {
-    trackEvent('product_demo_click');
-    router.push('/product-demo');
-  };
 
   const scrollToSection = (id: string) => {
     trackEvent(`scroll_to_${id}`);
